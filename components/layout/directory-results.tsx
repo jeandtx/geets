@@ -9,7 +9,7 @@ export default function DirectoryResults({ users }: { users: UserProps[] }) {
       {users.map((user) => (
         <li key={user.username}>
           <Link href={`/${user.username}`}>
-            <a>
+            <div>
               <div className="relative px-6 py-4 flex items-center space-x-3 focus-within:ring-0">
                 <div className="flex-shrink-0 h-12 w-12 rounded-full overflow-hidden">
                   <BlurImage
@@ -35,7 +35,7 @@ export default function DirectoryResults({ users }: { users: UserProps[] }) {
                   </p>
                 </div>
               </div>
-            </a>
+            </div>
           </Link>
         </li>
       ))}

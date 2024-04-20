@@ -29,7 +29,7 @@ export default function Navbar({
       {status !== 'loading' &&
         (session?.user ? (
           <Link href={`/${session.username}`}>
-            <a className="w-8 h-8 rounded-full overflow-hidden">
+            <div className="w-8 h-8 rounded-full overflow-hidden">
               <Image
                 src={
                   session.user.image ||
@@ -41,7 +41,7 @@ export default function Navbar({
                 placeholder="blur"
                 blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYV2PYsGHDfwAHNAMQumvbogAAAABJRU5ErkJggg=="
               />
-            </a>
+            </div>
           </Link>
         ) : (
           <button
