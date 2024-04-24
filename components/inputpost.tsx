@@ -12,7 +12,7 @@ export function InputPost() {
         e.preventDefault()
         console.log(fullname, email, message)
 
-        const res = await fetch("api/contact", {
+        const res = await fetch("api/posts", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
