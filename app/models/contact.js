@@ -1,10 +1,9 @@
 import { MongoClient } from "mongodb";
-
-// Vous pouvez placer la logique de connexion dans un fichier séparé et l'importer ici.
+//connection logic
 let db;
 const client = new MongoClient(process.env.MONGODB_URI);
 client.connect().then(client => {
-    db = client.db(); // Mettez le nom de votre base de données ici
+    db = client.db(); 
 });
 
 class Contact {
@@ -21,10 +20,9 @@ class Contact {
                 throw new Error("Message is required");
             }
 
-            // Insérer le contact dans la base de données
-            const result = await db.collection('contacts').insertOne({
+            const result = await db.collection('posts').insertOne({
                 ...data,
-                date: data.date || new Date() // Utiliser la date actuelle par défaut
+                date: data.date || new Date() // should change to have to good utc
             });
             return result;
         } catch (error) {

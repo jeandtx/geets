@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Input } from "./ui/input";
 
-export function Contact() {
+export function InputPost() {
     const [fullname, setFullname] = useState('')
     const [email, setEmail] = useState('')
     const [message, setMessage] = useState('')

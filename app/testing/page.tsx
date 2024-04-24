@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { Contact } from "@/components/contact";
+import { InputPost } from "@/components/inputpost";
 
 export const metadata: Metadata = {
 	title: "Test zone",
@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 export default async function Dashboard() {
 	return (
 		<div>
-			<Contact />
+			<InputPost />
 		</div>
 	);
 }
