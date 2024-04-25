@@ -7,8 +7,10 @@ export const metadata: Metadata = {
 
 export default async function Dashboard() {
 	return (
-		<div>
-			<InputPost />
+		<div className="p-5 ">
+			<div className="border-2 p-5 rounded-3xl border-black">
+				<InputPost />
+			</div>
 		</div>
 	);
 }
