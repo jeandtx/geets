@@ -12,7 +12,6 @@ export function InputPost() {
 
     const formRef = useRef<HTMLFormElement>(null);
 
-
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (formRef.current && !formRef.current.contains(event.target as Node)) {  // Type assertion for event.target
@@ -60,6 +59,7 @@ export function InputPost() {
 
     return (
         <>
+        <div className="border-2 p-5 rounded-3xl border-black">
         <form ref={formRef} onSubmit={handleSubmit} className='flex flex-col gap-5'>
             <div>
                 <label htmlFor="fullname">Full Name</label>
@@ -100,6 +100,7 @@ export function InputPost() {
                 </>
             )}
         </form>
+        </div>
         </>
     );
 }
