@@ -38,7 +38,7 @@ export const InfiniteScroll = () => {
     return (
         <div
             className='flex flex-col items-center'
-            style={{ height: '100vh', width: '40vw', overflowY: 'scroll' }}
+            style={{ height: '100vh', width: '60vw', overflowY: 'scroll' }}
         >
             <ul>
                 {/* TODO n°2*/}
