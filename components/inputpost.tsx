@@ -2,12 +2,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Button } from "./ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import Select from "react-tailwindcss-select";
-import { ClassNames } from "react-tailwindcss-select/dist/components/type";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
+import CreatableSelect from "react-select/creatable";
+import makeAnimated from "react-select/animated";
 
 export function InputPost() {
+	const animatedComponents = makeAnimated();
 	const [title, setTitle] = useState("");
 	const [hook, setHook] = useState("");
 	const [themes, setThemes] = useState<
@@ -117,20 +118,6 @@ export function InputPost() {
 		transition: "max-height 0.5s ease-in-out",
 	};
 
-	const customClassNames: ClassNames = {
-		menuButton: (value: any) =>
-			`flex w-full  rounded-full border border-input bg-background  ${
-				value?.isDisabled ? "bg-gray-200" : "hover:border-gray-400"
-			}`,
-		menu: "absolute z-10 w-full bg-white shadow-lg border border-gray-300 rounded mt-1.5 text-sm text-gray-700",
-		listItem: (value: any) =>
-			`block transition duration-200 px-2 py-2 cursor-pointer select-none truncate ${
-				value?.isSelected
-					? "text-white bg-blue-500"
-					: "text-gray-500 hover:bg-blue-100 hover:text-blue-500"
-			}`,
-	};
-
 	const handleThemeChange = (newValue: any) => {
 		if (Array.isArray(newValue)) {
 			setThemes(newValue);
@@ -176,15 +163,18 @@ export function InputPost() {
 						</div>
 
 						<div>
-							<Select
-								primaryColor="#000000"
-								isMultiple={true}
+							<CreatableSelect
+								// primaryColor="#000000"
+								isMulti
 								isSearchable={true}
 								options={themeOptions}
 								value={themes}
 								onChange={handleThemeChange}
+								closeMenuOnSelect={false}
 								placeholder="Select themes..."
-								classNames={customClassNames}
+								components={animatedComponents}
+								// classNames={customClassNames}
+								// className="mt-4 flex w-full placeholder-gray-400 font-normal rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:border-gray-300 focus:ring-0 disabled:cursor-not-allowed disabled:opacity-50 hover:border-gray-400 focus-visible:ring-0"
 							/>
 						</div>
 
