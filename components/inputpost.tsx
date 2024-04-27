@@ -9,6 +9,7 @@ export function InputPost() {
     const [hook, setHook] = useState('');
     const [theme, setTheme] = useState('');
     const [description, setDescription] = useState('');
+    const [imageUrl, setImageUrl] = useState('');
     const [isExpanded, setIsExpanded] = useState(false);
 
     const formRef = useRef<HTMLFormElement>(null);
@@ -62,7 +63,8 @@ export function InputPost() {
                 title,
                 hook,
                 theme,
-                description
+                description,
+                imageUrl
             }),
         });
     
@@ -71,6 +73,12 @@ export function InputPost() {
             console.log(data.msg);
         } else {
             console.log('Submission successful');
+            setTitle('');
+            setHook('');
+            setTheme('');
+            setDescription('');
+            setImageUrl('');
+            setIsExpanded(false);
         }
     };
     const expandedStyle = {
@@ -125,10 +133,11 @@ export function InputPost() {
                     </div>
 
                     <div>
-                        <Input
-                            type='file'
-                            id='file'
-                            placeholder='Upload a file'
+                        <input
+                            type='text'
+                            onChange={(e) => setImageUrl(e.target.value)}
+                            value={imageUrl}
+                            placeholder='Image URL'
                             className='text-black text-inter placeholder-gray-400 font-normal rounded-full flex h-10 w-full border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300'
                         />
                     </div>
