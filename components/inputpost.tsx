@@ -1,216 +1,221 @@
 "use client";
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from "react";
 import { Button } from "./ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
-import { Input } from "./ui/input"
-import Select from 'react-tailwindcss-select';
-import SelectContainer from 'react-tailwindcss-select';
-import { ClassNames } from 'react-tailwindcss-select/dist/components/type';
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import Select from "react-tailwindcss-select";
+import { ClassNames } from "react-tailwindcss-select/dist/components/type";
+import { Input } from "./ui/input";
+import { Textarea } from "./ui/textarea";
 
 export function InputPost() {
-    const [title, setTitle] = useState('');
-    const [hook, setHook] = useState('');
-    const [themes, setThemes] = useState<Array<{ value: string; label: string }>>([]);
+	const [title, setTitle] = useState("");
+	const [hook, setHook] = useState("");
+	const [themes, setThemes] = useState<
+		Array<{ value: string; label: string }>
+	>([]);
 
+	const [description, setDescription] = useState("");
+	const [imageUrl, setImageUrl] = useState("");
+	const [isExpanded, setIsExpanded] = useState(false);
+	const formRef = useRef<HTMLFormElement>(null);
 
-    const [description, setDescription] = useState('');
-    const [imageUrl, setImageUrl] = useState('');
-    const [isExpanded, setIsExpanded] = useState(false);
-    const formRef = useRef<HTMLFormElement>(null);
+	const themeOptions = [
+		{ value: "coding", label: "💪 Fitness" },
+		{ value: "fitness", label: "⚽️ Foot" },
+		{ value: "cooking", label: "🏀 Basket" },
+		{ value: "music", label: "🎶 Music" },
+		{ value: "gaming", label: "👾 Gaming" },
+		{ value: "travel", label: "✈️ Travel" },
+		{ value: "art", label: "🎨 Art" },
+		{ value: "coding", label: "💻 Coding" },
+		{ value: "cooking", label: "🍳 Cooking" },
+		{ value: "photography", label: "📸 Photography" },
+		{ value: "writing", label: "📝 Writing" },
+		{ value: "movies", label: "🎬 Movies" },
+		{ value: "books", label: "📚 Books" },
+		{ value: "sports", label: "🏈 Sports" },
+		{ value: "politics", label: "🏛 Politics" },
+		{ value: "science", label: "🔬 Science" },
+		{ value: "history", label: "🏰 History" },
+		{ value: "news", label: "📰 News" },
+		{ value: "other", label: "🏦 Finance" },
+	];
 
-    const themeOptions = [
-        { value: "coding", label: "💪 Fitness" },
-        { value: "fitness", label: "⚽️ Foot" },
-        { value: "cooking", label: "🏀 Basket" },
-        { value: "music", label: "🎶 Music" },
-        { value: "gaming", label: "👾 Gaming" },
-        { value: "travel", label: "✈️ Travel" },
-        { value: "art", label: "🎨 Art" },
-        { value: "coding", label: "💻 Coding" },
-        { value: "cooking", label: "🍳 Cooking" },
-        { value: "photography", label: "📸 Photography" },
-        { value: "writing", label: "📝 Writing" },
-        { value: "movies", label: "🎬 Movies" },
-        { value: "books", label: "📚 Books" },
-        { value: "sports", label: "🏈 Sports" },
-        { value: "politics", label: "🏛 Politics" },
-        { value: "science", label: "🔬 Science" },
-        { value: "history", label: "🏰 History" },
-        { value: "news", label: "📰 News" },
-        { value: "other", label: "🏦 Finance" }
-        
-    ];
+	useEffect(() => {
+		const handleClickOutside = (event: MouseEvent) => {
+			if (
+				formRef.current &&
+				!formRef.current.contains(event.target as Node)
+			) {
+				setIsExpanded(false);
+			}
+		};
 
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (formRef.current && !formRef.current.contains(event.target as Node)) {
-                setIsExpanded(false);
-            }
-        };
+		if (isExpanded) {
+			document.addEventListener("mousedown", handleClickOutside);
+		}
 
-        if (isExpanded) {
-            document.addEventListener('mousedown', handleClickOutside);
-        }
+		return () => {
+			document.removeEventListener("mousedown", handleClickOutside);
+		};
+	}, [isExpanded]);
 
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, [isExpanded]);
+	const handleTitleFocus = () => {
+		setIsExpanded(true);
+	};
 
-    const handleTitleFocus = () => {
-        setIsExpanded(true);
-    };
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-    
-        // Vérification des conditions avant de procéder
-        const isTitleValid = title.length > 3;
-        const isHookValid = hook.trim() !== '';
-        const isThemeValid = themes.length !== 0;
-    
-        // Log l'état des champs
-        console.log(`Title: ${title}, Valid: ${isTitleValid}`);
-        console.log(`Hook: ${hook}, Valid: ${isHookValid}`);
-        console.log(`Theme: ${themes}, Valid: ${isThemeValid}`);
-    
-        // Vérifie si tous les champs sont valides
-        if (!isTitleValid || !isHookValid || !isThemeValid) {
-            console.log("Validation failed, not submitting.");
-            return;  // Ne pas soumettre les données si la validation échoue
-        }
-    
-        // Si tout est valide, envoyer la requête
-        const res = await fetch("api/posts", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                title,
-                hook,
-                themes,
-                description,
-                imageUrl
-            }),
-        });
-    
-        const data = await res.json();
-        if (data.error) {
-            console.log(data.msg);
-        } else {
-            console.log('Submission successful');
-            setTitle('');
-            setHook('');
-            setThemes([]);
-            setDescription('');
-            setImageUrl('');
-            setIsExpanded(false);
-        }
-    };
-    const expandedStyle = {
-        maxHeight: isExpanded ? '1000px' : '0', // Adjust max height based on your content size
-        overflow: 'hidden',
-        transition: 'max-height 0.5s ease-in-out'
-    };
+		// Vérification des conditions avant de procéder
+		const isTitleValid = title.length > 3;
+		const isHookValid = hook.trim() !== "";
+		const isThemeValid = themes.length !== 0;
 
-    const customClassNames: ClassNames = {
-        menuButton: (value:any) => (
-            `flex w-full  rounded-full border border-input bg-background  ${
-                value?.isDisabled ? "bg-gray-200" : "hover:border-gray-400"
-            }`
-        ),
-        menu: "absolute z-10 w-full bg-white shadow-lg border border-gray-300 rounded mt-1.5 text-sm text-gray-700",
-        listItem: (value:any) => (
-            `block transition duration-200 px-2 py-2 cursor-pointer select-none truncate ${
-                value?.isSelected ? "text-white bg-blue-500" : "text-gray-500 hover:bg-blue-100 hover:text-blue-500"
-            }`
-        )
-    };
+		// Log l'état des champs
+		console.log(`Title: ${title}, Valid: ${isTitleValid}`);
+		console.log(`Hook: ${hook}, Valid: ${isHookValid}`);
+		console.log(`Theme: ${themes}, Valid: ${isThemeValid}`);
 
-    const handleThemeChange = (newValue: any) => {
-        if (Array.isArray(newValue)) {
-            setThemes(newValue);
-        } else {
-            setThemes([]);
-        }
-    };
-    
-    
-    
-    return (
-        <>
-        <div className="p-5 rounded-3xl bg-postbg">
-        <form ref={formRef} onSubmit={handleSubmit} className='flex flex-col'>
-            <div className="flex items-center gap-2">
-                <Avatar>
-                    <AvatarImage src="https://github.com/shadcn.png" />
-                    <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
-                <input 
-                    onFocus={handleTitleFocus}
-                    onChange={(e) => setTitle(e.target.value)}
-                    value={title}
-                    type='text' 
-                    id='title' 
-                    placeholder='Share something !' 
-                    className='text-black text-inter placeholder-gray-400 font-normal rounded-full flex h-10 w-full border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300 hover:border-gray-400'
-                />
-            </div>
+		// Vérifie si tous les champs sont valides
+		if (!isTitleValid || !isHookValid || !isThemeValid) {
+			console.log("Validation failed, not submitting.");
+			return; // Ne pas soumettre les données si la validation échoue
+		}
 
-            <div style={expandedStyle} className='flex flex-col gap-5'>
-                
-                    <div>
-                        <textarea 
-                            onChange={(e) => setHook(e.target.value)}
-                            value={hook}
-                            id='hook' 
-                            placeholder='Enter a catchy hook'
-                            style={{ height: '60px', borderRadius : '15px'}}
-                            className='mt-4 flex w-full placeholder-gray-400 font-normal rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:border-gray-300 focus:ring-0 disabled:cursor-not-allowed disabled:opacity-50 hover:border-gray-400'
-                        />
-                    </div>
+		// Si tout est valide, envoyer la requête
+		const res = await fetch("api/posts", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				title,
+				hook,
+				themes,
+				description,
+				imageUrl,
+			}),
+		});
 
-                    <div>
-                        <Select
-                        primaryColor='#000000'
-                        isMultiple={true}
-                        isSearchable={true}
-                        options={themeOptions}
-                        value={themes}
-                        onChange={handleThemeChange}
-                        placeholder="Select themes..."
-                        classNames={customClassNames}
-                    />
-                    </div>
+		const data = await res.json();
+		if (data.error) {
+			console.log(data.msg);
+		} else {
+			console.log("Submission successful");
+			setTitle("");
+			setHook("");
+			setThemes([]);
+			setDescription("");
+			setImageUrl("");
+			setIsExpanded(false);
+		}
+	};
+	const expandedStyle = {
+		maxHeight: isExpanded ? "1000px" : "0", // Adjust max height based on your content size
+		overflow: "hidden",
+		transition: "max-height 0.5s ease-in-out",
+	};
 
-                    <div>
-                        <input
-                            type='text'
-                            onChange={(e) => setImageUrl(e.target.value)}
-                            value={imageUrl}
-                            placeholder='Image URL'
-                            className='text-black text-inter placeholder-gray-400 font-normal rounded-full flex h-10 w-full border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300 hover:border-gray-400'
-                        />
-                    </div>
+	const customClassNames: ClassNames = {
+		menuButton: (value: any) =>
+			`flex w-full  rounded-full border border-input bg-background  ${
+				value?.isDisabled ? "bg-gray-200" : "hover:border-gray-400"
+			}`,
+		menu: "absolute z-10 w-full bg-white shadow-lg border border-gray-300 rounded mt-1.5 text-sm text-gray-700",
+		listItem: (value: any) =>
+			`block transition duration-200 px-2 py-2 cursor-pointer select-none truncate ${
+				value?.isSelected
+					? "text-white bg-blue-500"
+					: "text-gray-500 hover:bg-blue-100 hover:text-blue-500"
+			}`,
+	};
 
-                    <div>
-                        <textarea 
-                            onChange={(e) => setDescription(e.target.value)}
-                            value={description}
-                            id='description' 
-                            placeholder='Detailed description (optional)' 
-                            style={{ height: '120px' ,borderRadius : '15px' }}
-                            className='flex w-full rounded-md placeholder-gray-400 font-normal border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:border-gray-300 focus:ring-0 disabled:cursor-not-allowed disabled:opacity-50 hover:border-gray-400'
-                        />
-                    </div>
+	const handleThemeChange = (newValue: any) => {
+		if (Array.isArray(newValue)) {
+			setThemes(newValue);
+		} else {
+			setThemes([]);
+		}
+	};
 
-                    <Button type='submit'>Submit</Button>
-                
-            </div>
-        </form>
-        </div>
-        
-        </>
-    );
+	return (
+		<div>
+			<div className="p-5 rounded-3xl bg-postbg">
+				<form
+					ref={formRef}
+					onSubmit={handleSubmit}
+					className="flex flex-col"
+				>
+					<div className="flex items-center gap-2">
+						<Avatar>
+							<AvatarImage src="https://github.com/shadcn.png" />
+							<AvatarFallback>CN</AvatarFallback>
+						</Avatar>
+						<Input
+							onFocus={handleTitleFocus}
+							onChange={(e) => setTitle(e.target.value)}
+							value={title}
+							type="text"
+							id="title"
+							placeholder="Share something !"
+							className="text-black text-inter placeholder-gray-400 font-normal rounded-full flex h-10 w-full border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300 hover:border-gray-400 focus-visible:ring-0"
+						/>
+					</div>
+
+					<div style={expandedStyle} className="flex flex-col gap-5">
+						<div>
+							<Textarea
+								onChange={(e) => setHook(e.target.value)}
+								value={hook}
+								id="hook"
+								placeholder="Enter a catchy hook"
+								style={{ height: "60px", borderRadius: "15px" }}
+								className="mt-4 flex w-full placeholder-gray-400 font-normal rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:border-gray-300 focus:ring-0 disabled:cursor-not-allowed disabled:opacity-50 hover:border-gray-400 focus-visible:ring-0"
+							/>
+						</div>
+
+						<div>
+							<Select
+								primaryColor="#000000"
+								isMultiple={true}
+								isSearchable={true}
+								options={themeOptions}
+								value={themes}
+								onChange={handleThemeChange}
+								placeholder="Select themes..."
+								classNames={customClassNames}
+							/>
+						</div>
+
+						<div>
+							<Input
+								type="text"
+								onChange={(e) => setImageUrl(e.target.value)}
+								value={imageUrl}
+								placeholder="Image URL"
+								className="text-black text-inter placeholder-gray-400 font-normal rounded-full flex h-10 w-full border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300 hover:border-gray-400 focus-visible:ring-0"
+							/>
+						</div>
+
+						<div>
+							<Textarea
+								onChange={(e) => setDescription(e.target.value)}
+								value={description}
+								id="description"
+								placeholder="Detailed description (optional)"
+								style={{
+									height: "120px",
+									borderRadius: "15px",
+								}}
+								className="flex w-full rounded-md placeholder-gray-400 font-normal border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:border-gray-300 focus:ring-0 disabled:cursor-not-allowed disabled:opacity-50 hover:border-gray-400 focus-visible:ring-0"
+							/>
+						</div>
+
+						<Button type="submit">Submit</Button>
+					</div>
+				</form>
+			</div>
+		</div>
+	);
 }
