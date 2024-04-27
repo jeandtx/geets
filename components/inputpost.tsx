@@ -3,16 +3,43 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Button } from "./ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 import { Input } from "./ui/input"
+import Select from 'react-tailwindcss-select';
+import SelectContainer from 'react-tailwindcss-select';
+import { ClassNames } from 'react-tailwindcss-select/dist/components/type';
 
 export function InputPost() {
     const [title, setTitle] = useState('');
     const [hook, setHook] = useState('');
-    const [theme, setTheme] = useState('');
+    const [themes, setThemes] = useState<Array<{ value: string; label: string }>>([]);
+
+
     const [description, setDescription] = useState('');
     const [imageUrl, setImageUrl] = useState('');
     const [isExpanded, setIsExpanded] = useState(false);
-
     const formRef = useRef<HTMLFormElement>(null);
+
+    const themeOptions = [
+        { value: "coding", label: "💪 Fitness" },
+        { value: "fitness", label: "⚽️ Foot" },
+        { value: "cooking", label: "🏀 Basket" },
+        { value: "music", label: "🎶 Music" },
+        { value: "gaming", label: "👾 Gaming" },
+        { value: "travel", label: "✈️ Travel" },
+        { value: "art", label: "🎨 Art" },
+        { value: "coding", label: "💻 Coding" },
+        { value: "cooking", label: "🍳 Cooking" },
+        { value: "photography", label: "📸 Photography" },
+        { value: "writing", label: "📝 Writing" },
+        { value: "movies", label: "🎬 Movies" },
+        { value: "books", label: "📚 Books" },
+        { value: "sports", label: "🏈 Sports" },
+        { value: "politics", label: "🏛 Politics" },
+        { value: "science", label: "🔬 Science" },
+        { value: "history", label: "🏰 History" },
+        { value: "news", label: "📰 News" },
+        { value: "other", label: "🏦 Finance" }
+        
+    ];
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -40,12 +67,12 @@ export function InputPost() {
         // Vérification des conditions avant de procéder
         const isTitleValid = title.length > 3;
         const isHookValid = hook.trim() !== '';
-        const isThemeValid = theme.trim() !== '';
+        const isThemeValid = themes.length !== 0;
     
         // Log l'état des champs
         console.log(`Title: ${title}, Valid: ${isTitleValid}`);
         console.log(`Hook: ${hook}, Valid: ${isHookValid}`);
-        console.log(`Theme: ${theme}, Valid: ${isThemeValid}`);
+        console.log(`Theme: ${themes}, Valid: ${isThemeValid}`);
     
         // Vérifie si tous les champs sont valides
         if (!isTitleValid || !isHookValid || !isThemeValid) {
@@ -62,7 +89,7 @@ export function InputPost() {
             body: JSON.stringify({
                 title,
                 hook,
-                theme,
+                themes,
                 description,
                 imageUrl
             }),
@@ -75,7 +102,7 @@ export function InputPost() {
             console.log('Submission successful');
             setTitle('');
             setHook('');
-            setTheme('');
+            setThemes([]);
             setDescription('');
             setImageUrl('');
             setIsExpanded(false);
@@ -86,6 +113,29 @@ export function InputPost() {
         overflow: 'hidden',
         transition: 'max-height 0.5s ease-in-out'
     };
+
+    const customClassNames: ClassNames = {
+        menuButton: (value:any) => (
+            `flex w-full  rounded-full border border-input bg-background  ${
+                value?.isDisabled ? "bg-gray-200" : "hover:border-gray-400"
+            }`
+        ),
+        menu: "absolute z-10 w-full bg-white shadow-lg border border-gray-300 rounded mt-1.5 text-sm text-gray-700",
+        listItem: (value:any) => (
+            `block transition duration-200 px-2 py-2 cursor-pointer select-none truncate ${
+                value?.isSelected ? "text-white bg-blue-500" : "text-gray-500 hover:bg-blue-100 hover:text-blue-500"
+            }`
+        )
+    };
+
+    const handleThemeChange = (newValue: any) => {
+        if (Array.isArray(newValue)) {
+            setThemes(newValue);
+        } else {
+            setThemes([]);
+        }
+    };
+    
     
     
     return (
@@ -104,7 +154,7 @@ export function InputPost() {
                     type='text' 
                     id='title' 
                     placeholder='Share something !' 
-                    className='text-black text-inter placeholder-gray-400 font-normal rounded-full flex h-10 w-full border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300'
+                    className='text-black text-inter placeholder-gray-400 font-normal rounded-full flex h-10 w-full border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300 hover:border-gray-400'
                 />
             </div>
 
@@ -117,19 +167,21 @@ export function InputPost() {
                             id='hook' 
                             placeholder='Enter a catchy hook'
                             style={{ height: '60px', borderRadius : '15px'}}
-                            className='mt-4 flex w-full placeholder-gray-400 font-normal rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:border-gray-300 focus:ring-0 disabled:cursor-not-allowed disabled:opacity-50'
+                            className='mt-4 flex w-full placeholder-gray-400 font-normal rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:border-gray-300 focus:ring-0 disabled:cursor-not-allowed disabled:opacity-50 hover:border-gray-400'
                         />
                     </div>
 
                     <div>
-                        <input 
-                            onChange={(e) => setTheme(e.target.value)}
-                            value={theme}
-                            type='text' 
-                            id='theme' 
-                            placeholder='Post theme'
-                            className='text-black text-inter placeholder-gray-400 font-normal rounded-full flex h-10 w-full border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300'
-                        />
+                        <Select
+                        primaryColor='#000000'
+                        isMultiple={true}
+                        isSearchable={true}
+                        options={themeOptions}
+                        value={themes}
+                        onChange={handleThemeChange}
+                        placeholder="Select themes..."
+                        classNames={customClassNames}
+                    />
                     </div>
 
                     <div>
@@ -138,7 +190,7 @@ export function InputPost() {
                             onChange={(e) => setImageUrl(e.target.value)}
                             value={imageUrl}
                             placeholder='Image URL'
-                            className='text-black text-inter placeholder-gray-400 font-normal rounded-full flex h-10 w-full border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300'
+                            className='text-black text-inter placeholder-gray-400 font-normal rounded-full flex h-10 w-full border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300 hover:border-gray-400'
                         />
                     </div>
 
@@ -149,7 +201,7 @@ export function InputPost() {
                             id='description' 
                             placeholder='Detailed description (optional)' 
                             style={{ height: '120px' ,borderRadius : '15px' }}
-                            className='flex w-full rounded-md placeholder-gray-400 font-normal border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:border-gray-300 focus:ring-0 disabled:cursor-not-allowed disabled:opacity-50'
+                            className='flex w-full rounded-md placeholder-gray-400 font-normal border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:border-gray-300 focus:ring-0 disabled:cursor-not-allowed disabled:opacity-50 hover:border-gray-400'
                         />
                     </div>
 

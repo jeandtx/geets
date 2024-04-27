@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import clientPromise from "../../../lib/mongodb";
 
 export async function POST(req: Request) {
-    const { title, hook, theme, description, imageUrl } = await req.json();
+    const { title, hook, themes, description, imageUrl } = await req.json();
     const userId = "";
     const client = await clientPromise;
     const db = client.db('geets'); 
@@ -13,11 +13,9 @@ export async function POST(req: Request) {
         if (!hook || hook.trim() === "") {
             throw new Error("Hook is required.");
         }
-        if (!theme || theme.trim() === "") {
-            throw new Error("Theme is required.");
-        }
+        
 
-        const result = await db.collection('posts').insertOne({ userId,title, hook, theme, description, imageUrl, date: new Date() });
+        const result = await db.collection('posts').insertOne({ userId,title, hook, themes, description, imageUrl, date: new Date() });
         return NextResponse.json({ msg: ['Post created successfully'], success: true });
     } catch (error: any) {
         console.error(error);
