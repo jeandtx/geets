@@ -146,7 +146,7 @@ export function InputPost() {
 							type="text"
 							id="title"
 							placeholder="Share something !"
-							className="text-black text-inter placeholder-gray-400 font-normal rounded-full flex h-10 w-full border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300 hover:border-gray-400 focus-visible:ring-0"
+							className="text-black text-inter placeholder-gray-400 font-normal rounded-full flex h-10 w-full border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300 hover:border-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0"
 						/>
 					</div>
 
@@ -158,7 +158,7 @@ export function InputPost() {
 								id="hook"
 								placeholder="Enter a catchy hook"
 								style={{ height: "60px", borderRadius: "15px" }}
-								className="mt-4 flex w-full placeholder-gray-400 font-normal rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:border-gray-300 focus:ring-0 disabled:cursor-not-allowed disabled:opacity-50 hover:border-gray-400 focus-visible:ring-0"
+								className="mt-4 flex w-full placeholder-gray-400 font-normal rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:border-gray-300 focus:ring-0 disabled:cursor-not-allowed disabled:opacity-50 hover:border-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0"
 							/>
 						</div>
 
@@ -184,7 +184,7 @@ export function InputPost() {
 								onChange={(e) => setImageUrl(e.target.value)}
 								value={imageUrl}
 								placeholder="Image URL"
-								className="text-black text-inter placeholder-gray-400 font-normal rounded-full flex h-10 w-full border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300 hover:border-gray-400 focus-visible:ring-0"
+								className="text-black text-inter placeholder-gray-400 font-normal rounded-full flex h-10 w-full border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300 hover:border-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0"
 							/>
 						</div>
 
@@ -198,7 +198,7 @@ export function InputPost() {
 									height: "120px",
 									borderRadius: "15px",
 								}}
-								className="flex w-full rounded-md placeholder-gray-400 font-normal border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:border-gray-300 focus:ring-0 disabled:cursor-not-allowed disabled:opacity-50 hover:border-gray-400 focus-visible:ring-0"
+								className="flex w-full rounded-md placeholder-gray-400 font-normal border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:border-gray-300 focus:ring-0 disabled:cursor-not-allowed disabled:opacity-50 hover:border-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0"
 							/>
 						</div>
 
