@@ -1,15 +1,14 @@
 import { MongoClient, MongoClientOptions, Db, Collection } from 'mongodb';
 import { genSaltSync, hashSync } from 'bcrypt-ts';
+import clientPromise from '@/lib/mongodb';
 
 const MONGODB_URI = process.env.MONGODB_URI!;
-
-const client = new MongoClient(MONGODB_URI, { useUnifiedTopology: true } as MongoClientOptions);
 
 let db: Db, users: Collection;
 
 async function connectToDatabase() {
     try {
-        await client.connect();
+        const client = await clientPromise;
         db = client.db("sample_mflix"); // database name
         users = db.collection('users');
         console.log("Connected to MongoDB");
