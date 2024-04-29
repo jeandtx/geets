@@ -21,9 +21,9 @@ export const {
         }
 
         // Vérifier si les mots de passe correspondent
-        const passwordsMatch = await compare(password, user[0].password!);
+        const passwordsMatch = await compare(password, user.password!);
         if (passwordsMatch) {
-          return user[0] as any;
+          return { email: user.email, name: user.name };
         } else {
           return null;
         }

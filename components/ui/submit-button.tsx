@@ -1,14 +1,19 @@
 'use client';
-
 import { useFormStatus } from 'react-dom';
 
-export function SubmitButton({ children }: { children: React.ReactNode }) {
+type SubmitButtonProps = {
+  children: React.ReactNode;
+  style?: React.CSSProperties;
+};
+
+export function SubmitButton({ children, style }: SubmitButtonProps) {
   const { pending } = useFormStatus();
 
   return (
     <button
       type={pending ? 'button' : 'submit'}
       aria-disabled={pending}
+      style={style}
       className="flex h-10 w-full items-center justify-center rounded-md border text-sm transition-all focus:outline-none"
     >
       {children}

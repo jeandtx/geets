@@ -24,6 +24,11 @@ const config = {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        h3color: 'rgb(35,43,53)',
+        inputborder:'rgb(71,102,241)',
+        textcolor:'rgb(18,25,39)',
+        textblue :"rgb(58,93,240)",
+        plaintext:'rgb(100,112,125)',
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",

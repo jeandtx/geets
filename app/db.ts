@@ -28,7 +28,6 @@ export async function createUser(email: string, password: string) {
     try {
         let salt = genSaltSync(10);
         let hash = hashSync(password, salt);
-        console.log(password);
         return await users.insertOne({ email, password: hash });
     } catch (error) {
         console.error("Error creating user:", error);
