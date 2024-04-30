@@ -77,7 +77,8 @@ export function InputPost() {
 			toast({
 				variant: "destructive",
 				title: "Uh oh! Something went wrong.",
-				description: "Title, hook and themes are required.",
+				description:
+					"Please check the email or password and try again.",
 			});
 			console.log("Validation failed, not submitting.");
 			return;

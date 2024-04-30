@@ -13,15 +13,11 @@ export default function Login() {
 				<Form
 					action={async (formData: FormData) => {
 						"use server";
-						try {
-							await signIn("credentials", {
-								redirectTo: "/protected",
-								email: formData.get("email") as string,
-								password: formData.get("password") as string,
-							});
-						} catch (error) {
-							console.log("Sign in failed");
-						}
+						await signIn("credentials", {
+							redirectTo: "/protected",
+							email: formData.get("email") as string,
+							password: formData.get("password") as string,
+						});
 					}}
 				>
 					<SubmitButton
