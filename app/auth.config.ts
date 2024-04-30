@@ -12,15 +12,14 @@ export const authConfig = {
     authorized({ auth, request: { nextUrl } }) {
       let isLoggedIn = !!auth?.user;
       let isOnDashboard = nextUrl.pathname.startsWith('/protected');
-
+  
       if (isOnDashboard) {
-        if (isLoggedIn) return true;
-        return false; // Redirect unauthenticated users to login page
-      } else if (isLoggedIn) {
-        return Response.redirect(new URL('/protected', nextUrl));
+        return isLoggedIn; // Redirect unauthenticated users to login page
       }
-
+  
+      // Allow navigation if user is logged in or if it's not a protected page
       return true;
     },
   },
+  
 } satisfies NextAuthConfig;
