@@ -2,7 +2,7 @@ import React from "react";
 // import 'bulma/css/bulma.min.css';
 import { list } from "postcss";
 import clientPromise from "@/lib/mongodb";
-import Img from "next/image";
+// import Img from "next/image";
 
 interface SideProjectPost {
 	_id: {
@@ -64,7 +64,7 @@ export default async function SideProjectCard({
 		<div className="flex max-w-2xl rounded overflow-hidden shadow-lg">
 			{/* Image container with a relative size */}
 			<div className="w-2/5">
-				<Img
+				<img
 					className="w-full h-full object-cover"
 					src={
 						post.media
@@ -79,7 +79,7 @@ export default async function SideProjectCard({
 			<div className="w-3/5 p-2 bg-gray-100">
 				{/* put a rounded image placer for user.media */}
 				<div className="flex items-center mb-4">
-					<Img
+					<img
 						className="w-12 h-12 rounded-full mr-4"
 						src={
 							user.Media
