@@ -30,9 +30,9 @@ export default async function Dashboard() {
 					{movie.title}
 				</h3>
 				<p className="text-green-200 text-lg">Year: {movie.year}</p>
-				<p>Plot: {movie.plot}</p>
-				<p>Genres: {movie.genres}</p>
-				<p>Metacritic: {movie.metacritic}</p>
+				<div>Plot: {movie.plot}</div>
+				<div>Genres: {movie.genres}</div>
+				<div>Metacritic: {movie.metacritic}</div>
 			</div>
 		</li>
 	));
