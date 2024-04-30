@@ -6,6 +6,7 @@ import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import CreatableSelect from "react-select/creatable";
 import makeAnimated from "react-select/animated";
+import { useToast } from "./ui/use-toast";
 
 export function InputPost() {
 	const animatedComponents = makeAnimated();
@@ -14,6 +15,7 @@ export function InputPost() {
 	const [themes, setThemes] = useState<
 		Array<{ value: string; label: string }>
 	>([]);
+	const { toast } = useToast();
 
 	const [description, setDescription] = useState("");
 	const [imageUrl, setImageUrl] = useState("");
@@ -67,25 +69,21 @@ export function InputPost() {
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-
-		// Vérification des conditions avant de procéder
 		const isTitleValid = title.length > 3;
 		const isHookValid = hook.trim() !== "";
 		const isThemeValid = themes.length !== 0;
 
-		// Log l'état des champs
-		console.log(`Title: ${title}, Valid: ${isTitleValid}`);
-		console.log(`Hook: ${hook}, Valid: ${isHookValid}`);
-		console.log(`Theme: ${themes}, Valid: ${isThemeValid}`);
-
-		// Vérifie si tous les champs sont valides
 		if (!isTitleValid || !isHookValid || !isThemeValid) {
+			toast({
+				variant: "destructive",
+				title: "Uh oh! Something went wrong.",
+				description: "Title, hook and themes are required.",
+			});
 			console.log("Validation failed, not submitting.");
-			return; // Ne pas soumettre les données si la validation échoue
+			return;
 		}
 
-		// Si tout est valide, envoyer la requête
-		const res = await fetch("api/posts", {
+		await fetch("api/posts", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -97,20 +95,28 @@ export function InputPost() {
 				description,
 				imageUrl,
 			}),
-		});
-
-		const data = await res.json();
-		if (data.error) {
-			console.log(data.msg);
-		} else {
-			console.log("Submission successful");
-			setTitle("");
-			setHook("");
-			setThemes([]);
-			setDescription("");
-			setImageUrl("");
-			setIsExpanded(false);
-		}
+		})
+			.catch((error) => {
+				toast({
+					variant: "destructive",
+					title: "Uh oh! Something went wrong.",
+					description: error.message,
+				});
+				console.log("Showing destructive toast");
+			})
+			.finally(() => {
+				toast({
+					title: "Post submitted successfully",
+					description: "Your post has been successfully submitted.",
+				});
+				console.log("Submission successful");
+				setTitle("");
+				setHook("");
+				setThemes([]);
+				setDescription("");
+				setImageUrl("");
+				setIsExpanded(false);
+			});
 	};
 	const expandedStyle = {
 		maxHeight: isExpanded ? "1000px" : "0", // Adjust max height based on your content size
