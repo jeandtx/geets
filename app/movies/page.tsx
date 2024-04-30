@@ -10,11 +10,13 @@ export const metadata: Metadata = {
 
 interface User {
     _id: string;
-    Name: string;
-    Email: string;
-    media: string;
-    Posts: string;
+    age: string;
+    email: string;
+    Media: string;
+    pseudo: string;
     Rating: number;
+    UserId : number;
+    location: string;
 }
 
 
@@ -54,14 +56,24 @@ async function getUserById(userId: string): Promise<User> {
 
 export default async function Dashboard() {
     const posts = await getPosts()
-    const user = await getUserById(posts[0].user_id)
+    const user = await getUserById(posts[2].userId)
+    // make a list of the same length of posts with the user of each post thanks to the function getUserById
+    const users = posts.map((post) => getUserById(post.userId))
+    // for loop to get the user of each post
+    // for (let i = 0; i < posts.length; i++) {
+
+    console.log(user)
     "use client"
     const postList = posts.map((post) => (
+        // for each post create new user const user = getUserById(post.userId)
+        
+        
         <>
-                        <div className="flex p-8 bg-gray-50  overflow-hidden">
-			<SideProjectCard post={post} user={user}/>
-		</div>
-                    </>
+        
+            <div className="flex p-8 bg-gray-50  overflow-hidden">
+			    <SideProjectCard post={post} user={user}/>
+		    </div>
+        </>
     ));
 
     return (

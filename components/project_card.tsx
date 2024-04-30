@@ -1,32 +1,35 @@
 import React from 'react';
 import 'bulma/css/bulma.min.css';
+import { list } from 'postcss';
 
 
 interface SideProjectPost {
   _id: {
     $oid: string;
   };
-  Time: {
+  time: {
     $date: string;
   };
-  Title: string;
-  Hook: string;
-  Theme: string;
-  Description: string;
-  Media: string;
-  Labels: string[];
-  Participants: number;
+  title: string;
+  hook: string;
+  theme: string;
+  description: string;
+  media: string;
+  labels: string[];
+  participants: number;
 }
 
 interface SideProjectUser {
   _id: {
     $oid: string;
   };
-  Name: string;
-  Email: string;
+  name: string;
+  email: string;
+  experience: number;
   media: string;
-  Posts: string;
-  Rating: number;
+  PostId: string[];
+  Media: string;
+  
 
 }
 
@@ -42,7 +45,7 @@ export const SideProjectCard: React.FC<SideProjectCardProps> = ({ post, user}) =
 
       {/* Image container with a relative size */}
       <div className="w-2/5">
-        <img className="w-full h-full object-cover" src={post.Media ? post.Media : "https://bulma.io/images/placeholders/1280x960.png"} alt="Placeholder image" />
+        <img className="w-full h-full object-cover" src={post.media ? post.media : "https://bulma.io/images/placeholders/1280x960.png"} alt="Placeholder image" />
       </div>
 
       {/* Text content container with padding and background color */}
@@ -52,22 +55,22 @@ export const SideProjectCard: React.FC<SideProjectCardProps> = ({ post, user}) =
           <img className="w-12 h-12 rounded-full mr-4" src={user.Media ? user.Media : "https://bulma.io/images/placeholders/96x96.png"} alt="Placeholder image" />
           <div>
             {/* put user.Name and next of it the user.Rating over 5*/}
-            <p className="text-lg text-gray-900 font-bold">{user.Name} {user.Rating}/5</p>
+            <p className="text-lg text-gray-900 font-bold">{user.name} {user.Rating}/5</p>
 
 
             {/* <p className="text-lg text-gray-900 font-bold">{user.Name}</p>  */}
-            <p className="text-sm text-gray-600">{user.Email}</p>
+            <p className="text-sm text-gray-600">{user.email}</p>
             {/* write the number of posts  */}
-            <p className="text-sm text-gray-600">{user.Posts} posted projects</p>
+            <p className="text-sm text-gray-600">{user.PostId} posted projects</p>
           </div>
         </div>
         {/*make a new div for the content with padding*/}
 
         <div className="p-2">
-        <h2 className="text-2xl font-bold mb-2">{post.Title}</h2>
-        <p className="text-base text-gray-700 underline mb-1">{post.Hook}</p>
-        <p className="text-gray-700 mb-0">{post.Description}</p>
-        <p className="text-sm text-gray-600 mt-4"><time dateTime={post.Time.$date}>{new Date(post.Time.$date).toLocaleDateString()}</time></p>
+        <h2 className="text-2xl font-bold mb-2">{post.title}</h2>
+        <p className="text-base text-gray-700 underline mb-1">{post.hook}</p>
+        <p className="text-gray-700 mb-0">{post.description}</p>
+        <p className="text-sm text-gray-600 mt-4"><time dateTime={post.time.$date}>{new Date(post.time.$date).toLocaleDateString()}</time></p>
         </div>
       </div>
 
