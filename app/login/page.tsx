@@ -2,10 +2,8 @@ import Link from "next/link";
 import { Form } from "@/components/form";
 import { signIn } from "@/app/auth";
 import { SubmitButton } from "@/components/ui/submit-button";
-import { useToast } from "@/components/ui/use-toast";
 
 export default function Login() {
-	const { toast } = useToast();
 	return (
 		<div className="flex h-screen w-screen items-center justify-center mt-5">
 			<div className="z-10 w-full max-w-md overflow-hidden rounded-2xl border border-gray-100 shadow-xl">
@@ -22,11 +20,7 @@ export default function Login() {
 								password: formData.get("password") as string,
 							});
 						} catch (error) {
-							toast({
-								variant: "destructive",
-								title: "Uh oh! Something went wrong.",
-								description: "error",
-							});
+							console.log("Sign in failed");
 						}
 					}}
 				>
