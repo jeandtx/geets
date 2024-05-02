@@ -6,17 +6,6 @@ export const metadata: Metadata = {
 	title: "Top 15 Movies by Metacritic",
 };
 
-interface User {
-	_id: string;
-	age: string;
-	email: string;
-	Media: string;
-	pseudo: string;
-	Rating: number;
-	UserId: number;
-	location: string;
-}
-
 async function getPosts() {
 	const client = await clientPromise;
 	const db = client.db("geets");
