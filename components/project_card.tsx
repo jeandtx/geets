@@ -1,36 +1,8 @@
 import React from "react";
-// import 'bulma/css/bulma.min.css';
 import { list } from "postcss";
 import clientPromise from "@/lib/mongodb";
-// import Img from "next/image";
-
-interface SideProjectPost {
-	_id: {
-		$oid: string;
-	};
-	time: {
-		$date: string;
-	};
-	title: string;
-	hook: string;
-	theme: string;
-	description: string;
-	media: string;
-	labels: string[];
-	participants: number;
-}
-
-interface SideProjectUser {
-	_id: {
-		$oid: string;
-	};
-	name: string;
-	email: string;
-	experience: number;
-	media: string;
-	PostId: string[];
-	Media: string;
-}
+import Img from "next/image";
+import { ObjectId } from "mongodb";
 
 interface User {
 	_id: string;
@@ -45,64 +17,76 @@ interface User {
 
 interface SideProjectCardProps {
 	post: any;
-	// user: any;
 }
 
-async function getUserById(userId: string): Promise<User> {
+async function getUserById(userId: string) {
 	const client = await clientPromise;
 	const db = client.db("geets");
-	const user = await db.collection<User>("users").findOne({ _id: userId });
-	return user!;
+	const users = db.collection("users");
+	const user = await users.findOne({
+		_id: new ObjectId("6630eacbc9cd5f9cad32f2d9"),
+	});
+	// const user = await users.findOne({ _id: new ObjectId(userId) });
+	if (user) {
+		return user;
+	} else {
+		return {
+			_id: "not_found",
+			age: "not_found",
+			email: "not_found",
+			Media: "https://loremflickr.com/640/480/nature",
+			pseudo: "not_found",
+			Rating: 0,
+			UserId: 0,
+			location: "not_found",
+		};
+	}
 }
 
-export default async function SideProjectCard({
-	post, // user,
-}: SideProjectCardProps) {
+export default async function SideProjectCard({ post }: SideProjectCardProps) {
 	const user = await getUserById(post.userId);
 	return (
-		// Parent container with horizontal layout, rounded corners, shadow, and a defined maximum width
 		<div className="flex max-w-2xl rounded overflow-hidden shadow-lg">
-			{/* Image container with a relative size */}
 			<div className="w-2/5">
-				<img
+				<Img
 					className="w-full h-full object-cover"
 					src={
 						post.media
 							? post.media
-							: "https://bulma.io/images/placeholders/1280x960.png"
+							: "https://loremflickr.com/640/480/nature"
 					}
 					alt="Placeholder image"
+					width={1280}
+					height={960}
 				/>
 			</div>
 
-			{/* Text content container with padding and background color */}
 			<div className="w-3/5 p-2 bg-gray-100">
-				{/* put a rounded image placer for user.media */}
 				<div className="flex items-center mb-4">
-					<img
+					<Img
 						className="w-12 h-12 rounded-full mr-4"
 						src={
-							user.Media
+							user
 								? user.Media
-								: "https://bulma.io/images/placeholders/96x96.png"
+								: "https://loremflickr.com/640/480/nature"
 						}
 						alt="Placeholder image"
+						width={48}
+						height={48}
 					/>
 					<div>
-						{/* put user.Name and next of it the user.Rating over 5*/}
 						<p className="text-lg text-gray-900 font-bold">
-							{user.email} 4/5
+							{user ? user.pseudo : "user pseudo"}
 						</p>
 
-						{/* <p className="text-lg text-gray-900 font-bold">{user.Name}</p>  */}
-						<p className="text-sm text-gray-600">{user.email}</p>
-						{/* write the number of posts  */}
 						<p className="text-sm text-gray-600">
-							{user.age} posted projects
+							{user ? user.Rating : "user rating"}
+						</p>
+						<p className="text-sm text-gray-600">
+							{user ? user.location : "user location"}
 						</p>
 					</div>
 				</div>
-				{/*make a new div for the content with padding*/}
 
 				<div className="p-2">
 					<h2 className="text-2xl font-bold mb-2">{post.title}</h2>
