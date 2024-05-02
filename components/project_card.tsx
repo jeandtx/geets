@@ -1,19 +1,7 @@
 import React from "react";
-import { list } from "postcss";
 import clientPromise from "@/lib/mongodb";
 import Img from "next/image";
 import { ObjectId } from "mongodb";
-
-interface User {
-	_id: string;
-	age: string;
-	email: string;
-	Media: string;
-	pseudo: string;
-	Rating: number;
-	UserId: number;
-	location: string;
-}
 
 interface SideProjectCardProps {
 	post: any;
@@ -28,6 +16,7 @@ async function getUserById(userId: string) {
 	});
 	// const user = await users.findOne({ _id: new ObjectId(userId) });
 	if (user) {
+		console.log(user);
 		return user;
 	} else {
 		return {
@@ -80,10 +69,10 @@ export default async function SideProjectCard({ post }: SideProjectCardProps) {
 						</p>
 
 						<p className="text-sm text-gray-600">
-							{user ? user.Rating : "user rating"}
+							Age : {user ? user.age : "user age"}
 						</p>
 						<p className="text-sm text-gray-600">
-							{user ? user.location : "user location"}
+							{user ? user.email : "user email"}
 						</p>
 					</div>
 				</div>
