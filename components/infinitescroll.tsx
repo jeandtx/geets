@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { useInView } from 'react-intersection-observer'
+import { cn } from '@/lib/utils'
 
 /* 
 LIST OF TODOs:
@@ -11,7 +12,9 @@ LIST OF TODOs:
 General task: change types to match the data you are fetching (create interface)
 */
 
-export const InfiniteScroll = () => {
+interface InfiniteScrollProps extends React.HTMLAttributes<HTMLDivElement> {}
+
+export const InfiniteScroll = ({ className }: InfiniteScrollProps) => {
     const [data, setData] = React.useState<Object[]>([])
 
     // TODO n°1
@@ -37,8 +40,8 @@ export const InfiniteScroll = () => {
 
     return (
         <div
-            className='flex flex-col items-center'
-            style={{ height: '100vh', width: '40vw', overflowY: 'scroll' }}
+            className={cn('flex flex-col items-center', className)}
+            style={{ height: '100%', width: '60vw', overflowY: 'scroll' }}
         >
             <ul>
                 {/* TODO n°2*/}
