@@ -50,7 +50,7 @@ export function Post({ className, jsonData, ...props }: Readonly<PostProps>) {
 					</CardTitle>
 
 					<CardDate className="text-sm text-gray-500">
-						{new Date(jsonData.Time.$date).toLocaleString()}
+						{jsonData.Time.$date.toLocaleString()}
 					</CardDate>
 				</CardHeader>
 
