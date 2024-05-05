@@ -15,7 +15,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import BadgeList from "@/components/ui/badge";
 import Img from "next/image";
 
-interface CardDemoProps extends React.HTMLAttributes<HTMLDivElement> {
+interface PostProps extends React.HTMLAttributes<HTMLDivElement> {
 	className?: string;
 	jsonData: {
 		Title: string;
@@ -30,11 +30,7 @@ interface CardDemoProps extends React.HTMLAttributes<HTMLDivElement> {
 	};
 }
 
-export function CardDemo({
-	className,
-	jsonData,
-	...props
-}: Readonly<CardDemoProps>) {
+export function Post({ className, jsonData, ...props }: Readonly<PostProps>) {
 	return (
 		<div className="flex flex-col">
 			<Card

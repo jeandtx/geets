@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { CardDemo } from "@/components/card";
+import { Post } from "@/components/post";
 
 export const metadata: Metadata = {
 	title: "Test zone",
@@ -20,7 +20,7 @@ const jsonData = {
 export default async function Dashboard() {
 	return (
 		<div className="flex p-8 bg-gray-50">
-			<CardDemo jsonData={jsonData} />
+			<Post jsonData={jsonData} />
 		</div>
 	);
 }
