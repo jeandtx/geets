@@ -27,16 +27,16 @@ function SignOut() {
 export default async function ProfilPage({
 	params,
 }: Readonly<{
-	params: { pseudo: string };
+	params: { profil: string };
 }>) {
 	const session = await auth();
-	const { pseudo } = params;
+	const { profil } = params;
 	const user = await getUser(session?.user?.email ?? "");
 
 	return (
 		<div className="flex h-screen ">
 			<div className="w-screen h-screen flex flex-col space-y-5 justify-center items-center text-black">
-				<div>The pseudo of the searched profile is {pseudo}</div>
+				<div>The pseudo of the searched profile is {profil}</div>
 				<div>You are logged in as {session?.user?.email}</div>
 				{user && <div>Nom: {user.name}</div>}
 				{user && <div>Prénom: {user.last_name}</div>}

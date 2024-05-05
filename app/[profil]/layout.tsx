@@ -3,7 +3,7 @@ export default function ProfilLayout({
 }: Readonly<{
 	children: React.ReactNode;
 	params: {
-		pseudo: string;
+		profil: string;
 	};
 }>) {
 	return <section>{children}</section>;
