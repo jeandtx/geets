@@ -1,6 +1,7 @@
 import { auth, signOut } from "@/app/auth";
 import clientPromise from "@/lib/mongodb";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 async function getUser(email: string) {
 	const client = await clientPromise;
@@ -31,19 +32,44 @@ export default async function ProfilPage({
 }>) {
 	const session = await auth();
 	const { profil } = params;
-	const user = await getUser(session?.user?.email ?? "");
+	const decodeEmail = decodeURIComponent(profil);
+	const user = await getUser(decodeEmail);
 
 	return (
-		<div className="flex h-screen ">
+		<div className="flex h-screen">
 			<div className="w-screen h-screen flex flex-col space-y-5 justify-center items-center text-black">
-				<div>The pseudo of the searched profile is {profil}</div>
-				<div>You are logged in as {session?.user?.email}</div>
-				{user && <div>Nom: {user.name}</div>}
-				{user && <div>Prénom: {user.last_name}</div>}
-				{user && <div>Age: {user.age}</div>}
-				{user && <div>Localisation: {user.location}</div>}
-				{user && <div>Sexe: {user.sexe}</div>}
-				{user && <div>Expérience: {user.experience}</div>}
+				<div>Search other profils from the database to try</div>
+				<Link href="/sanchezlori@example.com" className="text-textblue">
+					{" "}
+					for example sanchezlori@example.com
+				</Link>
+				<div>
+					Note that you have to be logged in to access this page and
+					any profil page
+				</div>
+				<h1 className="text-3xl font-bold ">Profil of {decodeEmail}</h1>
+				{user ? (
+					<>
+						<div>Nom: {user.name}</div>
+						<div>Prénom: {user.last_name}</div>
+						<div>Age: {user.age}</div>
+						<div>Localisation: {user.location}</div>
+						<div>Sexe: {user.sexe}</div>
+						<div>Expérience: {user.experience}</div>
+					</>
+				) : (
+					<div>User not found :(</div>
+				)}
+				<div className="text-2xl font-bold ">
+					You are logged in as {session?.user?.email}
+				</div>
+
+				<Link
+					href={`/${session?.user?.email}`}
+					className="text-textblue"
+				>
+					Back to my profile
+				</Link>
 				<SignOut />
 			</div>
 		</div>
