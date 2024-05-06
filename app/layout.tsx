@@ -24,9 +24,7 @@ export default function RootLayout({
 				<div className="flex  w-full h-screen overflow-hidden">
 					<SessionWrapper>
 						<Sidebar className="w-1/5 bg-gray-200" />
-						<div className="flex justify-evenly items-center w-4/5">
-							{children}
-						</div>
+						<div className="w-4/5">{children}</div>
 					</SessionWrapper>
 					<Toaster />
 				</div>
