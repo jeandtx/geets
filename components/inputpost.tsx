@@ -7,6 +7,8 @@ import { Textarea } from "./ui/textarea";
 import CreatableSelect from "react-select/creatable";
 import makeAnimated from "react-select/animated";
 import { useToast } from "./ui/use-toast";
+import Modal from "./ui/modal";
+
 
 export function InputPost() {
 	const animatedComponents = makeAnimated();
@@ -21,11 +23,11 @@ export function InputPost() {
 	const [imageUrl, setImageUrl] = useState("");
 	const [isExpanded, setIsExpanded] = useState(false);
 	const formRef = useRef<HTMLFormElement>(null);
-
+    const [textareaHeight, setTextareaHeight] = useState("min-h-[40px]");  // Gère la hauteur de Textarea
+	const [selectedProject, setSelectedProject] = useState<string | null>(null);
 	const themeOptions = [
-		{ value: "coding", label: "💪 Fitness" },
-		{ value: "fitness", label: "⚽️ Foot" },
-		{ value: "cooking", label: "🏀 Basket" },
+		{ value: "fitness", label: "💪 Fitness" },
+		{ value: "basket", label: "🏀 Basket" },
 		{ value: "music", label: "🎶 Music" },
 		{ value: "gaming", label: "👾 Gaming" },
 		{ value: "travel", label: "✈️ Travel" },
@@ -51,6 +53,7 @@ export function InputPost() {
 				!formRef.current.contains(event.target as Node)
 			) {
 				setIsExpanded(false);
+				setTextareaHeight("min-h-[40px]");
 			}
 		};
 
@@ -65,7 +68,10 @@ export function InputPost() {
 
 	const handleTitleFocus = () => {
 		setIsExpanded(true);
+		setTextareaHeight("min-h-[80px]");
 	};
+
+	
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -117,12 +123,14 @@ export function InputPost() {
 				setDescription("");
 				setImageUrl("");
 				setIsExpanded(false);
+				setTextareaHeight("min-h-[40px]");
+
 			});
 	};
 	const expandedStyle = {
 		maxHeight: isExpanded ? "1000px" : "0", // Adjust max height based on your content size
 		overflow: "hidden",
-		transition: "max-height 0.5s ease-in-out",
+		transition: "max-height 0.3s ease-in-out",
 	};
 
 	const handleThemeChange = (newValue: any) => {
@@ -139,78 +147,37 @@ export function InputPost() {
 				<form
 					ref={formRef}
 					onSubmit={handleSubmit}
-					className="flex flex-col"
+					className="flex flex-col gap-5"
 				>
-					<div className="flex items-center gap-2">
+					<div className="flex gap-2">
 						<Avatar>
 							<AvatarImage src="https://github.com/shadcn.png" />
 							<AvatarFallback>CN</AvatarFallback>
 						</Avatar>
-						<Input
+						<Textarea
 							onFocus={handleTitleFocus}
+							onBlur={() => setIsExpanded(false)}
 							onChange={(e) => setTitle(e.target.value)}
 							value={title}
-							type="text"
+							height={textareaHeight}
+							style={{
+								minHeight: textareaHeight,
+								transition: "min-height 0.3s ease-in-out"
+							}}
 							id="title"
 							placeholder="Share something !"
-							className="text-black text-inter placeholder-gray-400 font-normal rounded-full flex h-10 w-full border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300 hover:border-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0"
+							className="text-black text-inter  placeholder-gray-400 font-normal flex h-5 w-full border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300 hover:border-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0"
 						/>
 					</div>
 
-					<div style={expandedStyle} className="flex flex-col gap-5">
-						<div>
-							<Textarea
-								onChange={(e) => setHook(e.target.value)}
-								value={hook}
-								id="hook"
-								placeholder="Enter a catchy hook"
-								style={{ height: "60px", borderRadius: "15px" }}
-								className="mt-4 flex w-full placeholder-gray-400 font-normal rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:border-gray-300 focus:ring-0 disabled:cursor-not-allowed disabled:opacity-50 hover:border-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0"
-							/>
+					<div /*style={expandedStyle}*/ className="flex justify-end">
+						<div className="flex gap-3">
+							<Modal onSelectProject={setSelectedProject} />
+							{selectedProject && <span>Projet sélectionné : {selectedProject}</span>}
+							<Button type="submit">Envoyer</Button>
 						</div>
-
-						<div>
-							<CreatableSelect
-								// primaryColor="#000000"
-								isMulti
-								isSearchable={true}
-								options={themeOptions}
-								value={themes}
-								onChange={handleThemeChange}
-								closeMenuOnSelect={false}
-								placeholder="Select themes..."
-								components={animatedComponents}
-								// classNames={customClassNames}
-								// className="mt-4 flex w-full placeholder-gray-400 font-normal rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:border-gray-300 focus:ring-0 disabled:cursor-not-allowed disabled:opacity-50 hover:border-gray-400 focus-visible:ring-0"
-							/>
-						</div>
-
-						<div>
-							<Input
-								type="text"
-								onChange={(e) => setImageUrl(e.target.value)}
-								value={imageUrl}
-								placeholder="Image URL"
-								className="text-black text-inter placeholder-gray-400 font-normal rounded-full flex h-10 w-full border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300 hover:border-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0"
-							/>
-						</div>
-
-						<div>
-							<Textarea
-								onChange={(e) => setDescription(e.target.value)}
-								value={description}
-								id="description"
-								placeholder="Detailed description (optional)"
-								style={{
-									height: "120px",
-									borderRadius: "15px",
-								}}
-								className="flex w-full rounded-md placeholder-gray-400 font-normal border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:border-gray-300 focus:ring-0 disabled:cursor-not-allowed disabled:opacity-50 hover:border-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0"
-							/>
-						</div>
-
-						<Button type="submit">Submit</Button>
 					</div>
+
 				</form>
 			</div>
 		</div>
