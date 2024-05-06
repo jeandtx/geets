@@ -1,3 +1,4 @@
+"use client";
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 import { ScrollArea } from "./ui/scroll-area";
@@ -15,6 +16,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { auth } from "@/app/auth";
+import React, { useState } from "react";
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -31,8 +33,26 @@ const projects = [
 	"MatchNote",
 ];
 
-export async function Sidebar({ className }: SidebarProps) {
-	const session = await auth();
+export function Sidebar({ className }: SidebarProps) {
+	// const session = await auth();
+	const [session, setSession] = useState<any>(null);
+	const [open, setOpen] = useState(false);
+
+	React.useEffect(() => {
+		const fetchSession = async () => {
+			const res = await fetch("/api/auth/session");
+			if (res.body !== null) {
+				const reader = res.body.getReader();
+				const result = await reader.read(); // yields { done: true, value: Uint8Array }
+				const decoder = new TextDecoder("utf-8");
+				const text = decoder.decode(result.value);
+				const session = JSON.parse(text);
+				console.log(session);
+				setSession(session);
+			}
+		};
+		fetchSession();
+	}, []);
 	return (
 		<div className={cn("pb-12", className)}>
 			<div className="space-y-4 py-4">
