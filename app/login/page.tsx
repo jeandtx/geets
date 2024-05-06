@@ -14,7 +14,7 @@ export default function Login() {
 					action={async (formData: FormData) => {
 						"use server";
 						await signIn("credentials", {
-							redirectTo: "/protected",
+							redirectTo: "/" + formData.get("email"),
 							email: formData.get("email") as string,
 							password: formData.get("password") as string,
 						});
@@ -29,15 +29,15 @@ export default function Login() {
 						Sign In
 					</SubmitButton>
 					<div className="flex flex-row justify-center space-x-4">
-						<p className="text-center text-sm text-plaintext">
+						<div className="text-center text-sm text-plaintext">
 							Forget Password?{" "}
-						</p>
-						<p className="text-center text-sm text-plaintext">
+						</div>
+						<div className="text-center text-sm text-plaintext">
 							{"Don't have an account? "}
 							<Link href="/register" className="text-textblue">
 								Sign up
 							</Link>
-						</p>
+						</div>
 					</div>
 				</Form>
 			</div>

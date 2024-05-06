@@ -13,7 +13,7 @@ export const {
   ...authConfig,
   providers: [
     Credentials({
-      async authorize({ email, password }: any ) {
+      async authorize({ email, password }: any) {
         const user = await getUser(email);
 
         if (!user || user.length === 0) {
@@ -21,7 +21,7 @@ export const {
         }
 
         // Vérifier si les mots de passe correspondent
-        const passwordsMatch = await compare(password, user.password!);
+        const passwordsMatch = await compare(password, user.password);
         if (passwordsMatch) {
           return { email: user.email, name: user.name };
         } else {
