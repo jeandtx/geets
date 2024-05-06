@@ -15,8 +15,9 @@ import {
 	SquareMousePointer,
 } from "lucide-react";
 import Link from "next/link";
-import { auth } from "@/app/auth";
 import React, { useState } from "react";
+import { Menu } from "lucide-react";
+import { NavigationMenuDemo } from "./navigation-menu";
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -34,9 +35,7 @@ const projects = [
 ];
 
 export function Sidebar({ className }: SidebarProps) {
-	// const session = await auth();
 	const [session, setSession] = useState<any>(null);
-	const [open, setOpen] = useState(false);
 
 	React.useEffect(() => {
 		const fetchSession = async () => {
@@ -47,130 +46,133 @@ export function Sidebar({ className }: SidebarProps) {
 				const decoder = new TextDecoder("utf-8");
 				const text = decoder.decode(result.value);
 				const session = JSON.parse(text);
-				console.log(session);
 				setSession(session);
 			}
 		};
 		fetchSession();
 	}, []);
-	return (
-		<div className={cn("pb-12", className)}>
-			<div className="space-y-4 py-4">
-				<div className="px-3 py-2">
-					<h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
-						Navigate
-					</h2>
-					<div className="space-y-1">
-						<Link href={"/"}>
-							<Button
-								variant="ghost"
-								className="w-full justify-start"
-							>
-								<BookHeart className="mr-2 h-4 w-4" />
-								For You
-							</Button>
-						</Link>
-						<Link href={"/testing"}>
-							<Button
-								variant="ghost"
-								className="w-full justify-start"
-							>
-								<FlaskConical className="mr-2 h-4 w-4" />
-								Testing Page
-							</Button>
-						</Link>
-						<Link href={`/${session?.user?.email}`}>
-							<Button
-								variant="ghost"
-								className="w-full justify-start"
-							>
-								<PersonStanding className="mr-2 h-4 w-4" />
-								Profil
-							</Button>
-						</Link>
-						<Link href={`/posts`}>
-							<Button
-								variant="ghost"
-								className="w-full justify-start"
-							>
-								<SquareMousePointer className="mr-2 h-4 w-4" />
-								My Posts
-							</Button>
-						</Link>
-						<Link href={`/projects`}>
-							<Button
-								variant="ghost"
-								className="w-full justify-start"
-							>
-								<SquareKanban className="mr-2 h-4 w-4" />
-								My Projects
-							</Button>
-						</Link>
-					</div>
-				</div>
-				<div className="px-3 py-2">
-					<h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
-						Settings
-					</h2>
-					<div className="space-y-1">
-						<Button
-							variant="ghost"
-							className="w-full justify-start"
-						>
-							<EarthLock className="mr-2 h-4 w-4" />
-							Privacy Policy
-						</Button>
-						<Button
-							variant="ghost"
-							className="w-full justify-start"
-						>
-							<SunMoon className="mr-2 h-4 w-4" />
-							Themes
-						</Button>
-						<Button
-							variant="ghost"
-							className="w-full justify-start"
-						>
-							<UserRoundCog className="mr-2 h-4 w-4" />
-							Account Settings
-						</Button>
-						<Button
-							variant="ghost"
-							className="w-full justify-start"
-						>
-							<BellMinus className="mr-2 h-4 w-4" />
-							Notification Settings
-						</Button>
-						<Button
-							variant="ghost"
-							className="w-full justify-start"
-						>
-							<Languages className="mr-2 h-4 w-4" />
-							Language Settings
-						</Button>
-					</div>
-				</div>
 
-				<div className="py-2">
-					<h2 className="relative px-7 text-lg font-semibold tracking-tight">
-						Your Projects
-					</h2>
-					<ScrollArea className="h-[300px] px-1">
-						<div className="space-y-1 p-2">
-							{projects?.map((playlist, i) => (
+	return (
+		<>
+			<NavigationMenuDemo className="fixed top-4 left-4 z-50 md:hidden block" />
+			<div className={cn("pb-12  md:block hidden", className)}>
+				<div className="space-y-4 py-4 ">
+					<div className="px-3 py-2">
+						<h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
+							Navigate
+						</h2>
+						<div className="space-y-1">
+							<Link href={"/"}>
 								<Button
-									key={`${playlist}-${i}`}
 									variant="ghost"
-									className="w-full justify-start font-normal"
+									className="w-full justify-start"
+								>
+									<BookHeart className="mr-2 h-4 w-4" />
+									For You
+								</Button>
+							</Link>
+							<Link href={"/testing"}>
+								<Button
+									variant="ghost"
+									className="w-full justify-start"
+								>
+									<FlaskConical className="mr-2 h-4 w-4" />
+									Testing Page
+								</Button>
+							</Link>
+							<Link href={`/${session?.user?.email}`}>
+								<Button
+									variant="ghost"
+									className="w-full justify-start"
+								>
+									<PersonStanding className="mr-2 h-4 w-4" />
+									Profil
+								</Button>
+							</Link>
+							<Link href={`/posts`}>
+								<Button
+									variant="ghost"
+									className="w-full justify-start"
+								>
+									<SquareMousePointer className="mr-2 h-4 w-4" />
+									My Posts
+								</Button>
+							</Link>
+							<Link href={`/projects`}>
+								<Button
+									variant="ghost"
+									className="w-full justify-start"
 								>
 									<SquareKanban className="mr-2 h-4 w-4" />
-									{playlist}
+									My Projects
 								</Button>
-							))}
+							</Link>
 						</div>
-					</ScrollArea>
+					</div>
+					<div className="px-3 py-2">
+						<h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
+							Settings
+						</h2>
+						<div className="space-y-1">
+							<Button
+								variant="ghost"
+								className="w-full justify-start"
+							>
+								<EarthLock className="mr-2 h-4 w-4" />
+								Policy
+							</Button>
+							<Button
+								variant="ghost"
+								className="w-full justify-start"
+							>
+								<SunMoon className="mr-2 h-4 w-4" />
+								Themes
+							</Button>
+							<Button
+								variant="ghost"
+								className="w-full justify-start"
+							>
+								<UserRoundCog className="mr-2 h-4 w-4" />
+								Account
+							</Button>
+							<Button
+								variant="ghost"
+								className="w-full justify-start"
+							>
+								<BellMinus className="mr-2 h-4 w-4" />
+								Notification
+							</Button>
+							<Button
+								variant="ghost"
+								className="w-full justify-start"
+							>
+								<Languages className="mr-2 h-4 w-4" />
+								Language
+							</Button>
+						</div>
+					</div>
+
+					<div className="py-2">
+						<h2 className="relative px-7 text-lg font-semibold tracking-tight">
+							Your Projects
+						</h2>
+						<ScrollArea className="h-[300px] px-1">
+							<div className="space-y-1 p-2">
+								{projects?.map((playlist, i) => (
+									<Button
+										key={`${playlist}-${i}`}
+										variant="ghost"
+										className="w-full justify-start font-normal"
+									>
+										<SquareKanban className="mr-2 h-4 w-4" />
+										{playlist}
+									</Button>
+								))}
+							</div>
+						</ScrollArea>
+					</div>
 				</div>
 			</div>
-		</div>
+		</>
 	);
 }
