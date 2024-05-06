@@ -7,6 +7,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel"
 import { Card, CardContent } from "@/components/ui/card"
+import Link from "next/link";
 
 interface Project {
   _id: string;
@@ -106,14 +107,15 @@ const Modal: React.FC<ModalProps> = ({ onSelectProject, projects }) => {
                     </Card>
                   </CarouselItem>
                 ))}
-
+              <Link href="/">
               <CarouselItem key="add-new" onClick={handleAddProject} className="basis-1/3 cursor-pointer ">
                   <Card>
                     <CardContent className="flex items-center justify-center p-6 overflow-hidden">
-                      <span className="text-xl font-bold">+</span> {/* Styliser comme souhaité */}
+                      <span className="text-xl font-bold">+</span> 
                     </CardContent>
                   </Card>
                 </CarouselItem>
+              </Link>
               </CarouselContent>
               <CarouselPrevious />
               <CarouselNext />
