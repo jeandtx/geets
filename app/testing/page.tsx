@@ -11,7 +11,7 @@ export default async function Dashboard() {
 		<div className="p-5">
 			<InputPost />
 			<div className="">
-				<UpperBar className="w-3/5 h-20" />
+				<UpperBar />
 			</div>
 		</div>
 	);
