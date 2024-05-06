@@ -7,11 +7,20 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel"
 import { Card, CardContent } from "@/components/ui/card"
-interface ModalProps {
-  onSelectProject: (projectId: string) => void; // Ajout de cette ligne
+
+interface Project {
+  _id: string;
+  name: string;
+  description: string;
+  // Ajoutez d'autres champs nécessaires
 }
 
-const Modal: React.FC<ModalProps> = ({ onSelectProject }) => {
+interface ModalProps {
+  onSelectProject: (projectId: string) => void;
+  projects: Project[];
+}
+
+const Modal: React.FC<ModalProps> = ({ onSelectProject, projects }) => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const trigger = useRef<HTMLButtonElement>(null);
   const modal = useRef<HTMLDivElement>(null);
@@ -52,6 +61,11 @@ const Modal: React.FC<ModalProps> = ({ onSelectProject }) => {
     setModalOpen(false); // Ferme la modal
   };
 
+  const handleAddProject = () => {
+    console.log("Add new project");
+    setModalOpen(false);
+  };
+
   return (
     <>
       <button
@@ -81,18 +95,25 @@ const Modal: React.FC<ModalProps> = ({ onSelectProject }) => {
             </h3>
             <div className="flex justify-center pb-5 ">
             <Carousel className="w-full max-w-sm">
-              <CarouselContent className="-ml-1">
-                {Array.from({ length: 5 }).map((_, index) => (
-                  <CarouselItem key={index} className="pl-1 md:basis-1/2 lg:basis-1/3 hover:cursor-pointer" onClick={() => handleSelectItem(index.toString())}>
-                    <div className="p-1">
-                      <Card>
-                        <CardContent className="flex aspect-square items-center justify-center p-6">
-                          <span className="text-2xl font-semibold">{index + 1}</span>
-                        </CardContent>
-                      </Card>
-                    </div>
+              <CarouselContent>
+                {projects.map(project => (
+                  <CarouselItem key={project._id} onClick={() => handleSelectItem(project.name)} className="basis-1/3 cursor-pointer ">
+                    <Card>
+                      <CardContent className="flex items-center justify-center p-6 overflow-hidden">
+                        <span className="text-xl font-semibold">{project.name}</span>
+                        {/* Ajoutez d'autres détails du projet ici si nécessaire */}
+                      </CardContent>
+                    </Card>
                   </CarouselItem>
                 ))}
+
+              <CarouselItem key="add-new" onClick={handleAddProject} className="basis-1/3 cursor-pointer ">
+                  <Card>
+                    <CardContent className="flex items-center justify-center p-6 overflow-hidden">
+                      <span className="text-xl font-bold">+</span> {/* Styliser comme souhaité */}
+                    </CardContent>
+                  </Card>
+                </CarouselItem>
               </CarouselContent>
               <CarouselPrevious />
               <CarouselNext />

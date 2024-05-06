@@ -42,7 +42,7 @@ async function getUserProjects(email: string): Promise<Project[]> {
         console.log("User is undefined, cannot fetch projects.");
         return (
             <div className="p-5 rounded-3xl bg-postbg">
-                <InputPost />
+                <InputPost projects={[]}/>
             </div>
         );
     }
@@ -52,7 +52,7 @@ async function getUserProjects(email: string): Promise<Project[]> {
 
     return (
         <div className="p-5 rounded-3xl bg-postbg">
-            <InputPost />
+            <InputPost projects={projects} />
         </div>
     );
 }

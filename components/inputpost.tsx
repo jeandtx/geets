@@ -9,8 +9,13 @@ import makeAnimated from "react-select/animated";
 import { useToast } from "./ui/use-toast";
 import Modal from "./ui/modal";
 
+export interface InputPostProps {
+    projects: Array<{ _id: string; name: string; description: string; [key: string]: any }>;
+}
 
-export function InputPost() {
+
+
+export function InputPost({ projects }: InputPostProps) {
 	const animatedComponents = makeAnimated();
 	const [title, setTitle] = useState("");
 	const [hook, setHook] = useState("");
@@ -172,7 +177,7 @@ export function InputPost() {
 
 					<div /*style={expandedStyle}*/ className="flex justify-end">
 						<div className="flex gap-3">
-							<Modal onSelectProject={setSelectedProject} />
+							<Modal onSelectProject={setSelectedProject} projects={projects} />
 							{selectedProject && <span>Projet sélectionné : {selectedProject}</span>}
 							<Button type="submit">Envoyer</Button>
 						</div>
