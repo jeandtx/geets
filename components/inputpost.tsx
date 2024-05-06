@@ -4,24 +4,21 @@ import { Button } from "./ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
-import CreatableSelect from "react-select/creatable";
 import makeAnimated from "react-select/animated";
 import { useToast } from "./ui/use-toast";
 import Modal from "./ui/modal";
 
 export interface InputPostProps {
     projects: Array<{ _id: string; name: string; description: string; [key: string]: any }>;
+	userEmail: string; // Ajout de l'e-mail de l'utilisateur comme prop
+
 }
 
 
 
-export function InputPost({ projects }: InputPostProps) {
-	const animatedComponents = makeAnimated();
-	const [title, setTitle] = useState("");
-	const [hook, setHook] = useState("");
-	const [themes, setThemes] = useState<
-		Array<{ value: string; label: string }>
-	>([]);
+export function InputPost({ projects, userEmail}: InputPostProps) {
+	
+	
 	const { toast } = useToast();
 
 	const [description, setDescription] = useState("");
@@ -30,26 +27,7 @@ export function InputPost({ projects }: InputPostProps) {
 	const formRef = useRef<HTMLFormElement>(null);
     const [textareaHeight, setTextareaHeight] = useState("min-h-[40px]");  // Gère la hauteur de Textarea
 	const [selectedProject, setSelectedProject] = useState<string | null>(null);
-	const themeOptions = [
-		{ value: "fitness", label: "💪 Fitness" },
-		{ value: "basket", label: "🏀 Basket" },
-		{ value: "music", label: "🎶 Music" },
-		{ value: "gaming", label: "👾 Gaming" },
-		{ value: "travel", label: "✈️ Travel" },
-		{ value: "art", label: "🎨 Art" },
-		{ value: "coding", label: "💻 Coding" },
-		{ value: "cooking", label: "🍳 Cooking" },
-		{ value: "photography", label: "📸 Photography" },
-		{ value: "writing", label: "📝 Writing" },
-		{ value: "movies", label: "🎬 Movies" },
-		{ value: "books", label: "📚 Books" },
-		{ value: "sports", label: "🏈 Sports" },
-		{ value: "politics", label: "🏛 Politics" },
-		{ value: "science", label: "🔬 Science" },
-		{ value: "history", label: "🏰 History" },
-		{ value: "news", label: "📰 News" },
-		{ value: "other", label: "🏦 Finance" },
-	];
+	
 
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
@@ -80,57 +58,54 @@ export function InputPost({ projects }: InputPostProps) {
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		const isTitleValid = title.length > 3;
-		const isHookValid = hook.trim() !== "";
-		const isThemeValid = themes.length !== 0;
+        const isDescriptionValid = description.trim() !== "";
+        // const isProjectSelected = selectedProject !== null;
+		if (!isDescriptionValid) {
+            toast({
+                variant: "destructive",
+                title: "Uh oh! Something went wrong.",
+                description: "Please provide a description and select a project.",
+            });
+            console.log("Validation failed, not submitting.");
+            return;
+        }
 
-		if (!isTitleValid || !isHookValid || !isThemeValid) {
-			toast({
-				variant: "destructive",
-				title: "Uh oh! Something went wrong.",
-				description:
-					"Please check the email or password and try again.",
-			});
-			console.log("Validation failed, not submitting.");
-			return;
-		}
-
-		await fetch("api/posts", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
-				title,
-				hook,
-				themes,
-				description,
-				imageUrl,
-			}),
-		})
-			.catch((error) => {
-				toast({
-					variant: "destructive",
-					title: "Uh oh! Something went wrong.",
-					description: error.message,
-				});
-				console.log("Showing destructive toast");
-			})
-			.finally(() => {
-				toast({
-					title: "Post submitted successfully",
-					description: "Your post has been successfully submitted.",
-				});
-				console.log("Submission successful");
-				setTitle("");
-				setHook("");
-				setThemes([]);
-				setDescription("");
-				setImageUrl("");
-				setIsExpanded(false);
-				setTextareaHeight("min-h-[40px]");
-
-			});
+        await fetch("api/posts", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                description,
+                selectedProject,
+				userEmail
+            }),
+        })
+            .then(async (response) => {
+                if (!response.ok) {
+                    const { msg } = await response.json();
+                    throw new Error(msg);
+                }
+                return response.json();
+            })
+            .then((data) => {
+                toast({
+                    title: "Post submitted successfully",
+                    description: "Your post has been successfully submitted.",
+                });
+                console.log("Submission successful");
+                setDescription("");
+                setSelectedProject(null);
+            })
+            .catch((error) => {
+                toast({
+                    variant: "destructive",
+                    title: "Uh oh! Something went wrong.",
+                    description: error.message,
+                });
+                console.log("Showing destructive toast");
+            });
+    
 	};
 	const expandedStyle = {
 		maxHeight: isExpanded ? "1000px" : "0", // Adjust max height based on your content size
@@ -138,13 +113,7 @@ export function InputPost({ projects }: InputPostProps) {
 		transition: "max-height 0.3s ease-in-out",
 	};
 
-	const handleThemeChange = (newValue: any) => {
-		if (Array.isArray(newValue)) {
-			setThemes(newValue);
-		} else {
-			setThemes([]);
-		}
-	};
+	
 
 	return (
 		<div>
@@ -162,8 +131,8 @@ export function InputPost({ projects }: InputPostProps) {
 						<Textarea
 							onFocus={handleTitleFocus}
 							onBlur={() => setIsExpanded(false)}
-							onChange={(e) => setTitle(e.target.value)}
-							value={title}
+							onChange={(e) => setDescription(e.target.value)}
+							value={description}
 							height={textareaHeight}
 							style={{
 								minHeight: textareaHeight,

@@ -95,8 +95,8 @@ const Modal: React.FC<ModalProps> = ({ onSelectProject, projects }) => {
               Choisi ton projet !
             </h3>
             <div className="flex justify-center pb-5 ">
-            <Carousel className="w-full max-w-sm">
-              <CarouselContent>
+            <Carousel className={`w-full max-w-sm `}>
+              <CarouselContent className={`${projects.length === 0 ? "justify-center" : ""}`}>
                 {projects.map(project => (
                   <CarouselItem key={project._id} onClick={() => handleSelectItem(project.name)} className="basis-1/3 cursor-pointer ">
                     <Card>
@@ -110,7 +110,7 @@ const Modal: React.FC<ModalProps> = ({ onSelectProject, projects }) => {
               <Link href="/">
               <CarouselItem key="add-new" onClick={handleAddProject} className="basis-1/3 cursor-pointer ">
                   <Card>
-                    <CardContent className="flex items-center justify-center p-6 overflow-hidden">
+                    <CardContent className="flex items-center justify-center p-6 px-8 overflow-hidden">
                       <span className="text-xl font-bold">+</span> 
                     </CardContent>
                   </Card>
