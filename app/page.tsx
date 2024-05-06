@@ -1,21 +1,16 @@
-import { Metadata } from "next";
-import { InputPost } from "@/components/inputpost";
-import { UpperBar } from "@/components/upper-bar";
 import { Sidebar } from "@/components/sidebar";
-
-export const metadata: Metadata = {
-	title: "Home page",
-};
+import { InfiniteScroll } from "@/components/infinitescroll";
 
 export default async function Home() {
 	return (
-		<div className="p-5">
-			<InputPost />
-			<div className="inline-flex">
+		<main className="flex flex-col w-full h-screen bg-gray-200">
+			<div className="flex w-full h-full bg-gray-200 overflow-hidden">
 				<Sidebar className="w-1/5 bg-gray-200" />
-				<UpperBar className="w-3/5 h-20" />
-				<div className="bg-red-500 w-1/5">aaa</div>
+				<div className="flex justify-evenly items-center w-4/5">
+					<InfiniteScroll className="bg-gray-200" />
+					<div className="h-full bg-red-500 w-1/5">aaa</div>
+				</div>
 			</div>
-		</div>
+		</main>
 	);
 }
