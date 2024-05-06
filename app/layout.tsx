@@ -20,10 +20,10 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body className={inter.className}>
-				<div className="flex  w-full h-screen ">
+				<div className="flex  w-full h-screen overflow-hidden">
 					<SessionWrapper>
 						<Sidebar className="w-1/5 bg-gray-200" />
-						<div className="flex justify-evenly items-center w-4/5 overflow-hidden">
+						<div className="flex justify-evenly items-center w-4/5">
 							{children}
 						</div>
 					</SessionWrapper>
