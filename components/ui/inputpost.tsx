@@ -1,12 +1,12 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
-import { Button } from "./ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
+import { Button } from "./button";
+import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
+import { Input } from "./input";
+import { Textarea } from "./textarea";
 import makeAnimated from "react-select/animated";
-import { useToast } from "./ui/use-toast";
-import Modal from "./ui/modal";
+import { useToast } from "./use-toast";
+import Modal from "./modal";
 
 export interface InputPostProps {
     projects: Array<{ _id: string; name: string; description: string; [key: string]: any }>;
@@ -117,7 +117,7 @@ export function InputPost({ projects, userEmail}: InputPostProps) {
 
 	return (
 		<div>
-			<div className="p-5 rounded-3xl bg-postbg">
+			<div className="">
 				<form
 					ref={formRef}
 					onSubmit={handleSubmit}
@@ -139,7 +139,7 @@ export function InputPost({ projects, userEmail}: InputPostProps) {
 								transition: "min-height 0.3s ease-in-out"
 							}}
 							id="title"
-							placeholder="Share something !"
+							placeholder="Raconte nous ton projet !"
 							className="text-black text-inter  placeholder-gray-400 font-normal flex h-5 w-full border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300 hover:border-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0"
 						/>
 					</div>
@@ -147,7 +147,7 @@ export function InputPost({ projects, userEmail}: InputPostProps) {
 					<div /*style={expandedStyle}*/ className="flex justify-end">
 						<div className="flex gap-3">
 							<Modal onSelectProject={setSelectedProject} projects={projects} />
-							{selectedProject && <span>Projet sélectionné : {selectedProject}</span>}
+							
 							<Button type="submit">Envoyer</Button>
 						</div>
 					</div>

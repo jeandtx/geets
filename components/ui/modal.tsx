@@ -23,6 +23,7 @@ interface ModalProps {
 
 const Modal: React.FC<ModalProps> = ({ onSelectProject, projects }) => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [selectedProjectName, setSelectedProjectName] = useState<string>("Ajouter un projet");  // Stocke le nom du projet sélectionné
   const trigger = useRef<HTMLButtonElement>(null);
   const modal = useRef<HTMLDivElement>(null);
 
@@ -55,11 +56,11 @@ const Modal: React.FC<ModalProps> = ({ onSelectProject, projects }) => {
     document.addEventListener("keydown", keyHandler);
     return () => document.removeEventListener("keydown", keyHandler);
   }, [modalOpen]);
-  const handleSelectItem = (itemId:string) => {
-    console.log("Selected item ID:", itemId);
-    onSelectProject(itemId); // Mise à jour de l'état avec l'ID sélectionné
-
-    setModalOpen(false); // Ferme la modal
+  const handleSelectItem = (itemName: string) => {
+    console.log("Selected item name:", itemName);
+    setSelectedProjectName(itemName);  // Mettre à jour le nom du projet sélectionné
+    onSelectProject(itemName);  // Mise à jour de l'état avec le nom sélectionné
+    setModalOpen(false);  // Ferme la modal
   };
 
   const handleAddProject = () => {
@@ -76,7 +77,7 @@ const Modal: React.FC<ModalProps> = ({ onSelectProject, projects }) => {
         className="inline-flex items-center justify-center rounded-md bg-primary px-6 py-3 text-base font-medium text-white"
         style={{ height: "40px" }}
       >
-        + Projet
+        {selectedProjectName}
       </button>
 
 
@@ -124,21 +125,17 @@ const Modal: React.FC<ModalProps> = ({ onSelectProject, projects }) => {
 
             
           
-            <div className="-mx-3 flex flex-wrap">
+            <div className="-mx-3 flex justify-center">
               <div className="w-1/2 px-3">
                 <button
                 type="button"
                   onClick={() => setModalOpen(false)}
                   className="block w-full rounded-md border border-stroke p-3 text-center text-base font-medium text-dark transition hover:border-red-600 hover:bg-red-600 hover:text-white dark:text-white"
                 >
-                  Cancel
+                  Annuler
                 </button>
               </div>
-              <div className="w-1/2 px-3">
-                <button type="button" className="block w-full rounded-md border border-primary bg-primary p-3 text-center text-base font-medium text-white transition hover:bg-blue-dark">
-                  <a href="#/"> View Details </a>
-                </button>
-              </div>
+              
             </div>
           </div>
         </div>

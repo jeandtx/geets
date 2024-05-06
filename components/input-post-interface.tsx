@@ -1,6 +1,6 @@
 "use server";
 import React from "react";
-import { InputPost } from "./inputpost";
+import { InputPost } from "./ui/inputpost";
 import { auth, signOut } from "@/app/auth";
 import clientPromise from "@/lib/mongodb";
 
@@ -41,7 +41,7 @@ async function getUserProjects(email: string): Promise<Project[]> {
     if (!user) {
         console.log("User is undefined, cannot fetch projects.");
         return (
-            <div className="p-5 rounded-3xl bg-postbg">
+            <div className="p-4 rounded-2xl bg-postbg">
                 <InputPost projects={[]} userEmail=""/>
             </div>
         );
@@ -51,7 +51,7 @@ async function getUserProjects(email: string): Promise<Project[]> {
     console.log(projects);
 
     return (
-        <div className="p-5 rounded-3xl bg-postbg">
+        <div className="p-4 rounded-2xl bg-postbg">
             <InputPost projects={projects} userEmail={user.email}/>
         </div>
     );
