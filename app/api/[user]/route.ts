@@ -6,7 +6,7 @@ type Request = {
     user: string;
 };
 
-export async function GET(context: { params: Params }) {
+export async function GET(req: Request, context: { params: Params }) {
     const { user } = context.params;
     const client = await clientPromise;
     const db = client.db("geets");
