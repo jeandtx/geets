@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { InputPost } from "@/components/inputpost";
 
-export const meta: Metadata = {
+export const metadata: Metadata = {
 	title: "Testing page",
 };
 
