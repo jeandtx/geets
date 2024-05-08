@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 interface Project {
 	_id: string;
@@ -17,18 +18,36 @@ interface Project {
 
 interface SelectProjectProps {
 	onSelectProject: (projectId: string) => void;
-	projects?: Project[];
+	user?: string;
 }
 
 export default function SelectProject({
 	onSelectProject,
-	projects,
+	user,
 }: SelectProjectProps) {
 	const [modalOpen, setModalOpen] = useState<boolean>(false);
 	const [selectedProjectName, setSelectedProjectName] =
 		useState<string>("Ajouter un projet");
 	const trigger = useRef<HTMLButtonElement>(null);
 	const modal = useRef<HTMLDivElement>(null);
+	const [projects, setProjects] = useState<Project[]>();
+
+	useEffect(() => {
+		const fetchProjects = async () => {
+			const res = await fetch("/api/" + user + "/projects");
+			if (res.body !== null) {
+				const reader = res.body.getReader();
+				const result = await reader.read();
+				const decoder = new TextDecoder("utf-8");
+				const text = decoder.decode(result.value);
+				const projects = JSON.parse(text);
+				setProjects(projects.response);
+			}
+		};
+		if (!projects) {
+			fetchProjects();
+		}
+	}, [projects, user]);
 
 	useEffect(() => {
 		const clickHandler = ({ target }: MouseEvent) => {
@@ -65,6 +84,10 @@ export default function SelectProject({
 	};
 
 	const handleAddProject = () => {
+		if (!user) {
+			console.log('redirect to "/login"');
+			redirect("/login");
+		}
 		// console.log("Add new project");
 		setModalOpen(false);
 	};
@@ -129,9 +152,16 @@ export default function SelectProject({
 									>
 										<Card>
 											<CardContent className="flex items-center justify-center p-6 px-8 overflow-hidden">
-												<span className="text-xl font-bold">
-													+
-												</span>
+												{user ? (
+													<span className="text-xl font-bold">
+														+
+													</span>
+												) : (
+													<span className="text-xl font-semibold">
+														Connecte toi pour
+														ajouter un projet
+													</span>
+												)}
 											</CardContent>
 										</Card>
 									</CarouselItem>

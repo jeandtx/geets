@@ -18,16 +18,9 @@ interface Session {
 	expires: Date;
 }
 
-interface Project {
-	_id: string;
-	name: string;
-	owner: string;
-}
-
 export function InputPost({ className }: InputPostProps) {
 	const [session, setSession] = useState<Session>();
 	const [user, setUser] = useState<string>("");
-	const [projects, setProjects] = useState<Project[]>();
 
 	React.useEffect(() => {
 		const fetchSession = async () => {
@@ -41,17 +34,6 @@ export function InputPost({ className }: InputPostProps) {
 				setSession(session);
 			}
 		};
-		const fetchProjects = async () => {
-			const res = await fetch("/api/" + user + "/projects");
-			if (res.body !== null) {
-				const reader = res.body.getReader();
-				const result = await reader.read();
-				const decoder = new TextDecoder("utf-8");
-				const text = decoder.decode(result.value);
-				const projects = JSON.parse(text);
-				setProjects(projects.response);
-			}
-		};
 		if (!session) {
 			fetchSession();
 		}
@@ -59,10 +41,7 @@ export function InputPost({ className }: InputPostProps) {
 		if (!user) {
 			setUser(session.user.email);
 		}
-		if (!projects) {
-			fetchProjects();
-		}
-	}, [session, user, projects]);
+	}, [session, user]);
 
 	const { toast } = useToast();
 
@@ -171,7 +150,7 @@ export function InputPost({ className }: InputPostProps) {
 						<div className="flex gap-3">
 							<SelectProject
 								onSelectProject={setSelectedProject}
-								projects={projects}
+								user={user}
 							/>
 
 							<Button type="submit">Envoyer</Button>
