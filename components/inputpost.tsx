@@ -4,12 +4,9 @@ import { Button } from "./ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
-import CreatableSelect from "react-select/creatable";
-import makeAnimated from "react-select/animated";
 import { useToast } from "./ui/use-toast";
 
 export function InputPost() {
-	const animatedComponents = makeAnimated();
 	const [title, setTitle] = useState("");
 	const [hook, setHook] = useState("");
 	const [themes, setThemes] = useState<
@@ -166,22 +163,6 @@ export function InputPost() {
 								placeholder="Enter a catchy hook"
 								style={{ height: "60px", borderRadius: "15px" }}
 								className="mt-4 flex w-full placeholder-gray-400 font-normal rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:border-gray-300 focus:ring-0 disabled:cursor-not-allowed disabled:opacity-50 hover:border-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0"
-							/>
-						</div>
-
-						<div>
-							<CreatableSelect
-								// primaryColor="#000000"
-								isMulti
-								isSearchable={true}
-								options={themeOptions}
-								value={themes}
-								onChange={handleThemeChange}
-								closeMenuOnSelect={false}
-								placeholder="Select themes..."
-								components={animatedComponents}
-								// classNames={customClassNames}
-								// className="mt-4 flex w-full placeholder-gray-400 font-normal rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:border-gray-300 focus:ring-0 disabled:cursor-not-allowed disabled:opacity-50 hover:border-gray-400 focus-visible:ring-0"
 							/>
 						</div>
 
