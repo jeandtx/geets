@@ -29,7 +29,7 @@ export default async function Dashboard() {
 				<h3 className="text-green-500 text-xl font-extrabold">
 					{movie.title}
 				</h3>
-				<p className="text-green-200 text-lg">Year: {movie.year}</p>
+				<div className="text-green-200 text-lg">Year: {movie.year}</div>
 				<div>Plot: {movie.plot}</div>
 				<div>Genres: {movie.genres}</div>
 				<div>Metacritic: {movie.metacritic}</div>
