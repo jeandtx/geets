@@ -1,40 +1,45 @@
 "use client";
 
-import React from "react";
 import { useInView } from "react-intersection-observer";
 import { cn } from "@/lib/utils";
 
-/* 
-LIST OF TODOs:
-1. Modify the fetchNewData function to actually fetch data from an API
-2. Change the mapping to display card components
+import SideProjectCard from "@/components/project_card";
+import React from "react";
 
-General task: change types to match the data you are fetching (create interface)
-*/
+interface InfiniteScrollProps {
+	/**
+	 * Additional class name(s) for the component.
+	 */
+	className?: string;
 
-interface InfiniteScrollProps extends React.HTMLAttributes<HTMLDivElement> {}
+	/**
+	 * The function used to fetch data. Triggered when the user scrolls to the bottom of the page.
+	 * @param params Optional parameters for the fetch function.
+	 * @returns The result of the fetch function.
+	 */
+	fetchFunction: (params?: any) => any;
+}
 
-export const InfiniteScroll = ({ className }: InfiniteScrollProps) => {
-	const [data, setData] = React.useState<Object[]>([]);
-
-	// TODO n°1
-	const fetchNewData = () => {
-		return new Promise((resolve) => {
-			setTimeout(() => {
-				resolve(Array.from({ length: 10 }, () => "z"));
-			}, 1000);
-		});
-	};
-
-	const [ref, inView] = useInView({
+export default function InfiniteScroll({
+	className,
+	fetchFunction,
+}: Readonly<InfiniteScrollProps>) {
+	const { ref, inView } = useInView({
 		threshold: 0,
 	});
+	const [posts, setPosts] = React.useState<any>([]);
 
 	React.useEffect(() => {
 		if (inView) {
-			fetchNewData().then((newData: any) => {
-				setData((prevData) => [...prevData, ...newData]);
-			});
+			if (inView) {
+				fetchFunction()
+					.then((data: any) => {
+						setPosts((prev: any) => [...prev, ...data]);
+					})
+					.catch((error: any) => {
+						console.error(error);
+					});
+			}
 		}
 	}, [inView]);
 
@@ -43,31 +48,12 @@ export const InfiniteScroll = ({ className }: InfiniteScrollProps) => {
 			className={cn("flex flex-col items-center", className)}
 			style={{ height: "100%", width: "60vw", overflowY: "scroll" }}
 		>
-			<div>
-				{/* TODO n°2*/}
-				{data.map((item: any, index: any) => (
-					<div key={index}>
-						<div className="max-w-lg mx-auto rounded-lg  p-5 border-2 border-white">
-							<h2 className="text-center text-2xl font-semibold mt-3">
-								John Doe
-							</h2>
-							<div className="text-center text-gray-600 mt-1">
-								Software Engineer
-							</div>
-							<div className="mt-5">
-								<h3 className="text-xl font-semibold">Bio</h3>
-								<div className="text-gray-600 mt-2">
-									John is a software engineer with over 10
-									years of experience in developing web and
-									mobile applications. He is skilled in
-									JavaScript, React, and Node.js.
-								</div>
-							</div>
-						</div>
-					</div>
+			<ul className="space-y-4">
+				{posts.map((post: any) => (
+					<SideProjectCard key={post._id} post={post} />
 				))}
-				<div ref={ref}>Loading...</div>
-			</div>
+			</ul>
+			<div ref={ref}>Loading...</div>
 		</div>
 	);
-};
+}

@@ -1,49 +1,40 @@
 import { Metadata } from "next";
-
 import clientPromise from "../../lib/mongodb";
+import SideProjectCard from "@/components/project_card";
 
 export const metadata: Metadata = {
 	title: "Top 15 Movies by Metacritic",
 };
 
-async function getMovies() {
+async function getPosts() {
 	const client = await clientPromise;
-	const db = client.db("sample_mflix");
-	const movies = await db
-		.collection("movies")
+	const db = client.db("geets");
+	const posts = await db
+		.collection("posts_fake")
 		.find({})
 		.sort({ metacritic: -1 })
-		.limit(15)
+		.limit(10)
 		.toArray();
-	return movies;
+	return posts;
 }
+
 export default async function Dashboard() {
-	const movies = await getMovies();
-	("use client");
-	const movieList = movies.map((movie) => (
-		<li
-			key={movie.title}
-			className="w-[300px] bg-black-400 rounded-lg shadow-md m-2 p-2 text-center"
-		>
-			<div>
-				<h3 className="text-green-500 text-xl font-extrabold">
-					{movie.title}
-				</h3>
-				<div className="text-green-200 text-lg">Year: {movie.year}</div>
-				<div>Plot: {movie.plot}</div>
-				<div>Genres: {movie.genres}</div>
-				<div>Metacritic: {movie.metacritic}</div>
+	const posts = await getPosts();
+	const postList = posts.map((post) => (
+		<>
+			<div className="flex p-8 bg-gray-50  overflow-hidden">
+				<SideProjectCard post={post} />
 			</div>
-		</li>
+		</>
 	));
 
 	return (
 		<div className="py-8">
 			<h1 className="title text-green-400 text-center text-3xl font-bold mb-16">
-				Top 15 Movies by Metacritic
+				Top 15 posts by Metacritic
 			</h1>
 			<ul className="flex flex-wrap justify-center m-0 p-0 list-none">
-				{movieList}
+				{postList}
 			</ul>
 		</div>
 	);
