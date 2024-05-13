@@ -33,7 +33,7 @@ export interface User {
     profil_picture?: string;
     first_name?: string;
     lastName?: string;
-    birthDate: Date;
+    birth_date: Date;
     localisation?: string;
     gender?: string;
     experience?: string;

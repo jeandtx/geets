@@ -15,9 +15,8 @@ import {
 	SquareMousePointer,
 } from "lucide-react";
 import Link from "next/link";
-import React, { useState } from "react";
-import { Menu } from "lucide-react";
 import { NavigationMenuDemo } from "./navigation-menu";
+import { useSession } from "next-auth/react";
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -35,22 +34,7 @@ const projects = [
 ];
 
 export function Sidebar({ className }: SidebarProps) {
-	const [session, setSession] = useState<any>(null);
-
-	React.useEffect(() => {
-		const fetchSession = async () => {
-			const res = await fetch("/api/auth/session");
-			if (res.body !== null) {
-				const reader = res.body.getReader();
-				const result = await reader.read(); // yields { done: true, value: Uint8Array }
-				const decoder = new TextDecoder("utf-8");
-				const text = decoder.decode(result.value);
-				const session = JSON.parse(text);
-				setSession(session);
-			}
-		};
-		fetchSession();
-	}, []);
+	const session = useSession();
 
 	return (
 		<>
@@ -80,7 +64,7 @@ export function Sidebar({ className }: SidebarProps) {
 									Testing Page
 								</Button>
 							</Link>
-							<Link href={`/${session?.user?.email}`}>
+							<Link href={`/${session.data?.user?.email}`}>
 								<Button
 									variant="ghost"
 									className="w-full justify-start"
