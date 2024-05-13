@@ -1,22 +1,11 @@
 import { Metadata } from "next";
 import clientPromise from "../../lib/mongodb";
 import SideProjectCard from "@/components/project_card";
+import { getPosts } from "@/lib/actions";
 
 export const metadata: Metadata = {
 	title: "Top 15 Movies by Metacritic",
 };
-
-async function getPosts() {
-	const client = await clientPromise;
-	const db = client.db("geets");
-	const posts = await db
-		.collection("posts_fake")
-		.find({})
-		.sort({ metacritic: -1 })
-		.limit(10)
-		.toArray();
-	return posts;
-}
 
 export default async function Dashboard() {
 	const posts = await getPosts();
