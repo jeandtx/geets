@@ -45,6 +45,7 @@ export async function createProject(project: Project) {
         throw new Error('Missing field(s) in project. check title' + project.title + ' description ' + project.description + ' author ' + project.author)
     }
     const result = await db.collection('projects').insertOne({ ...project, _id: new ObjectId() });
-    return result
+    const data = JSON.parse(JSON.stringify(result)) // Remove ObjectID (not serializable)
+    return data
 }
 
