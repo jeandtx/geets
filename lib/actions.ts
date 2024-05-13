@@ -1,7 +1,9 @@
 
 'use server'
 import clientPromise from './mongodb'
-import { Post, User } from '../types/tables'
+import { Post, User, Project } from '../types/tables'
+import { ObjectId } from 'mongodb'; // Import the ObjectId type
+import { get } from 'http';
 
 /**
  * Retrieves posts from the database.
@@ -28,5 +30,21 @@ export async function getUser(email: string) {
     })
     const data: User = JSON.parse(JSON.stringify(user)) // Remove ObjectID (not serializable)
     return data
+}
+
+/**
+ * Creates a project in the database.
+ * @param {Project} project - The project to create.
+ * @returns {Promise<any>} A promise that resolves to the created project.
+ * @throws {Error} If the project have a missing field.
+    */
+export async function createProject(project: Project) {
+    const client = await clientPromise
+    const db = client.db('geets')
+    if (!project.title || !project.description || !project.author) {
+        throw new Error('Missing field(s) in project. check title' + project.title + ' description ' + project.description + ' author ' + project.author)
+    }
+    const result = await db.collection('projects').insertOne({ ...project, _id: new ObjectId() });
+    return result
 }
 

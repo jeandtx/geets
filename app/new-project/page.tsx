@@ -6,16 +6,20 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Project } from "@/types/tables";
 import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/components/ui/use-toast";
+import { createProject } from "@/lib/actions";
+import { useSession } from "next-auth/react";
 
 export default function NewProject() {
 	const [label, setLabel] = useState<string>("");
 	const [labels, setLabels] = useState<string[]>([]);
 	const [theme, setTheme] = useState<string>("");
 	const [themes, setThemes] = useState<string[]>([]);
-
+	const { toast } = useToast();
+	const session = useSession();
 	const [project, setProject] = useState<Project>({
 		_id: "Generated",
-		author: "Generated",
+		author: "",
 		title: "",
 		themes: themes,
 		description: "",
@@ -41,7 +45,39 @@ export default function NewProject() {
 
 	const handleSubmit = (e: any) => {
 		e.preventDefault();
-		console.log(project, labels, themes);
+		const user =
+			session.data && session.data.user && session.data.user.email;
+		if (!user) {
+			toast({
+				variant: "destructive",
+				title: "Uh oh! Something went wrong.",
+				description:
+					"Please check the email or password and try again.",
+			});
+			return;
+		} else {
+			setProject({
+				...project,
+				author: user,
+			});
+		}
+		createProject(project)
+			.then(() => {
+				toast({
+					title: "Success!",
+					description:
+						"Your form has been submitted. with " + project.title,
+				});
+			})
+			.catch(() => {
+				toast({
+					variant: "destructive",
+					title: "Uh oh! Something went wrong.",
+					description:
+						"Please check the email or password and try again.",
+				});
+				return;
+			});
 	};
 
 	return (
