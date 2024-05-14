@@ -30,24 +30,44 @@ export default function SelectProject({
 		useState<string>("Ajouter un projet");
 	const trigger = useRef<HTMLButtonElement>(null);
 	const modal = useRef<HTMLDivElement>(null);
-	const [projects, setProjects] = useState<Project[]>();
+	const [projects, setProjects] = useState<Project[]>([]);
 
 	useEffect(() => {
+		console.log("useEffect for fetching projects triggered. user:", user);
+
 		const fetchProjects = async () => {
-			const res = await fetch("/api/" + user + "/projects");
-			if (res.body !== null) {
-				const reader = res.body.getReader();
-				const result = await reader.read();
-				const decoder = new TextDecoder("utf-8");
-				const text = decoder.decode(result.value);
-				const projects = JSON.parse(text);
-				setProjects(projects.response);
+			if (!user) {
+				console.log("No user, skipping fetch.");
+				return;
+			}
+
+			try {
+				const res = await fetch("/api/" + user + "/projects");
+				console.log("Fetch response:", res);
+
+				if (res.ok && res.body) {
+					const reader = res.body.getReader();
+					const result = await reader.read();
+					const decoder = new TextDecoder("utf-8");
+					const text = decoder.decode(result.value);
+					const projects = JSON.parse(text);
+					console.log("Parsed projects:", projects);
+					setProjects(projects.response);
+				} else {
+					console.log("Fetch response not OK or body is null.");
+				}
+			} catch (error) {
+				console.error("Error fetching projects:", error);
 			}
 		};
-		if (!projects) {
+
+		if (!projects.length) {
+			console.log("Projects state is null or undefined. Fetching projects...");
 			fetchProjects();
+		} else {
+			console.log("Projects already fetched:", projects);
 		}
-	}, [projects, user]);
+	}, [user]);
 
 	useEffect(() => {
 		const clickHandler = ({ target }: MouseEvent) => {
@@ -59,7 +79,7 @@ export default function SelectProject({
 			)
 				return;
 			setModalOpen(false);
-			// console.log("modal is closing because of click outside");
+			console.log("Modal is closing because of click outside.");
 		};
 
 		document.addEventListener("click", clickHandler);
@@ -69,15 +89,16 @@ export default function SelectProject({
 	useEffect(() => {
 		const keyHandler = ({ keyCode }: KeyboardEvent) => {
 			if (!modalOpen || keyCode !== 27) return;
-			// console.log("modal is closing because of", keyCode);
+			console.log("Modal is closing because of key press:", keyCode);
 			setModalOpen(false);
 		};
 
 		document.addEventListener("keydown", keyHandler);
 		return () => document.removeEventListener("keydown", keyHandler);
 	}, [modalOpen]);
+
 	const handleSelectItem = (itemName: string) => {
-		// console.log("Selected item name:", itemName);
+		console.log("Selected item name:", itemName);
 		setSelectedProjectName(itemName);
 		onSelectProject(itemName);
 		setModalOpen(false);
@@ -85,11 +106,12 @@ export default function SelectProject({
 
 	const handleAddProject = () => {
 		if (!user) {
-			console.log('redirect to "/login"');
+			console.log('User not logged in. Redirecting to "/login"');
 			redirect("/login");
+		} else {
+			console.log("Add new project.");
+			setModalOpen(false);
 		}
-		// console.log("Add new project");
-		setModalOpen(false);
 	};
 
 	return (
@@ -112,7 +134,6 @@ export default function SelectProject({
 				<div
 					ref={modal}
 					onFocus={() => setModalOpen(true)}
-					// onBlur={() => setModalOpen(false)}
 					className="w-full max-w-[570px] rounded-[20px] bg-white px-8 py-12 text-center dark:bg-dark-2 md:px-[70px] md:py-[60px]"
 				>
 					<h3 className="pb-[18px] text-xl font-semibold text-dark dark:text-white sm:text-2xl">
@@ -144,7 +165,7 @@ export default function SelectProject({
 										</Card>
 									</CarouselItem>
 								))}
-								<Link href="/">
+								<Link href="/new-project">
 									<CarouselItem
 										key="add-new"
 										onClick={handleAddProject}

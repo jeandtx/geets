@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
+import { useSession } from "next-auth/react";
 import { Button } from "./ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Textarea } from "./ui/textarea";
@@ -10,46 +11,14 @@ export interface InputPostProps {
 	className?: string;
 }
 
-interface Session {
-	user: {
-		email: string;
-		name: string;
-	};
-	expires: Date;
-}
-
 export function InputPost({ className }: InputPostProps) {
-	const [session, setSession] = useState<Session>();
-	const [user, setUser] = useState<string>("");
-
-	React.useEffect(() => {
-		const fetchSession = async () => {
-			const res = await fetch("/api/auth/session");
-			if (res.body !== null) {
-				const reader = res.body.getReader();
-				const result = await reader.read();
-				const decoder = new TextDecoder("utf-8");
-				const text = decoder.decode(result.value);
-				const session = JSON.parse(text);
-				setSession(session);
-			}
-		};
-		if (!session) {
-			fetchSession();
-		}
-		if (!session) return;
-		if (!user) {
-			setUser(session.user.email);
-		}
-	}, [session, user]);
-
-	const { toast } = useToast();
-
+	const { data: session, status } = useSession();
 	const [description, setDescription] = useState("");
 	const [isExpanded, setIsExpanded] = useState(false);
 	const formRef = useRef<HTMLFormElement>(null);
 	const [textareaHeight, setTextareaHeight] = useState("min-h-[40px]"); // Gère la hauteur de Textarea
 	const [selectedProject, setSelectedProject] = useState<string | null>(null);
+	const { toast } = useToast();
 
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
@@ -79,12 +48,23 @@ export function InputPost({ className }: InputPostProps) {
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const isDescriptionValid = description.trim() !== "";
-		if (!isDescriptionValid) {
+		const isProjectSelected = selectedProject !== null;
+
+		if (!isDescriptionValid || !isProjectSelected) {
 			toast({
 				variant: "destructive",
 				title: "Uh oh! Something went wrong.",
 				description:
 					"Please provide a description and select a project.",
+			});
+			return;
+		}
+
+		if (!session?.user?.email) {
+			toast({
+				variant: "destructive",
+				title: "Not authenticated",
+				description: "Please log in to submit a post.",
 			});
 			return;
 		}
@@ -97,7 +77,7 @@ export function InputPost({ className }: InputPostProps) {
 			body: JSON.stringify({
 				description,
 				selectedProject,
-				user,
+				user: session.user.email,
 			}),
 		})
 			.then(() => {
@@ -150,7 +130,7 @@ export function InputPost({ className }: InputPostProps) {
 						<div className="flex gap-3">
 							<SelectProject
 								onSelectProject={setSelectedProject}
-								user={user}
+								user={session?.user?.email || ""}
 							/>
 
 							<Button type="submit">Envoyer</Button>
