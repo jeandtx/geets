@@ -3,6 +3,7 @@ import { NextAuthConfig } from 'next-auth';
 export const authConfig = {
   pages: {
     signIn: '/login',
+
   },
   providers: [
     // added later in auth.ts since it requires bcrypt which is only compatible with Node.js
@@ -12,8 +13,9 @@ export const authConfig = {
     authorized({ auth, request: { nextUrl } }) {
       let isLoggedIn = !!auth?.user;
       let isOnProfile = /^\/[^\/]+$/.test(nextUrl.pathname); // Modify this line
+      let isOnProjectPage = nextUrl.pathname === '/project';
 
-      if (isOnProfile) {
+      if (isOnProfile || isOnProjectPage) {
         return isLoggedIn; // Redirect unauthenticated users to login page
       }
 
