@@ -18,16 +18,16 @@ interface Project {
 
 interface SelectProjectProps {
 	onSelectProject: (projectId: string) => void;
+	selectedProject: string | null;
 	user?: string;
 }
 
 export default function SelectProject({
 	onSelectProject,
+	selectedProject,
 	user,
 }: SelectProjectProps) {
 	const [modalOpen, setModalOpen] = useState<boolean>(false);
-	const [selectedProjectName, setSelectedProjectName] =
-		useState<string>("Ajouter un projet");
 	const trigger = useRef<HTMLButtonElement>(null);
 	const modal = useRef<HTMLDivElement>(null);
 	const [projects, setProjects] = useState<Project[]>([]);
@@ -99,7 +99,6 @@ export default function SelectProject({
 
 	const handleSelectItem = (itemName: string) => {
 		console.log("Selected item name:", itemName);
-		setSelectedProjectName(itemName);
 		onSelectProject(itemName);
 		setModalOpen(false);
 	};
@@ -123,7 +122,7 @@ export default function SelectProject({
 				className="inline-flex items-center justify-center rounded-md bg-primary px-6 py-3 text-base font-medium text-white"
 				style={{ height: "40px" }}
 			>
-				{selectedProjectName}
+				{selectedProject || "Ajouter un projet"}
 			</button>
 
 			<div

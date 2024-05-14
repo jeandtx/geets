@@ -130,6 +130,7 @@ export function InputPost({ className }: InputPostProps) {
 						<div className="flex gap-3">
 							<SelectProject
 								onSelectProject={setSelectedProject}
+								selectedProject={selectedProject}
 								user={session?.user?.email || ""}
 							/>
 
