@@ -13,9 +13,10 @@ export const authConfig = {
     authorized({ auth, request: { nextUrl } }) {
       let isLoggedIn = !!auth?.user;
       let isOnProfile = /^\/[^\/]+$/.test(nextUrl.pathname); // Modify this line
-      let isOnProjectPage = nextUrl.pathname === '/project';
+      let isOnProjectPage = /^\/[^\/]+\/[^\/]+$/.test(nextUrl.pathname); // Modify this line
+      let isOnProjectsPage = /^\/projects$/.test(nextUrl.pathname); // Modify this line
 
-      if (isOnProfile || isOnProjectPage) {
+      if (isOnProfile || isOnProjectPage || isOnProjectsPage) {
         return isLoggedIn; // Redirect unauthenticated users to login page
       }
 
