@@ -14,20 +14,11 @@ import { Send } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import BadgeList from "@/components/ui/badge";
 import Img from "next/image";
+import type { Post } from "@/types/tables";
 
 interface PostProps extends React.HTMLAttributes<HTMLDivElement> {
 	className?: string;
-	jsonData: {
-		Title: string;
-		Time: {
-			$date: string;
-		};
-		Thème: string;
-		Date: string;
-		Media: string;
-		Labels: string[];
-		Participants: number;
-	};
+	jsonData: Post;
 }
 
 export function Post({ className, jsonData, ...props }: Readonly<PostProps>) {
@@ -46,22 +37,22 @@ export function Post({ className, jsonData, ...props }: Readonly<PostProps>) {
 						<AvatarFallback>CN</AvatarFallback>
 					</Avatar>
 					<CardTitle className="text-lg font-bold">
-						{jsonData.Title}
+						{jsonData.title}
 					</CardTitle>
 
 					<CardDate className="text-sm text-gray-500">
-						{jsonData.Time.$date.toLocaleString()}
+						{jsonData.time.toLocaleString()}
 					</CardDate>
 				</CardHeader>
 
 				<CardContent className="mt-4">
 					<div className="text-gray-700 font-medium">
-						{jsonData.Date}
+						{jsonData.time.toLocaleString()}
 					</div>
 					<CardImage>
 						<Img
-							src={jsonData.Media}
-							alt={jsonData.Title}
+							src={jsonData.media ?? ""}
+							alt={jsonData.title}
 							className="flex justify-center items-center rounded-md mt-4 "
 							style={{ width: "30%", height: "auto" }}
 							width={1080}
@@ -71,15 +62,15 @@ export function Post({ className, jsonData, ...props }: Readonly<PostProps>) {
 
 					<div className="mt-2 text-sm text-gray-600 flex justify-between">
 						<BadgeList
-							jsonData={{ Labels: jsonData.Labels }}
+							jsonData={{ Labels: jsonData.labels ?? [] }}
 						></BadgeList>
 					</div>
-					<div className="mt-2">
+					{/* <div className="mt-2">
 						<div className="text-sm text-gray-600 flex justify-between">
 							Participants:
 						</div>{" "}
-						{jsonData.Participants}
-					</div>
+						{}
+					</div> */}
 				</CardContent>
 
 				<CardFooter className="mt-4">

@@ -15,8 +15,11 @@ export const authConfig = {
       let isOnProfile = /^\/[^\/]+$/.test(nextUrl.pathname); // Modify this line
       let isOnProjectPage = /^\/[^\/]+\/[^\/]+$/.test(nextUrl.pathname); // Modify this line
       let isOnProjectsPage = /^\/projects$/.test(nextUrl.pathname); // Modify this line
+      let isOnNewProject = /^\/new-project$/.test(nextUrl.pathname); // Add this line
 
-      if (isOnProfile || isOnProjectPage || isOnProjectsPage) {
+      if (isOnProfile || isOnProjectPage || isOnProjectsPage || isOnNewProject) {
+
+
         return isLoggedIn; // Redirect unauthenticated users to login page
       }
 

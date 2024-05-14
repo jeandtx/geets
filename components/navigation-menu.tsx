@@ -1,5 +1,4 @@
 "use client";
-import * as React from "react";
 import { cn } from "@/lib/utils";
 import {
 	NavigationMenu,
@@ -11,26 +10,14 @@ import {
 } from "@/components/ui/navigation-menu";
 import { Button } from "@/components/ui/button";
 import { BookHeart, FlaskConical, PersonStanding } from "lucide-react";
+import { useSession } from "next-auth/react";
+import React from "react";
 
 export function NavigationMenuDemo({
 	className,
 }: Readonly<{ className?: string }>) {
-	const [session, setSession] = React.useState<any>(null);
+	const session = useSession();
 
-	React.useEffect(() => {
-		const fetchSession = async () => {
-			const res = await fetch("/api/auth/session");
-			if (res.body !== null) {
-				const reader = res.body.getReader();
-				const result = await reader.read(); // yields { done: true, value: Uint8Array }
-				const decoder = new TextDecoder("utf-8");
-				const text = decoder.decode(result.value);
-				const session = JSON.parse(text);
-				setSession(session);
-			}
-		};
-		fetchSession();
-	}, []);
 	return (
 		<NavigationMenu className={className}>
 			<NavigationMenuList>
@@ -56,7 +43,7 @@ export function NavigationMenuDemo({
 									Testing Page
 								</Button>
 							</ListItem>
-							<ListItem href={`/${session?.user?.email}`}>
+							<ListItem href={`/${session.data?.user?.email}`}>
 								<Button
 									variant="ghost"
 									className="w-full justify-start"
