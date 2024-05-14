@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 
 import SideProjectCard from "@/components/project_card";
 import React from "react";
+import { Post } from "@/types/tables";
 
 interface InfiniteScrollProps {
 	/**
@@ -27,7 +28,7 @@ export default function InfiniteScroll({
 	const { ref, inView } = useInView({
 		threshold: 0,
 	});
-	const [posts, setPosts] = React.useState<any>([]);
+	const [posts, setPosts] = React.useState<Post[]>([]);
 
 	React.useEffect(() => {
 		if (inView) {

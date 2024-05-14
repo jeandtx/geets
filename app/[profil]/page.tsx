@@ -2,13 +2,7 @@ import { auth, signOut } from "@/app/auth";
 import clientPromise from "@/lib/mongodb";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-
-async function getUser(email: string) {
-	const client = await clientPromise;
-	const db = client.db("geets");
-	const user = await db.collection("users").findOne({ email });
-	return user;
-}
+import { getUser } from "@/lib/actions";
 
 function SignOut() {
 	return (
@@ -50,11 +44,14 @@ export default async function ProfilPage({
 				<h1 className="text-3xl font-bold ">Profil of {decodeEmail}</h1>
 				{user ? (
 					<>
-						<div>Nom: {user.name}</div>
-						<div>Prénom: {user.last_name}</div>
-						<div>Age: {user.age}</div>
-						<div>Localisation: {user.location}</div>
-						<div>Sexe: {user.sexe}</div>
+						<div>Nom: {user.pseudo}</div>
+						<div>Nom: {user.first_name}</div>
+						<div>
+							Age:{" "}
+							{user.birth_date?.toLocaleString() ?? "no data"}
+						</div>
+						<div>Localisation: {user.localisation}</div>
+						<div>Sexe: {user.gender}</div>
 						<div>Expérience: {user.experience}</div>
 					</>
 				) : (

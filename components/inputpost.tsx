@@ -19,28 +19,6 @@ export function InputPost() {
 	const [isExpanded, setIsExpanded] = useState(false);
 	const formRef = useRef<HTMLFormElement>(null);
 
-	const themeOptions = [
-		{ value: "coding", label: "💪 Fitness" },
-		{ value: "fitness", label: "⚽️ Foot" },
-		{ value: "cooking", label: "🏀 Basket" },
-		{ value: "music", label: "🎶 Music" },
-		{ value: "gaming", label: "👾 Gaming" },
-		{ value: "travel", label: "✈️ Travel" },
-		{ value: "art", label: "🎨 Art" },
-		{ value: "coding", label: "💻 Coding" },
-		{ value: "cooking", label: "🍳 Cooking" },
-		{ value: "photography", label: "📸 Photography" },
-		{ value: "writing", label: "📝 Writing" },
-		{ value: "movies", label: "🎬 Movies" },
-		{ value: "books", label: "📚 Books" },
-		{ value: "sports", label: "🏈 Sports" },
-		{ value: "politics", label: "🏛 Politics" },
-		{ value: "science", label: "🔬 Science" },
-		{ value: "history", label: "🏰 History" },
-		{ value: "news", label: "📰 News" },
-		{ value: "other", label: "🏦 Finance" },
-	];
-
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
 			if (
@@ -120,14 +98,6 @@ export function InputPost() {
 		maxHeight: isExpanded ? "1000px" : "0", // Adjust max height based on your content size
 		overflow: "hidden",
 		transition: "max-height 0.5s ease-in-out",
-	};
-
-	const handleThemeChange = (newValue: any) => {
-		if (Array.isArray(newValue)) {
-			setThemes(newValue);
-		} else {
-			setThemes([]);
-		}
 	};
 
 	return (
