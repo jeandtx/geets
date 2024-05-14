@@ -73,13 +73,13 @@ export function Sidebar({ className }: SidebarProps) {
 									Profil
 								</Button>
 							</Link>
-							<Link href={`/posts`}>
+							<Link href={`/new-project`}>
 								<Button
 									variant="ghost"
 									className="w-full justify-start"
 								>
 									<SquareMousePointer className="mr-2 h-4 w-4" />
-									My Posts
+									Write Project
 								</Button>
 							</Link>
 							<Link href={`/projects`}>
