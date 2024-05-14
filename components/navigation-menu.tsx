@@ -12,7 +12,9 @@ import {
 import { Button } from "@/components/ui/button";
 import { BookHeart, FlaskConical, PersonStanding } from "lucide-react";
 
-export function NavigationMenuDemo({ className }: { className?: string }) {
+export function NavigationMenuDemo({
+	className,
+}: Readonly<{ className?: string }>) {
 	const [session, setSession] = React.useState<any>(null);
 
 	React.useEffect(() => {
