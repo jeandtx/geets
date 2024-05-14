@@ -1,6 +1,6 @@
 import { Metadata } from "next";
-import { RandomComponent } from "@/components/random";
-import { Sidebar } from "@/components/sidebar";
+import { InputPost } from "@/components/inputpost";
+import { UpperBar } from "@/components/upper-bar";
 
 export const metadata: Metadata = {
 	title: "Test zone",
@@ -8,8 +8,11 @@ export const metadata: Metadata = {
 
 export default async function Dashboard() {
 	return (
-		<div className="flex p-8 bg-gray-50 h-screen overflow-hidden">
-			<Sidebar />
+		<div className="p-5">
+			<InputPost />
+			<div className="">
+				<UpperBar />
+			</div>
 		</div>
 	);
 }
