@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
 
 export async function POST(req: Request) {
-    const { description, selectedProject, user } = await req.json(); // Récupération des données requises
+    const { description, selectedProject, user,imageUrl } = await req.json(); // Récupération des données requises
     const client = await clientPromise;
     const db = client.db('geets');
     console.log(description, selectedProject, user);
@@ -18,7 +18,7 @@ export async function POST(req: Request) {
             throw new Error("Selected project is required.");
         }
 
-        await db.collection('posts').insertOne({ user, description, selectedProject, date: new Date() }); // Insertion des données dans la base de données
+        await db.collection('posts').insertOne({ user, description, selectedProject,imageUrl, date: new Date() }); // Insertion des données dans la base de données
         return NextResponse.json({ msg: ['Post created successfully'], success: true });
     } catch (error: any) {
         console.error(error);

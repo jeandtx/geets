@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Textarea } from "./ui/textarea";
 import { useToast } from "./ui/use-toast";
 import SelectProject from "./select-project";
+import { CldUploadWidget } from 'next-cloudinary';
 
 export interface InputPostProps {
 	className?: string;
@@ -18,6 +19,7 @@ export function InputPost({ className }: InputPostProps) {
 	const formRef = useRef<HTMLFormElement>(null);
 	const [textareaHeight, setTextareaHeight] = useState("min-h-[40px]"); // Gère la hauteur de Textarea
 	const [selectedProject, setSelectedProject] = useState<string | null>(null);
+	const [imageUrl, setImageUrl] = useState<string | null>(null);
 	const { toast } = useToast();
 
 	useEffect(() => {
@@ -78,6 +80,7 @@ export function InputPost({ className }: InputPostProps) {
 				description,
 				selectedProject,
 				user: session.user.email,
+				imageUrl,  // Include the imageUrl in the payload
 			}),
 		})
 			.then(() => {
@@ -87,6 +90,7 @@ export function InputPost({ className }: InputPostProps) {
 				});
 				setDescription("");
 				setSelectedProject(null);
+				setImageUrl(null);  // Reset the imageUrl state
 			})
 			.catch((error) => {
 				toast({
@@ -133,7 +137,15 @@ export function InputPost({ className }: InputPostProps) {
 								selectedProject={selectedProject}
 								user={session?.user?.email || ""}
 							/>
-
+							<CldUploadWidget uploadPreset="onrkam98" onUpload={(result) => setImageUrl(result.info.secure_url)}>
+								{({ open }) => {
+									return (
+										<button type="button" onClick={() => open()}>
+											Upload an Image
+										</button>
+									);
+								}}
+							</CldUploadWidget>
 							<Button type="submit">Envoyer</Button>
 						</div>
 					</div>
