@@ -1,7 +1,9 @@
 import { auth, signOut } from "@/app/auth";
 import clientPromise from "@/lib/mongodb";
-import { Button } from "@/components/ui/button";
+import { Button} from "@/components/ui/button";
 import Link from "next/link";
+
+
 
 async function getUser(email: string) {
 	const client = await clientPromise;
@@ -24,6 +26,76 @@ function SignOut() {
 		</form>
 	);
 }
+function EditProfile() {
+	return(
+		<form
+			action={async () => {
+				"use server";
+			}}
+		>
+			<Button variant={"default"} type="submit">
+				Edit my profile
+			</Button>
+		</form>
+ 	);
+}
+
+// function EditProfile() {
+// 	function handleEdit() {
+// 		console.log("hellooooooooooooooo");
+// 		throw new Error('Function not implemented.');
+// 	}
+
+// 	return (
+// 		<form
+// 			action={async () => {
+// 				"use server";
+// 				console.log("hiiiiiiiiiiiiiiiiii");
+// 				// useEffect(()=>{
+// 				// 	handleEdit();
+// 				// }, []);
+// 			}
+// 		}
+			
+// 		>
+// 			<Button variant={"default"} type="submit">
+// 				Edit my profile
+// 			</Button>
+// 		</form>
+// 	);
+// }
+
+// function EditProfile() {
+// 	// Ajout d'un console.log à la déclaration de la fonction
+// 	console.log('EditProfile component is being rendered');
+  
+// 	function handleEdit() {
+// 	  // Ajout d'un console.log dans une fonction
+// 	  console.log('handleEdit function has been called');
+// 	  throw new Error('Function not implemented.');
+// 	}
+  
+// 	return (
+// 	  <form
+// 		action={async () => {
+// 		  "use server";
+// 		  console.log('Form action triggered');
+// 		  // Si vous avez un code asynchrone ici, vous pouvez également ajouter des console.log
+// 		  try {
+// 			await handleEdit();
+// 		  } catch (error) {
+// 			console.error('Error in form action:', error);
+// 		  }
+// 		}}
+// 	  >
+// 		{/* Ajout d'un console.log lorsque le bouton est rendu */}
+// 		<Button variant={"default"} type="submit" onClick={() => console.log('Edit my profile button clicked')}>
+// 		  Edit my profile
+// 		</Button>
+// 	  </form>
+// 	);
+//   }
+
 
 export default async function ProfilPage({
 	params,
@@ -58,7 +130,7 @@ export default async function ProfilPage({
 						<div>Expérience: {user.experience}</div>
 					</>
 				) : (
-					<div>User not found :(</div>
+					<div>User not found :</div>
 				)}
 				<div className="text-2xl font-bold ">
 					You are logged in as {session?.user?.email}
@@ -70,6 +142,7 @@ export default async function ProfilPage({
 				>
 					Back to my profile
 				</Link>
+				<EditProfile />
 				<SignOut />
 			</div>
 		</div>

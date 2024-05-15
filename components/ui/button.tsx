@@ -3,6 +3,30 @@ import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
+import { ChangeEvent } from 'react';
+
+// Composant Input simple avec des propriétés de base
+export function Input({
+  type = "text",
+  name,
+  value,
+  onChange,
+}: {
+  type?: string;
+  name: string;
+  value: string | number;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+}) {
+  return (
+    <input
+      type={type}
+      name={name}
+      value={value}
+      onChange={onChange}
+      className="border rounded px-2 py-1"
+    />
+  );
+}
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
