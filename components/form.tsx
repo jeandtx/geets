@@ -27,8 +27,6 @@ export function Form({
 			});
 	}
 
-	// function handleEdit(e: any) {}
-
 	return (
 		<form
 			action={handleSubmit}

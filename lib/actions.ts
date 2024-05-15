@@ -49,3 +49,23 @@ export async function createProject(project: Project) {
     return data
 }
 
+/**
+ * Update a user in the database.
+ * @param {User} user - The user to update.
+ * @returns {Promise<any>} A promise that resolves to the updated user.
+ * @throws {Error} If the user have a missing field.
+ */
+
+export async function updateUser(user: User) {
+    const client = await clientPromise
+    const db = client.db('geets')
+    if (!user.email) {
+        throw new Error('Missing email in user')
+    }
+    // removing the id as it is immutable
+
+    user = { ...user, _id: new ObjectId(user._id) }; // Convert ObjectId to string
+    const result = await db.collection('users').updateOne({ email: user.email }, { $set: { ...user } });
+    const data = JSON.parse(JSON.stringify(result)) // Remove ObjectID (not serializable)
+    return data 
+}

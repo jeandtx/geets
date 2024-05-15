@@ -19,19 +19,6 @@ function SignOut() {
     </form>
   );
 }
-function EditProfile() {
-  return (
-    <form
-      action={async () => {
-        "use server";
-      }}
-    >
-      <Button variant={"default"} type="submit">
-        Edit my profile
-      </Button>
-    </form>
-  );
-}
 
 export default async function ProfilPage({
   params,
@@ -62,8 +49,6 @@ export default async function ProfilPage({
         ) : (
           <div>User not found :</div>
         )}
-
-        <EditProfile />
         <SignOut />
       </div>
     </div>
