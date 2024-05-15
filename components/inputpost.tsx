@@ -20,6 +20,8 @@ export function InputPost({ className }: InputPostProps) {
 	const [textareaHeight, setTextareaHeight] = useState("min-h-[40px]"); // Gère la hauteur de Textarea
 	const [selectedProject, setSelectedProject] = useState<string | null>(null);
 	const [imageUrl, setImageUrl] = useState<string | null>(null);
+	const [imageName, setImageName] = useState<string>("Ajouter une photo");
+
 	const { toast } = useToast();
 
 	useEffect(() => {
@@ -90,7 +92,7 @@ export function InputPost({ className }: InputPostProps) {
 				});
 				setDescription("");
 				setSelectedProject(null);
-				setImageUrl(null);  // Reset the imageUrl state
+				setImageUrl("Ajouter une photo");  // Reset the imageUrl state
 			})
 			.catch((error) => {
 				toast({
@@ -137,11 +139,19 @@ export function InputPost({ className }: InputPostProps) {
 								selectedProject={selectedProject}
 								user={session?.user?.email || ""}
 							/>
-							<CldUploadWidget uploadPreset="onrkam98" onUpload={(result) => setImageUrl(result.info.secure_url)}>
+							<CldUploadWidget 
+								
+								uploadPreset="onrkam98" 
+								onSuccess={(result) => {
+									setImageUrl((result as any).info.secure_url);
+									setImageName((result as any).info.original_filename); // Update the image name
+								}}
+							>
 								{({ open }) => {
 									return (
-										<button type="button" onClick={() => open()}>
-											Upload an Image
+										<button className="overflow-hidden inline-flex items-center justify-center rounded-md bg-primary px-6 py-3 text-base font-medium text-white"
+										style={{ height: "40px", maxWidth: "200px", whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden" }} type="button" onClick={() => open()}>
+											{imageName}
 										</button>
 									);
 								}}
