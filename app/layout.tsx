@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import SessionWrapper from "./sessionwrapper";
+import { Sidebar } from "@/components/sidebar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,8 +20,13 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body className={inter.className}>
-				<SessionWrapper>{children}</SessionWrapper>
-				<Toaster />
+				<div className="flex  w-full h-screen overflow-hidden">
+					<SessionWrapper>
+						<Sidebar className="w-1/5 bg-gray-200" />
+						<div className="lg:w-4/5 w-full">{children}</div>
+					</SessionWrapper>
+					<Toaster />
+				</div>
 			</body>
 		</html>
 	);

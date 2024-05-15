@@ -1,16 +1,8 @@
 import { auth, signOut } from "@/app/auth";
 import clientPromise from "@/lib/mongodb";
-import { Button} from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
-
-
-
-async function getUser(email: string) {
-	const client = await clientPromise;
-	const db = client.db("geets");
-	const user = await db.collection("users").findOne({ email });
-	return user;
-}
+import { getUser } from "@/lib/actions";
 
 function SignOut() {
 	return (
@@ -27,7 +19,7 @@ function SignOut() {
 	);
 }
 function EditProfile() {
-	return(
+	return (
 		<form
 			action={async () => {
 				"use server";
@@ -37,7 +29,7 @@ function EditProfile() {
 				Edit my profile
 			</Button>
 		</form>
- 	);
+	);
 }
 
 // function EditProfile() {
@@ -56,7 +48,7 @@ function EditProfile() {
 // 				// }, []);
 // 			}
 // 		}
-			
+
 // 		>
 // 			<Button variant={"default"} type="submit">
 // 				Edit my profile
@@ -68,13 +60,13 @@ function EditProfile() {
 // function EditProfile() {
 // 	// Ajout d'un console.log à la déclaration de la fonction
 // 	console.log('EditProfile component is being rendered');
-  
+
 // 	function handleEdit() {
 // 	  // Ajout d'un console.log dans une fonction
 // 	  console.log('handleEdit function has been called');
 // 	  throw new Error('Function not implemented.');
 // 	}
-  
+
 // 	return (
 // 	  <form
 // 		action={async () => {
@@ -95,7 +87,6 @@ function EditProfile() {
 // 	  </form>
 // 	);
 //   }
-
 
 export default async function ProfilPage({
 	params,
@@ -122,15 +113,18 @@ export default async function ProfilPage({
 				<h1 className="text-3xl font-bold ">Profil of {decodeEmail}</h1>
 				{user ? (
 					<>
-						<div>Nom: {user.name}</div>
-						<div>Prénom: {user.last_name}</div>
-						<div>Age: {user.age}</div>
-						<div>Localisation: {user.location}</div>
-						<div>Sexe: {user.sexe}</div>
+						<div>Nom: {user.pseudo}</div>
+						<div>Nom: {user.first_name}</div>
+						<div>
+							Age:{" "}
+							{user.birth_date?.toLocaleString() ?? "no data"}
+						</div>
+						<div>Localisation: {user.localisation}</div>
+						<div>Sexe: {user.gender}</div>
 						<div>Expérience: {user.experience}</div>
 					</>
 				) : (
-					<div>User not found :</div>
+					<div>User not found :(</div>
 				)}
 				<div className="text-2xl font-bold ">
 					You are logged in as {session?.user?.email}
