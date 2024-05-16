@@ -3,7 +3,6 @@
 import clientPromise from './mongodb'
 import { Post, User, Project } from '../types/tables'
 import { ObjectId } from 'mongodb'; // Import the ObjectId type
-import { get } from 'http';
 
 /**
  * Retrieves posts from the database.
