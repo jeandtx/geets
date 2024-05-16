@@ -6,7 +6,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Textarea } from "./ui/textarea";
 import { useToast } from "./ui/use-toast";
 import SelectProject from "./select-project";
-
+import { CldUploadWidget } from 'next-cloudinary';
+import { Post } from '../types/tables'
+import {
+	Image,
+	Send
+} from "lucide-react";
 export interface InputPostProps {
 	className?: string;
 }
@@ -16,16 +21,16 @@ export function InputPost({ className }: InputPostProps) {
 	const [description, setDescription] = useState("");
 	const [isExpanded, setIsExpanded] = useState(false);
 	const formRef = useRef<HTMLFormElement>(null);
-	const [textareaHeight, setTextareaHeight] = useState("min-h-[40px]"); // Gère la hauteur de Textarea
+	const [textareaHeight, setTextareaHeight] = useState("min-h-[40px]");
 	const [selectedProject, setSelectedProject] = useState<string | null>(null);
+	const [imageUrl, setImageUrl] = useState<string | null>(null);
+	const [imageName, setImageName] = useState<string>("Ajouter une photo");
+
 	const { toast } = useToast();
 
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
-			if (
-				formRef.current &&
-				!formRef.current.contains(event.target as Node)
-			) {
+			if (formRef.current && !formRef.current.contains(event.target as Node)) {
 				setIsExpanded(false);
 				setTextareaHeight("min-h-[40px]");
 			}
@@ -54,8 +59,7 @@ export function InputPost({ className }: InputPostProps) {
 			toast({
 				variant: "destructive",
 				title: "Uh oh! Something went wrong.",
-				description:
-					"Please provide a description and select a project.",
+				description: "Please provide a description and select a project.",
 			});
 			return;
 		}
@@ -69,42 +73,46 @@ export function InputPost({ className }: InputPostProps) {
 			return;
 		}
 
+		const post: Post = {
+			_id: "",
+			project: selectedProject!,
+			title: description,
+			content: description,
+			time: new Date(),
+			author: session.user.email,
+			media: imageUrl || undefined,
+			labels: []
+		};
+
 		await fetch("api/posts", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({
-				description,
-				selectedProject,
-				user: session.user.email,
-			}),
+			body: JSON.stringify(post),
 		})
-			.then(() => {
-				toast({
-					title: "Post submitted successfully",
-					description: "Your post has been successfully submitted.",
-				});
-				setDescription("");
-				setSelectedProject(null);
-			})
-			.catch((error) => {
-				toast({
-					variant: "destructive",
-					title: "Uh oh! Something went wrong.",
-					description: error.message,
-				});
+		.then(() => {
+			toast({
+				title: "Post submitted successfully",
+				description: "Your post has been successfully submitted.",
 			});
+			setDescription("");
+			setSelectedProject(null);
+			setImageUrl("Ajouter une photo");
+		})
+		.catch((error) => {
+			toast({
+				variant: "destructive",
+				title: "Uh oh! Something went wrong.",
+				description: error.message,
+			});
+		});
 	};
 
 	return (
 		<>
 			<div className={className}>
-				<form
-					ref={formRef}
-					onSubmit={handleSubmit}
-					className="flex flex-col gap-5"
-				>
+				<form ref={formRef} onSubmit={handleSubmit} className="flex flex-col gap-5">
 					<div className="flex gap-2">
 						<Avatar>
 							<AvatarImage src="https://github.com/shadcn.png" />
@@ -119,24 +127,50 @@ export function InputPost({ className }: InputPostProps) {
 							style={{
 								minHeight: textareaHeight,
 								transition: "min-height 0.3s ease-in-out",
+								WebkitBorderRadius: "5px",
+								MozBorderRadius: "5px",
+								borderRadius: "15px",
 							}}
 							id="title"
-							placeholder="Raconte nous ton projet !"
-							className="text-black text-inter  placeholder-gray-400 font-normal flex h-5 w-full border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300 hover:border-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0"
+							placeholder="Parle nous ton projet !"
+							className="text-base font-medium text-gray-500 placeholder-gray-400  flex h-5 w-full border border-input bg-background px-3 py-2  focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300 hover:border-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0"
 						/>
 					</div>
 
-					<div className="flex justify-end">
-						<div className="flex gap-3">
-							<SelectProject
-								onSelectProject={setSelectedProject}
-								selectedProject={selectedProject}
-								user={session?.user?.email || ""}
-							/>
-
-							<Button type="submit">Envoyer</Button>
+					<div className="flex justify-between items-center w-full px-8">
+    <div className="flex gap-10">
+        <SelectProject
+            onSelectProject={setSelectedProject}
+            selectedProject={selectedProject}
+            user={session?.user?.email || ""}
+        />
+        <CldUploadWidget 
+            uploadPreset="onrkam98" 
+            onSuccess={(result) => {
+                setImageUrl((result as any).info.secure_url);
+                setImageName((result as any).info.original_filename);
+            }}
+        >
+            {({ open }) => {
+                return (
+                <button className="overflow-hidden inline-flex items-center justify-center rounded-md px-6 py-3 text-base font-medium text-gray-500"
+    					style={{ height: "40px", maxWidth: "200px", whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden" }} 
+    					type="button" 
+    					onClick={() => open()}>
+						<div className="flex items-center justify-center">
+							<Image className="h-6 w-6 text-blue-500 mr-2" />
+							{imageName}
 						</div>
-					</div>
+				</button>
+                );
+            }}
+        </CldUploadWidget>
+    </div>
+    <div className="flex">
+        <Button className="overflow-hidden inline-flex items-center bg-transparent hover:none hover:bg-transparent justify-center rounded-md px-6 py-3 text-base font-medium text-gray-500" type="submit"><Send className="h-6 w-6 text-green-500 mr-2" />Envoyer</Button>
+    </div>
+</div>
+
 				</form>
 			</div>
 		</>

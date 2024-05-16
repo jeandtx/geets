@@ -9,12 +9,8 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-
-interface Project {
-	_id: string;
-	name: string;
-	owner: string;
-}
+import { Lightbulb } from "lucide-react";
+import { Project } from "@/types/tables";
 
 interface SelectProjectProps {
 	onSelectProject: (projectId: string) => void;
@@ -62,7 +58,9 @@ export default function SelectProject({
 		};
 
 		if (!projects.length) {
-			console.log("Projects state is null or undefined. Fetching projects...");
+			console.log(
+				"Projects state is null or undefined. Fetching projects..."
+			);
 			fetchProjects();
 		} else {
 			console.log("Projects already fetched:", projects);
@@ -119,9 +117,11 @@ export default function SelectProject({
 				type="button"
 				ref={trigger}
 				onClick={() => setModalOpen(true)}
-				className="inline-flex items-center justify-center rounded-md bg-primary px-6 py-3 text-base font-medium text-white"
+				className="overflow-hidden inline-flex items-center justify-center rounded-md px-6 py-3 text-base font-medium text-gray-500"
 				style={{ height: "40px" }}
 			>
+				{" "}
+				<Lightbulb className="h-6 w-6 text-yellow-500 mr-2" />
 				{selectedProject || "Ajouter un projet"}
 			</button>
 
@@ -151,14 +151,14 @@ export default function SelectProject({
 									<CarouselItem
 										key={project._id}
 										onClick={() =>
-											handleSelectItem(project.name)
+											handleSelectItem(project.title)
 										}
 										className="basis-1/3 cursor-pointer "
 									>
 										<Card>
 											<CardContent className="flex items-center justify-center p-6 overflow-hidden">
 												<span className="text-xl font-semibold">
-													{project.name}
+													{project.title}
 												</span>
 											</CardContent>
 										</Card>
