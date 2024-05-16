@@ -7,6 +7,7 @@ import { Textarea } from "./ui/textarea";
 import { useToast } from "./ui/use-toast";
 import SelectProject from "./select-project";
 import { CldUploadWidget } from 'next-cloudinary';
+import { Post } from '../types/tables'
 
 export interface InputPostProps {
 	className?: string;
@@ -17,7 +18,7 @@ export function InputPost({ className }: InputPostProps) {
 	const [description, setDescription] = useState("");
 	const [isExpanded, setIsExpanded] = useState(false);
 	const formRef = useRef<HTMLFormElement>(null);
-	const [textareaHeight, setTextareaHeight] = useState("min-h-[40px]"); // Gère la hauteur de Textarea
+	const [textareaHeight, setTextareaHeight] = useState("min-h-[40px]");
 	const [selectedProject, setSelectedProject] = useState<string | null>(null);
 	const [imageUrl, setImageUrl] = useState<string | null>(null);
 	const [imageName, setImageName] = useState<string>("Ajouter une photo");
@@ -26,10 +27,7 @@ export function InputPost({ className }: InputPostProps) {
 
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
-			if (
-				formRef.current &&
-				!formRef.current.contains(event.target as Node)
-			) {
+			if (formRef.current && !formRef.current.contains(event.target as Node)) {
 				setIsExpanded(false);
 				setTextareaHeight("min-h-[40px]");
 			}
@@ -58,8 +56,7 @@ export function InputPost({ className }: InputPostProps) {
 			toast({
 				variant: "destructive",
 				title: "Uh oh! Something went wrong.",
-				description:
-					"Please provide a description and select a project.",
+				description: "Please provide a description and select a project.",
 			});
 			return;
 		}
@@ -73,44 +70,46 @@ export function InputPost({ className }: InputPostProps) {
 			return;
 		}
 
+		const post: Post = {
+			_id: "",
+			project: selectedProject!,
+			title: description,
+			content: description,
+			time: new Date(),
+			author: session.user.email,
+			media: imageUrl || undefined,
+			labels: []
+		};
+
 		await fetch("api/posts", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({
-				description,
-				selectedProject,
-				user: session.user.email,
-				imageUrl,  // Include the imageUrl in the payload
-			}),
+			body: JSON.stringify(post),
 		})
-			.then(() => {
-				toast({
-					title: "Post submitted successfully",
-					description: "Your post has been successfully submitted.",
-				});
-				setDescription("");
-				setSelectedProject(null);
-				setImageUrl("Ajouter une photo");  // Reset the imageUrl state
-			})
-			.catch((error) => {
-				toast({
-					variant: "destructive",
-					title: "Uh oh! Something went wrong.",
-					description: error.message,
-				});
+		.then(() => {
+			toast({
+				title: "Post submitted successfully",
+				description: "Your post has been successfully submitted.",
 			});
+			setDescription("");
+			setSelectedProject(null);
+			setImageUrl("Ajouter une photo");
+		})
+		.catch((error) => {
+			toast({
+				variant: "destructive",
+				title: "Uh oh! Something went wrong.",
+				description: error.message,
+			});
+		});
 	};
 
 	return (
 		<>
 			<div className={className}>
-				<form
-					ref={formRef}
-					onSubmit={handleSubmit}
-					className="flex flex-col gap-5"
-				>
+				<form ref={formRef} onSubmit={handleSubmit} className="flex flex-col gap-5">
 					<div className="flex gap-2">
 						<Avatar>
 							<AvatarImage src="https://github.com/shadcn.png" />
@@ -128,7 +127,7 @@ export function InputPost({ className }: InputPostProps) {
 							}}
 							id="title"
 							placeholder="Raconte nous ton projet !"
-							className="text-black text-inter  placeholder-gray-400 font-normal flex h-5 w-full border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300 hover:border-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0"
+							className="text-black text-inter placeholder-gray-400 font-normal flex h-5 w-full border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300 hover:border-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0"
 						/>
 					</div>
 
@@ -140,11 +139,10 @@ export function InputPost({ className }: InputPostProps) {
 								user={session?.user?.email || ""}
 							/>
 							<CldUploadWidget 
-								
 								uploadPreset="onrkam98" 
 								onSuccess={(result) => {
 									setImageUrl((result as any).info.secure_url);
-									setImageName((result as any).info.original_filename); // Update the image name
+									setImageName((result as any).info.original_filename);
 								}}
 							>
 								{({ open }) => {
