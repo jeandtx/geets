@@ -8,7 +8,7 @@ import { Project } from "@/types/tables";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 import { createProject } from "@/lib/actions";
-import { useSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
 
 export default function NewProject() {
 	const [label, setLabel] = useState<string>("");
@@ -17,9 +17,10 @@ export default function NewProject() {
 	const [themes, setThemes] = useState<string[]>([]);
 	const { toast } = useToast();
 	const session = useSession();
+	const [user, setUser] = useState<string>("loading");
 	const [project, setProject] = useState<Project>({
 		_id: "Generated",
-		author: "",
+		author: user,
 		title: "",
 		themes: themes,
 		description: "",
@@ -27,6 +28,14 @@ export default function NewProject() {
 		labels: labels,
 		participants: [],
 	});
+
+	useEffect(() => {
+		if (session.data?.user?.email) {
+			setUser(session.data.user.email);
+		} else {
+			console.log("No user found");
+		}
+	}, [session]);
 
 	const handleChange = (e: any) => {
 		setProject({
@@ -45,8 +54,6 @@ export default function NewProject() {
 
 	const handleSubmit = (e: any) => {
 		e.preventDefault();
-		const user =
-			session.data && session.data.user && session.data.user.email;
 		if (!user) {
 			toast({
 				variant: "destructive",
@@ -79,6 +86,10 @@ export default function NewProject() {
 				return;
 			});
 	};
+
+	if (session.status === "loading" || !user) {
+		return <div>Loading...</div>;
+	}
 
 	return (
 		<div>
