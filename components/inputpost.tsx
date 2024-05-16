@@ -127,11 +127,13 @@ export function InputPost({ className }: InputPostProps) {
 							style={{
 								minHeight: textareaHeight,
 								transition: "min-height 0.3s ease-in-out",
-								borderRadius: "0.375rem",
+								WebkitBorderRadius: "5px",
+								MozBorderRadius: "5px",
+								borderRadius: "15px",
 							}}
 							id="title"
-							placeholder="Raconte nous ton projet !"
-							className="text-black text-inter placeholder-gray-400 font-normal flex h-5 w-full border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300 hover:border-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0"
+							placeholder="Parle nous ton projet !"
+							className="text-base font-medium text-gray-500 placeholder-gray-400  flex h-5 w-full border border-input bg-background px-3 py-2  focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300 hover:border-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0"
 						/>
 					</div>
 
@@ -157,7 +159,7 @@ export function InputPost({ className }: InputPostProps) {
     					onClick={() => open()}>
 						<div className="flex items-center justify-center">
 							<Image className="h-6 w-6 text-blue-500 mr-2" />
-							<span>{imageName}</span>
+							{imageName}
 						</div>
 				</button>
                 );
