@@ -9,7 +9,9 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-
+import {
+	Lightbulb,
+} from "lucide-react";
 interface Project {
 	_id: string;
 	name: string;
@@ -119,9 +121,10 @@ export default function SelectProject({
 				type="button"
 				ref={trigger}
 				onClick={() => setModalOpen(true)}
-				className="inline-flex items-center justify-center rounded-md bg-primary px-6 py-3 text-base font-medium text-white"
+				className="overflow-hidden inline-flex items-center justify-center rounded-md px-6 py-3 text-base font-medium text-gray-500"
 				style={{ height: "40px" }}
-			>
+			> <Lightbulb className="h-6 w-6 text-yellow-500 mr-2" />
+
 				{selectedProject || "Ajouter un projet"}
 			</button>
 

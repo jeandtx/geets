@@ -8,7 +8,10 @@ import { useToast } from "./ui/use-toast";
 import SelectProject from "./select-project";
 import { CldUploadWidget } from 'next-cloudinary';
 import { Post } from '../types/tables'
-
+import {
+	Image,
+	Send
+} from "lucide-react";
 export interface InputPostProps {
 	className?: string;
 }
@@ -124,6 +127,7 @@ export function InputPost({ className }: InputPostProps) {
 							style={{
 								minHeight: textareaHeight,
 								transition: "min-height 0.3s ease-in-out",
+								borderRadius: "0.375rem",
 							}}
 							id="title"
 							placeholder="Raconte nous ton projet !"
@@ -131,32 +135,40 @@ export function InputPost({ className }: InputPostProps) {
 						/>
 					</div>
 
-					<div className="flex justify-end">
-						<div className="flex gap-3">
-							<SelectProject
-								onSelectProject={setSelectedProject}
-								selectedProject={selectedProject}
-								user={session?.user?.email || ""}
-							/>
-							<CldUploadWidget 
-								uploadPreset="onrkam98" 
-								onSuccess={(result) => {
-									setImageUrl((result as any).info.secure_url);
-									setImageName((result as any).info.original_filename);
-								}}
-							>
-								{({ open }) => {
-									return (
-										<button className="overflow-hidden inline-flex items-center justify-center rounded-md bg-primary px-6 py-3 text-base font-medium text-white"
-										style={{ height: "40px", maxWidth: "200px", whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden" }} type="button" onClick={() => open()}>
-											{imageName}
-										</button>
-									);
-								}}
-							</CldUploadWidget>
-							<Button type="submit">Envoyer</Button>
+					<div className="flex justify-between items-center w-full px-8">
+    <div className="flex gap-10">
+        <SelectProject
+            onSelectProject={setSelectedProject}
+            selectedProject={selectedProject}
+            user={session?.user?.email || ""}
+        />
+        <CldUploadWidget 
+            uploadPreset="onrkam98" 
+            onSuccess={(result) => {
+                setImageUrl((result as any).info.secure_url);
+                setImageName((result as any).info.original_filename);
+            }}
+        >
+            {({ open }) => {
+                return (
+                <button className="overflow-hidden inline-flex items-center justify-center rounded-md px-6 py-3 text-base font-medium text-gray-500"
+    					style={{ height: "40px", maxWidth: "200px", whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden" }} 
+    					type="button" 
+    					onClick={() => open()}>
+						<div className="flex items-center justify-center">
+							<Image className="h-6 w-6 text-blue-500 mr-2" />
+							<span>{imageName}</span>
 						</div>
-					</div>
+				</button>
+                );
+            }}
+        </CldUploadWidget>
+    </div>
+    <div className="flex">
+        <Button className="overflow-hidden inline-flex items-center bg-transparent hover:none hover:bg-transparent justify-center rounded-md px-6 py-3 text-base font-medium text-gray-500" type="submit"><Send className="h-6 w-6 text-green-500 mr-2" />Envoyer</Button>
+    </div>
+</div>
+
 				</form>
 			</div>
 		</>
