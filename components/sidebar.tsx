@@ -17,6 +17,8 @@ import {
 import Link from "next/link";
 import { NavigationMenuDemo } from "./navigation-menu";
 import { useSession } from "next-auth/react";
+import { getProjects } from "@/lib/actions";
+import { useEffect, useState } from 'react';
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -35,6 +37,19 @@ const projects = [
 
 export function Sidebar({ className }: SidebarProps) {
 	const session = useSession();
+	const [projects, setProjects] = useState<string[]>([]);
+
+	useEffect(() => {
+		const fetchProjects = async () => {
+		if (session.data?.user?.email) {
+			const userEmail = session.data?.user?.email;
+			const projects = await getProjects(userEmail);
+			const projectTitles = projects.map(project => project.title);
+			setProjects(projectTitles);
+		}
+		};
+		fetchProjects();
+	}, [session]);
 
 	return (
 		<>
@@ -82,7 +97,7 @@ export function Sidebar({ className }: SidebarProps) {
 									Write Project
 								</Button>
 							</Link>
-							<Link href={`/projects`}>
+							<Link href={`/${session.data?.user?.email}/projects`}>
 								<Button
 									variant="ghost"
 									className="w-full justify-start"
@@ -141,18 +156,20 @@ export function Sidebar({ className }: SidebarProps) {
 							Your Projects
 						</h2>
 						<ScrollArea className="h-[300px] px-1">
-							<div className="space-y-1 p-2">
-								{projects?.map((playlist, i) => (
-									<Button
-										key={`${playlist}-${i}`}
-										variant="ghost"
-										className="w-full justify-start font-normal"
-									>
-										<SquareKanban className="mr-2 h-4 w-4" />
-										{playlist}
-									</Button>
-								))}
-							</div>
+						<div className="space-y-1 p-2">
+							{projects?.map((project, i) => (
+							<Link key={`${project}-${i}`} href={`/${session.data?.user?.email}/${encodeURIComponent(project)}`}>
+								<Button
+								variant="ghost"
+								className="w-full justify-start font-normal"
+								>
+									
+								<SquareKanban className="mr-2 h-4 w-4" />
+								{project}
+								</Button>
+							</Link>
+							))}
+						</div>
 						</ScrollArea>
 					</div>
 				</div>
