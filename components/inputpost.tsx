@@ -99,6 +99,10 @@ export function InputPost({ className }: InputPostProps) {
 			setDescription("");
 			setSelectedProject(null);
 			setImageUrl("Ajouter une photo");
+			setImageName("Ajouter une photo");
+			setIsExpanded(false);
+			setTextareaHeight("min-h-[40px]")
+
 		})
 		.catch((error) => {
 			toast({
@@ -120,7 +124,11 @@ export function InputPost({ className }: InputPostProps) {
 						</Avatar>
 						<Textarea
 							onFocus={handleTitleFocus}
-							onBlur={() => setIsExpanded(false)}
+							onBlur={() => {
+								setIsExpanded(false);
+								setTextareaHeight("min-h-[40px]");
+							  }}
+							  
 							onChange={(e) => setDescription(e.target.value)}
 							value={description}
 							height={textareaHeight}
@@ -133,7 +141,7 @@ export function InputPost({ className }: InputPostProps) {
 							}}
 							id="title"
 							placeholder="Parle nous ton projet !"
-							className="text-base font-medium text-gray-500 placeholder-gray-400  flex h-5 w-full border border-input bg-background px-3 py-2  focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300 hover:border-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0"
+							className="resize-none text-base font-medium text-gray-500 placeholder-gray-400  flex h-5 w-full border border-input bg-background px-3 py-2  focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300 hover:border-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0"
 						/>
 					</div>
 
