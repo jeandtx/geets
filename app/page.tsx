@@ -1,5 +1,4 @@
 import Feed from "@/components/feed";
-import { InputPost } from "@/components/inputpost";
 
 export default async function Home() {
 	return (
