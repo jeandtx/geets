@@ -91,16 +91,13 @@ export async function getProjects(email: string) {
  * @returns {Promise<any>} A promise that resolves to the project.
  */
 export async function getProject(projectId: string) {
-    try {
-        const client = await clientPromise;
-        const db = client.db("geets");
-        const project = await db.collection("projects").findOne({ _id: new ObjectId(projectId) });
-        const data: Project = JSON.parse(JSON.stringify(project)) // Remove ObjectID (not serializable)
-        return data;
-    } catch (err) {
-        console.error("Error fetching project:", err);
-        return null;
-    }
+
+    const client = await clientPromise;
+    const db = client.db("geets");
+    const project = await db.collection("projects").findOne({ _id: new ObjectId(projectId) });
+    const data: Project = JSON.parse(JSON.stringify(project)) // Remove ObjectID (not serializable)
+    return data;
+
 }
 
 /**
