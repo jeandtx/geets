@@ -31,7 +31,7 @@ export default async function ProjectsPage() {
 						<Link
 							href={`/${encodeURIComponent(
 								userEmail
-							)}/${encodeURIComponent(project.title)}`}
+							)}/${encodeURIComponent(project._id)}`}
 						>
 							{project.title}
 						</Link>

@@ -72,15 +72,16 @@ export async function getProjects(email: string) {
 
 /**
  * Retrieves one unique project from the database using the project title.
- * @param {string} projectTitle - The title of the project to retrieve.
+ * @param {string} projectId - The title of the project to retrieve.
  * @returns {Promise<any>} A promise that resolves to the project.
  */
-export async function getUniqueProject(projectTitle: string) {
+export async function getProject(projectId: string) {
     try {
         const client = await clientPromise;
         const db = client.db("geets");
-        const project = await db.collection("projects").findOne({ title: projectTitle });
-        return project;
+        const project = await db.collection("projects").findOne({ _id: new ObjectId(projectId) });
+        const data: Project = JSON.parse(JSON.stringify(project)) // Remove ObjectID (not serializable)
+        return data;
     } catch (err) {
         console.error("Error fetching project:", err);
         return null;
@@ -99,7 +100,7 @@ export async function getPostsByProjectId(projectId: string): Promise<Post[]> {
         const db = client.db("geets");
         const posts = await db.collection("posts").find({ projectId: new ObjectId(projectId) }).toArray();
 
-        return posts.map(post => ({
+        const data: Post[] = posts.map(post => ({
             _id: post._id.toString(),
             project: post.project,
             title: post.title,
@@ -109,6 +110,7 @@ export async function getPostsByProjectId(projectId: string): Promise<Post[]> {
             media: post.media,
             labels: post.labels
         }));
+        return data;
     } catch (err) {
         console.error("Error fetching posts:", err);
         return [];
