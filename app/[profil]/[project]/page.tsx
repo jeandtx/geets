@@ -1,5 +1,6 @@
 import { getUser, getProject, getPostsByProjectId } from "@/lib/actions";
 import { Post, Project } from "@/types/tables";
+import Img from "next/image";
 
 export default async function ProjectPage({
 	params,
@@ -50,9 +51,11 @@ export default async function ProjectPage({
 												{post.media && (
 													<div>
 														Media:{" "}
-														<img
+														<Img
 															src={post.media}
 															alt="post media"
+															width={200}
+															height={200}
 														/>
 													</div>
 												)}
