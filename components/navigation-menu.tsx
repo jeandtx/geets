@@ -58,9 +58,7 @@ export function NavigationMenuDemo({
 									Profil
 								</Button>
 							</ListItem>
-							<ListItem
-								href={`/${session.data?.user?.email}/projects`}
-							>
+							<ListItem href={`/${email}/projects`}>
 								<Button
 									variant="ghost"
 									className="w-full justify-start"
