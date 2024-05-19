@@ -65,7 +65,7 @@ export default function SideProjectCard({ post }: SideProjectCardProps) {
 				</div>
 
 				<div className="p-2">
-					<h2 className="text-2xl font-bold mb-2">{post.title}</h2>
+					<h2 className="text-2xl font-bold mb-2">Title</h2>
 					<div className="text-base text-gray-700 underline mb-1">
 						{post.content}
 					</div>

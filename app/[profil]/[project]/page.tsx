@@ -45,7 +45,7 @@ export default async function ProjectPage({
 												key={post._id}
 												className="w-[300px] bg-black-400 rounded-lg shadow-md m-2 p-2 text-center"
 											>
-												<div>Title: {post.title}</div>
+												<div> Title : title</div>
 												<div>
 													Content: {post.content}
 												</div>
