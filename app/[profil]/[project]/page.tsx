@@ -13,9 +13,7 @@ export default async function ProjectPage({
 
 	const projectId = params.project;
 	const project: Project | null = await getProject(projectId);
-
-	let posts: Post[] = [];
-	posts = await getPostsByProjectId(projectId);
+	const posts: Post[] = await getPostsByProjectId(projectId);
 
 	return (
 		<div className="">

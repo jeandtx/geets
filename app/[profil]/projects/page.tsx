@@ -23,7 +23,7 @@ export default async function ProjectsPage() {
 		)
 		.map((project) => (
 			<div
-				key={project.title}
+				key={project._id}
 				className="w-[300px] bg-black-400 rounded-lg shadow-md m-2 p-2 text-center"
 			>
 				<div>
