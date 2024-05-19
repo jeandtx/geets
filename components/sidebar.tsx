@@ -19,6 +19,7 @@ import { NavigationMenuDemo } from "./navigation-menu";
 import { useSession } from "next-auth/react";
 import { getProjects } from "@/lib/actions";
 import { useEffect, useState } from "react";
+import { Project } from "@/types/tables";
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -37,23 +38,23 @@ const projects = [
 
 export function Sidebar({ className }: SidebarProps) {
 	const session = useSession();
-	const [projects, setProjects] = useState<string[]>([]);
+	const [projects, setProjects] = useState<Project[] | null>(null);
 	const [email, setEmail] = useState<string>("");
 
 	useEffect(() => {
 		const fetchProjects = async () => {
-			if (session.data?.user?.email) {
-				const userEmail = session.data?.user?.email;
-				const projects = await getProjects(userEmail);
-				const projectTitles = projects.map((project) => project.title);
-				setProjects(projectTitles);
+			if (email !== "" && projects === null) {
+				const projects = await getProjects(email);
+				const data: Project[] = JSON.parse(JSON.stringify(projects));
+				setProjects(data);
 			}
 		};
 		if (session.data?.user?.email) {
 			setEmail(session.data?.user?.email);
 		}
 		fetchProjects();
-	}, [session]);
+		console.log(projects);
+	}, [session, email, projects]);
 
 	return (
 		<>
@@ -166,14 +167,14 @@ export function Sidebar({ className }: SidebarProps) {
 										key={`${project}-${i}`}
 										href={`/${
 											session.data?.user?.email
-										}/${encodeURIComponent(project)}`}
+										}/${encodeURIComponent(project._id)}`}
 									>
 										<Button
 											variant="ghost"
 											className="w-full justify-start font-normal"
 										>
 											<SquareKanban className="mr-2 h-4 w-4" />
-											{project}
+											{project.title}
 										</Button>
 									</Link>
 								))}
