@@ -53,7 +53,6 @@ export function Sidebar({ className }: SidebarProps) {
 			setEmail(session.data?.user?.email);
 		}
 		fetchProjects();
-		console.log(projects);
 	}, [session, email, projects]);
 
 	return (
