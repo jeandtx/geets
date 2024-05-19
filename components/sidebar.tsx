@@ -60,7 +60,7 @@ export function Sidebar({ className }: SidebarProps) {
 		<>
 			<NavigationMenuDemo className="fixed top-4 left-4 z-50 md:hidden block" />
 			<div className={cn("pb-12  md:block hidden", className)}>
-				<div className="space-y-4 py-4 ">
+				<div className="space-y-4 py-4 flex flex-col items-center h-full justify-between">
 					<div className="px-3 py-2">
 						<h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
 							Navigate
@@ -113,48 +113,6 @@ export function Sidebar({ className }: SidebarProps) {
 							</Link>
 						</div>
 					</div>
-					<div className="px-3 py-2">
-						<h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
-							Settings
-						</h2>
-						<div className="space-y-1">
-							<Button
-								variant="ghost"
-								className="w-full justify-start"
-							>
-								<EarthLock className="mr-2 h-4 w-4" />
-								Policy
-							</Button>
-							<Button
-								variant="ghost"
-								className="w-full justify-start"
-							>
-								<SunMoon className="mr-2 h-4 w-4" />
-								Themes
-							</Button>
-							<Button
-								variant="ghost"
-								className="w-full justify-start"
-							>
-								<UserRoundCog className="mr-2 h-4 w-4" />
-								Account
-							</Button>
-							<Button
-								variant="ghost"
-								className="w-full justify-start"
-							>
-								<BellMinus className="mr-2 h-4 w-4" />
-								Notification
-							</Button>
-							<Button
-								variant="ghost"
-								className="w-full justify-start"
-							>
-								<Languages className="mr-2 h-4 w-4" />
-								Language
-							</Button>
-						</div>
-					</div>
 
 					<div className="py-2">
 						<h2 className="relative px-7 text-lg font-semibold tracking-tight">
@@ -162,12 +120,10 @@ export function Sidebar({ className }: SidebarProps) {
 						</h2>
 						<ScrollArea className="h-[300px] px-1">
 							<div className="space-y-1 p-2">
-								{projects?.map((project, i) => (
+								{projects?.map((project) => (
 									<Link
-										key={`${project}-${i}`}
-										href={`/${
-											session.data?.user?.email
-										}/${encodeURIComponent(project._id)}`}
+										key={`${project._id}`}
+										href={`/${email}/${project._id}`}
 									>
 										<Button
 											variant="ghost"
