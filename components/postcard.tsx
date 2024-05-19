@@ -23,7 +23,6 @@ export default function PostCard({ post }: PostProps) {
 			const project: Project = await getProject(
 				"664a103fab759e59e6bd0f91"
 			);
-			console.log("Project:", project);
 			setProject(project);
 		};
 		fetchProject();
