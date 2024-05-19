@@ -17,6 +17,9 @@ import {
 import Link from "next/link";
 import { NavigationMenuDemo } from "./navigation-menu";
 import { useSession } from "next-auth/react";
+import { getProjects } from "@/lib/actions";
+import { useEffect, useState } from "react";
+import { Project } from "@/types/tables";
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -35,12 +38,29 @@ const projects = [
 
 export function Sidebar({ className }: SidebarProps) {
 	const session = useSession();
+	const [projects, setProjects] = useState<Project[] | null>(null);
+	const [email, setEmail] = useState<string>("");
+
+	useEffect(() => {
+		const fetchProjects = async () => {
+			if (email !== "" && projects === null) {
+				const projects = await getProjects(email);
+				const data: Project[] = JSON.parse(JSON.stringify(projects));
+				setProjects(data);
+			}
+		};
+		if (session.data?.user?.email) {
+			setEmail(session.data?.user?.email);
+		}
+		fetchProjects();
+		console.log(projects);
+	}, [session, email, projects]);
 
 	return (
 		<>
 			<NavigationMenuDemo className="fixed top-4 left-4 z-50 md:hidden block" />
 			<div className={cn("pb-12  md:block hidden", className)}>
-				<div className="space-y-4 py-4 ">
+				<div className="space-y-4 py-4 flex flex-col items-center h-full justify-between">
 					<div className="px-3 py-2">
 						<h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
 							Navigate
@@ -82,7 +102,7 @@ export function Sidebar({ className }: SidebarProps) {
 									Write Project
 								</Button>
 							</Link>
-							<Link href={`/projects`}>
+							<Link href={`/${email}/projects`}>
 								<Button
 									variant="ghost"
 									className="w-full justify-start"
@@ -93,48 +113,6 @@ export function Sidebar({ className }: SidebarProps) {
 							</Link>
 						</div>
 					</div>
-					<div className="px-3 py-2">
-						<h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
-							Settings
-						</h2>
-						<div className="space-y-1">
-							<Button
-								variant="ghost"
-								className="w-full justify-start"
-							>
-								<EarthLock className="mr-2 h-4 w-4" />
-								Policy
-							</Button>
-							<Button
-								variant="ghost"
-								className="w-full justify-start"
-							>
-								<SunMoon className="mr-2 h-4 w-4" />
-								Themes
-							</Button>
-							<Button
-								variant="ghost"
-								className="w-full justify-start"
-							>
-								<UserRoundCog className="mr-2 h-4 w-4" />
-								Account
-							</Button>
-							<Button
-								variant="ghost"
-								className="w-full justify-start"
-							>
-								<BellMinus className="mr-2 h-4 w-4" />
-								Notification
-							</Button>
-							<Button
-								variant="ghost"
-								className="w-full justify-start"
-							>
-								<Languages className="mr-2 h-4 w-4" />
-								Language
-							</Button>
-						</div>
-					</div>
 
 					<div className="py-2">
 						<h2 className="relative px-7 text-lg font-semibold tracking-tight">
@@ -142,15 +120,19 @@ export function Sidebar({ className }: SidebarProps) {
 						</h2>
 						<ScrollArea className="h-[300px] px-1">
 							<div className="space-y-1 p-2">
-								{projects?.map((playlist, i) => (
-									<Button
-										key={`${playlist}-${i}`}
-										variant="ghost"
-										className="w-full justify-start font-normal"
+								{projects?.map((project) => (
+									<Link
+										key={`${project._id}`}
+										href={`/${email}/${project._id}`}
 									>
-										<SquareKanban className="mr-2 h-4 w-4" />
-										{playlist}
-									</Button>
+										<Button
+											variant="ghost"
+											className="w-full justify-start font-normal"
+										>
+											<SquareKanban className="mr-2 h-4 w-4" />
+											{project.title}
+										</Button>
+									</Link>
 								))}
 							</div>
 						</ScrollArea>
