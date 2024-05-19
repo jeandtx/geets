@@ -95,7 +95,7 @@ export default function SelectProject({
 		return () => document.removeEventListener("keydown", keyHandler);
 	}, [modalOpen]);
 
-	const handleSelectItem = (projectId: string, projectTitle: string) => {
+	const handleSelectItem = (projectId: string) => {
 		console.log("Selected project ID:", projectId);
 		onSelectProject(projectId);
 		setModalOpen(false);
@@ -151,7 +151,7 @@ export default function SelectProject({
 									<CarouselItem
 										key={project._id}
 										onClick={() =>
-											handleSelectItem(project._id, project.title)
+											handleSelectItem(project._id)
 										}
 										className="basis-1/3 cursor-pointer "
 									>
