@@ -33,28 +33,20 @@ export default function SelectProject({
 	const [projects, setProjects] = useState<Project[]>([]);
 
 	useEffect(() => {
-		console.log("useEffect for fetching projects triggered. user:", user);
-
 		const fetchProjects = async () => {
 			if (!user) {
-				console.log("No user, skipping fetch.");
 				return;
 			}
 
 			try {
 				const res = await fetch("/api/" + user + "/projects");
-				console.log("Fetch response:", res);
-
 				if (res.ok && res.body) {
 					const reader = res.body.getReader();
 					const result = await reader.read();
 					const decoder = new TextDecoder("utf-8");
 					const text = decoder.decode(result.value);
 					const projects = JSON.parse(text);
-					console.log("Parsed projects:", projects);
 					setProjects(projects.response);
-				} else {
-					console.log("Fetch response not OK or body is null.");
 				}
 			} catch (error) {
 				console.error("Error fetching projects:", error);
@@ -62,10 +54,7 @@ export default function SelectProject({
 		};
 
 		if (!projects.length) {
-			console.log("Projects state is null or undefined. Fetching projects...");
 			fetchProjects();
-		} else {
-			console.log("Projects already fetched:", projects);
 		}
 	}, [user]);
 
@@ -79,7 +68,6 @@ export default function SelectProject({
 			)
 				return;
 			setModalOpen(false);
-			console.log("Modal is closing because of click outside.");
 		};
 
 		document.addEventListener("click", clickHandler);
@@ -89,7 +77,6 @@ export default function SelectProject({
 	useEffect(() => {
 		const keyHandler = ({ keyCode }: KeyboardEvent) => {
 			if (!modalOpen || keyCode !== 27) return;
-			console.log("Modal is closing because of key press:", keyCode);
 			setModalOpen(false);
 		};
 
@@ -98,17 +85,14 @@ export default function SelectProject({
 	}, [modalOpen]);
 
 	const handleSelectItem = (itemName: string) => {
-		console.log("Selected item name:", itemName);
 		onSelectProject(itemName);
 		setModalOpen(false);
 	};
 
 	const handleAddProject = () => {
 		if (!user) {
-			console.log('User not logged in. Redirecting to "/login"');
 			redirect("/login");
 		} else {
-			console.log("Add new project.");
 			setModalOpen(false);
 		}
 	};

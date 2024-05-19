@@ -1,6 +1,5 @@
-import { Metadata } from 'next'
-import clientPromise from '../../lib/mongodb'
-import { getPosts } from '@/lib/actions'
+import { Metadata } from "next";
+import { getPosts } from "@/lib/actions";
 
 export const metadata: Metadata = {
     title: 'Top 15 Movies by Metacritic',
