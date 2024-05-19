@@ -95,9 +95,9 @@ export default function SelectProject({
 		return () => document.removeEventListener("keydown", keyHandler);
 	}, [modalOpen]);
 
-	const handleSelectItem = (itemName: string) => {
-		console.log("Selected item name:", itemName);
-		onSelectProject(itemName);
+	const handleSelectItem = (projectId: string) => {
+		console.log("Selected project ID:", projectId);
+		onSelectProject(projectId);
 		setModalOpen(false);
 	};
 
@@ -122,7 +122,7 @@ export default function SelectProject({
 			>
 				{" "}
 				<Lightbulb className="h-6 w-6 text-yellow-500 mr-2" />
-				{selectedProject || "Ajouter un projet"}
+				{selectedProject ? projects.find(p => p._id === selectedProject)?.title : "Ajouter un projet"}
 			</button>
 
 			<div
@@ -151,7 +151,7 @@ export default function SelectProject({
 									<CarouselItem
 										key={project._id}
 										onClick={() =>
-											handleSelectItem(project.title)
+											handleSelectItem(project._id)
 										}
 										className="basis-1/3 cursor-pointer "
 									>
