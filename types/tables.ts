@@ -15,8 +15,7 @@
 export interface Post {
     _id: string;
     project: string;
-    title: string;
-    content?: string;
+    content: string;
     time: Date;
     author: string;
     media?: string;

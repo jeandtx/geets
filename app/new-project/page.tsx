@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 import { createProject } from "@/lib/actions";
 import { useSession } from "next-auth/react";
+import { CldUploadWidget } from 'next-cloudinary';
 
 export default function NewProject() {
 	const [label, setLabel] = useState<string>("");
@@ -17,13 +18,16 @@ export default function NewProject() {
 	const [themes, setThemes] = useState<string[]>([]);
 	const { toast } = useToast();
 	const session = useSession();
+	const [imageUrl, setImageUrl] = useState<string>("");
+	const [imageName, setImageName] = useState<string>("Ajouter une photo");
+
 	const [project, setProject] = useState<Project>({
 		_id: "Generated",
 		author: "",
 		title: "",
 		themes: themes,
 		description: "",
-		media: "",
+		media: imageUrl,
 		labels: labels,
 		participants: [],
 	});
@@ -40,8 +44,9 @@ export default function NewProject() {
 			...project,
 			themes: themes,
 			labels: labels,
+			media: imageUrl,
 		});
-	}, [themes, labels]);
+	}, [themes, labels, imageUrl]);
 
 	const handleSubmit = (e: any) => {
 		e.preventDefault();
@@ -66,7 +71,7 @@ export default function NewProject() {
 				toast({
 					title: "Success!",
 					description:
-						"Your form has been submitted. with " + project.title,
+						"Your form has been submitted with " + project.title,
 				});
 			})
 			.catch(() => {
@@ -131,12 +136,28 @@ export default function NewProject() {
 					onChange={handleChange}
 					placeholder="Description"
 				/>
-				<Input
-					type="text"
-					name="media"
-					onChange={handleChange}
-					placeholder="Media"
-				/>
+
+				{/* Media Upload Section */}
+				<CldUploadWidget 
+					uploadPreset="onrkam98" 
+					onSuccess={(result) => {
+						setImageUrl((result as any).info.secure_url);
+						setImageName((result as any).info.original_filename); // Update the image name
+					}}
+				>
+					{({ open }) => {
+						return (
+							<button 
+								className="overflow-hidden inline-flex items-center justify-center rounded-md bg-primary px-6 py-3 text-base font-medium text-white"
+								style={{ height: "40px", whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden" }} 
+								type="button" 
+								onClick={() => open()}
+							>
+								{imageName}
+							</button>
+						);
+					}}
+				</CldUploadWidget>
 
 				<form
 					onSubmit={(e) => {

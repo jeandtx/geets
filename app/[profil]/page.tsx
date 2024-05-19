@@ -31,7 +31,7 @@ export default async function ProfilPage({
 
 	return (
 		<div className="flex h-screen">
-			<div className="w-screen h-screen flex flex-col space-y-5 justify-center items-center text-black">
+			<div className="w-screen flex flex-col space-y-5 justify-center items-center text-black">
 				<div>Search other profils from the database to try</div>
 				<Link href="/sanchezlori@example.com" className="text-textblue">
 					{" "}

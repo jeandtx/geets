@@ -13,8 +13,16 @@ import { BookHeart, FlaskConical, PersonStanding } from "lucide-react";
 import { useSession } from "next-auth/react";
 import React from "react";
 
-export function NavigationMenuDemo({ className }: { className?: string }) {
+export function NavigationMenuDemo({
+	className,
+}: Readonly<{ className?: string }>) {
 	const session = useSession();
+	const [email, setEmail] = React.useState<string>("");
+	React.useEffect(() => {
+		if (session.data?.user?.email) {
+			setEmail(session.data?.user?.email);
+		}
+	}, [session]);
 
 	return (
 		<NavigationMenu className={className}>
@@ -41,13 +49,22 @@ export function NavigationMenuDemo({ className }: { className?: string }) {
 									Testing Page
 								</Button>
 							</ListItem>
-							<ListItem href={`/${session.data?.user?.email}`}>
+							<ListItem href={`/${email}`}>
 								<Button
 									variant="ghost"
 									className="w-full justify-start"
 								>
 									<PersonStanding className="mr-2 h-4 w-4" />
 									Profil
+								</Button>
+							</ListItem>
+							<ListItem href={`/${email}/projects`}>
+								<Button
+									variant="ghost"
+									className="w-full justify-start"
+								>
+									<PersonStanding className="mr-2 h-4 w-4" />
+									My Projects
 								</Button>
 							</ListItem>
 						</ul>

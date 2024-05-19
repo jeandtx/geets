@@ -1,24 +1,39 @@
 import { NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
+import { Post } from "@/types/tables";
+import { ObjectId } from 'mongodb'; // Import the ObjectId type
+
 
 export async function POST(req: Request) {
-    const { description, selectedProject, user } = await req.json(); // Récupération des données requises
+    const { content, project, author, imageUrl } = await req.json(); // Récupération des données requises
     const client = await clientPromise;
     const db = client.db('geets');
-    console.log(description, selectedProject, user);
-    
+    console.log(content, project, author);
+
     try {
-        if (!description || description.trim() === "") { // Vérification de la description
+        if (!content || content.trim() === "") {
             throw new Error("Description is required.");
         }
-        if (!user || user.trim() === "") { // Vérification de l'utilisateur
+        if (!author || author.trim() === "") {
             throw new Error("User email is required.");
         }
-        if (!selectedProject) { // Vérification du projet sélectionné
+        if (!project) {
             throw new Error("Selected project is required.");
         }
-
-        await db.collection('posts').insertOne({ user, description, selectedProject, date: new Date() }); // Insertion des données dans la base de données
+        const post: Post = {
+            _id: "",
+            project: project,
+            content: content,
+            time: new Date(),
+            author: author,
+            media: imageUrl || undefined,
+        }
+        await db.collection('posts').insertOne(
+            {
+                ...post,
+                _id: new ObjectId()
+            }
+        );
         return NextResponse.json({ msg: ['Post created successfully'], success: true });
     } catch (error: any) {
         console.error(error);
