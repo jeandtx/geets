@@ -5,27 +5,27 @@ import { ObjectId } from 'mongodb'; // Import the ObjectId type
 
 
 export async function POST(req: Request) {
-    const { description, selectedProject, user, imageUrl } = await req.json(); // Récupération des données requises
+    const { content, project, author, imageUrl } = await req.json(); // Récupération des données requises
     const client = await clientPromise;
     const db = client.db('geets');
-    console.log(description, selectedProject, user);
+    console.log(content, project, author);
 
     try {
-        if (!description || description.trim() === "") {
+        if (!content || content.trim() === "") {
             throw new Error("Description is required.");
         }
-        if (!user || user.trim() === "") {
+        if (!author || author.trim() === "") {
             throw new Error("User email is required.");
         }
-        if (!selectedProject) {
+        if (!project) {
             throw new Error("Selected project is required.");
         }
         const post: Post = {
             _id: "",
-            project: selectedProject,
-            title: description,
+            project: project,
+            content: content,
             time: new Date(),
-            author: user,
+            author: author,
             media: imageUrl || undefined,
         }
         await db.collection('posts').insertOne(
