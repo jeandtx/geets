@@ -1,8 +1,8 @@
 import React from "react";
 import Img from "next/image";
 import { MessageSquare, Rocket, ThumbsUp } from "lucide-react";
-import { Post, User } from "@/types/tables";
-import { getUserById } from "@/lib/actions";
+import { Post, User, Project } from "@/types/tables";
+import { getUserById, getProject } from "@/lib/actions";
 
 interface PostProps {
 	post: Post;
@@ -10,15 +10,25 @@ interface PostProps {
 
 export default function PostCard({ post }: PostProps) {
 	const [user, setUser] = React.useState<User | null>(null);
+	const [project, setProject] = React.useState<Project | null>(null);
 
 	React.useEffect(() => {
 		const fetchUser = async () => {
-			// const user: User = await getUserById(post.author);
+			// const user: User = await getUserById(post.author); // TODO - Uncomment this line when data is stronger
 			const user: User = await getUserById("66311cf7f7f9f319e96ee5aa");
 			setUser(user);
 		};
+		const fetchProject = async () => {
+			// const project: Project = await getProject(post.project); // TODO - Uncomment this line when data is stronger
+			const project: Project = await getProject(
+				"664a103fab759e59e6bd0f91"
+			);
+			console.log("Project:", project);
+			setProject(project);
+		};
+		fetchProject();
 		fetchUser();
-	}, [post.author]);
+	}, [post]);
 
 	// TODO - Make sure the time is a Date object (currently a string)
 	function getTimeSincePosted(time: Date) {
@@ -77,7 +87,7 @@ export default function PostCard({ post }: PostProps) {
 						</p>
 						<p className="text-sm text-gray-600">
 							{getTimeSincePosted(post?.time)} •{" "}
-							{post.title ? post.title : "Nom de projet"}
+							{project?.title ? project?.title : "Nom de projet"}
 						</p>
 					</div>
 				</div>
