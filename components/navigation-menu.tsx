@@ -17,6 +17,12 @@ export function NavigationMenuDemo({
 	className,
 }: Readonly<{ className?: string }>) {
 	const session = useSession();
+	const [email, setEmail] = React.useState<string>("");
+	React.useEffect(() => {
+		if (session.data?.user?.email) {
+			setEmail(session.data?.user?.email);
+		}
+	}, [session]);
 
 	return (
 		<NavigationMenu className={className}>
@@ -43,7 +49,7 @@ export function NavigationMenuDemo({
 									Testing Page
 								</Button>
 							</ListItem>
-							<ListItem href={`/${session.data?.user?.email}`}>
+							<ListItem href={`/${email}`}>
 								<Button
 									variant="ghost"
 									className="w-full justify-start"
@@ -52,7 +58,9 @@ export function NavigationMenuDemo({
 									Profil
 								</Button>
 							</ListItem>
-							<ListItem href={`/${session.data?.user?.email}/projects`}>
+							<ListItem
+								href={`/${session.data?.user?.email}/projects`}
+							>
 								<Button
 									variant="ghost"
 									className="w-full justify-start"
