@@ -9,11 +9,19 @@ export default async function ProjectPage({
 }>) {
 	const { profil } = params;
 	const decodeEmail = decodeURIComponent(profil);
+
+	console.log("Decoded email:", decodeEmail);
 	const user = await getUser(decodeEmail);
+	console.log("Fetched user:", user);
 
 	const projectId = params.project;
+	console.log("Project ID:", projectId);
+
 	const project: Project | null = await getProject(projectId);
+	console.log("Fetched project:", project);
+
 	const posts: Post[] = await getPostsByProjectId(projectId);
+	console.log("Fetched posts:", posts);
 
 	return (
 		<div className="">
@@ -37,7 +45,7 @@ export default async function ProjectPage({
 												key={post._id}
 												className="w-[300px] bg-black-400 rounded-lg shadow-md m-2 p-2 text-center"
 											>
-												<div>Title: {post.title}</div>
+												<div> Title : title</div>
 												<div>
 													Content: {post.content}
 												</div>

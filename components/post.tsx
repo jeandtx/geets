@@ -37,8 +37,9 @@ export function Post({ className, jsonData, ...props }: Readonly<PostProps>) {
 						<AvatarFallback>CN</AvatarFallback>
 					</Avatar>
 					<CardTitle className="text-lg font-bold">
-						{jsonData.title}
+						Title
 					</CardTitle>
+					
 
 					<CardDate className="text-sm text-gray-500">
 						{jsonData.time.toLocaleString()}
@@ -52,7 +53,7 @@ export function Post({ className, jsonData, ...props }: Readonly<PostProps>) {
 					<CardImage>
 						<Img
 							src={jsonData.media ?? ""}
-							alt={jsonData.title}
+							alt="Post media"
 							className="flex justify-center items-center rounded-md mt-4 "
 							style={{ width: "30%", height: "auto" }}
 							width={1080}

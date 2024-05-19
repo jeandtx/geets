@@ -76,7 +76,6 @@ export function InputPost({ className }: InputPostProps) {
 		const post: Post = {
 			_id: "",
 			project: selectedProject!,
-			title: description,
 			content: description,
 			time: new Date(),
 			author: session.user.email,
