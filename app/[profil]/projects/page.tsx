@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { auth } from "@/app/auth";
 import { getProjects } from "@/lib/actions";
 import Link from "next/link";
+import { Project } from "@/types/tables";
 
 export const metadata: Metadata = {
 	title: "All Projects",
@@ -9,14 +10,17 @@ export const metadata: Metadata = {
 
 export default async function ProjectsPage() {
 	const session = await auth();
-    const userEmail = session?.user?.email;
+	const userEmail = session?.user?.email;
 	if (!userEmail) {
-        return <div>Please log in to view your projects.</div>;
-    }
-    const projects = await getProjects(userEmail);
+		return <div>Please log in to view your projects.</div>;
+	}
+	const projects: Project[] = await getProjects(userEmail);
 
 	const projectList = projects
-		.filter((project) => project.title && project.description && project.owner !== null)
+		.filter(
+			(project) =>
+				project.title && project.description && project.author !== null
+		)
 		.map((project) => (
 			<div
 				key={project.title}
@@ -24,11 +28,15 @@ export default async function ProjectsPage() {
 			>
 				<div>
 					<div className="text-xl font-bold">
-						<Link href={`/${encodeURIComponent(userEmail)}/${encodeURIComponent(project.title)}`}>
-								{project.title}
+						<Link
+							href={`/${encodeURIComponent(
+								userEmail
+							)}/${encodeURIComponent(project.title)}`}
+						>
+							{project.title}
 						</Link>
 					</div>
-					<div>Owner: {project.owner}</div>
+					<div>Owner: {project.author}</div>
 					<div>Description: {project.description}</div>
 					<div>Participants: {project.participants}</div>
 					<div>
