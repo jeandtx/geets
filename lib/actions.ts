@@ -97,12 +97,13 @@ export async function getPostsByProjectId(projectId: string): Promise<Post[]> {
     try {
         const client = await clientPromise;
         const db = client.db("geets");
-        const posts = await db.collection("posts").find({ projectId: new ObjectId(projectId) }).toArray();
+        const posts = await db.collection("posts").find({ project: projectId }).toArray();
+        console.log("Posts:", posts);
+        console.log("Project ID:", projectId);
 
         const data: Post[] = posts.map(post => ({
             _id: post._id.toString(),
             project: post.project,
-            title: post.title,
             content: post.content,
             time: new Date(post.time),
             author: post.author,
