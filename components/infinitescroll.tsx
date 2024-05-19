@@ -20,34 +20,23 @@ interface InfiniteScrollProps {
     fetchFunction: (params?: any) => any
 }
 
-export default function InfiniteScroll({
-    className,
-    fetchFunction,
-}: Readonly<InfiniteScrollProps>) {
+export default function InfiniteScroll({ className, fetchFunction }: Readonly<InfiniteScrollProps>) {
     const { ref, inView } = useInView({
-        threshold: 0,
+        threshold: 0
     })
     const [posts, setPosts] = React.useState<any>([])
 
     React.useEffect(() => {
-        if (inView) {
-            if (inView) {
-                fetchFunction()
-                    .then((data: any) => {
-                        setPosts((prev: any) => [...prev, ...data])
-                    })
-                    .catch((error: any) => {
-                        console.error(error)
-                    })
-            }
+        if (!inView) return
+        const fetchPosts = async () => {
+            const newPosts = await fetchFunction()
+            setPosts((prevPosts: any) => [...prevPosts, ...newPosts])
         }
+        fetchPosts()
     }, [inView])
 
     return (
-        <div
-            className={cn('flex flex-col w-full items-center', className)}
-            style={{ height: '100%', overflowY: 'scroll' }}
-        >
+        <div className={cn('flex flex-col w-full items-center', className)} style={{ height: '100%' }}>
             <ul className='space-y-4'>
                 {posts.map((post: any) => (
                     <PostCard key={post._id} post={post} />
