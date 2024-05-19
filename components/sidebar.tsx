@@ -63,7 +63,7 @@ export function Sidebar({ className }: SidebarProps) {
 				<div className="space-y-4 py-4 flex flex-col items-center h-full justify-between">
 					<div className="px-3 py-2">
 						<h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
-							Navigate
+							Parcourir
 						</h2>
 						<div className="space-y-1">
 							<Link href={"/"}>
@@ -72,7 +72,7 @@ export function Sidebar({ className }: SidebarProps) {
 									className="w-full justify-start"
 								>
 									<BookHeart className="mr-2 h-4 w-4" />
-									For You
+									Pour toi
 								</Button>
 							</Link>
 							<Link href={"/testing"}>
@@ -81,7 +81,7 @@ export function Sidebar({ className }: SidebarProps) {
 									className="w-full justify-start"
 								>
 									<FlaskConical className="mr-2 h-4 w-4" />
-									Testing Page
+									Laboratoire
 								</Button>
 							</Link>
 							<Link href={`/${session.data?.user?.email}`}>
@@ -90,7 +90,7 @@ export function Sidebar({ className }: SidebarProps) {
 									className="w-full justify-start"
 								>
 									<PersonStanding className="mr-2 h-4 w-4" />
-									Profil
+									Profile
 								</Button>
 							</Link>
 							<Link href={`/new-project`}>
@@ -99,7 +99,7 @@ export function Sidebar({ className }: SidebarProps) {
 									className="w-full justify-start"
 								>
 									<SquareMousePointer className="mr-2 h-4 w-4" />
-									Write Project
+									Ajouter un projet
 								</Button>
 							</Link>
 							<Link href={`/${email}/projects`}>
@@ -108,15 +108,15 @@ export function Sidebar({ className }: SidebarProps) {
 									className="w-full justify-start"
 								>
 									<SquareKanban className="mr-2 h-4 w-4" />
-									My Projects
+									Voir mes projets
 								</Button>
 							</Link>
 						</div>
-					</div>
-
-					<div className="py-2">
-						<h2 className="relative px-7 text-lg font-semibold tracking-tight">
-							Your Projects
+						<div className="py-2 px-5">
+                    <div className="border-t border-gray-400 my-5 mx-auto"></div>
+                </div>
+						<h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
+							Tes projects
 						</h2>
 						<ScrollArea className="h-[300px] px-1">
 							<div className="space-y-1 p-2">
@@ -137,6 +137,8 @@ export function Sidebar({ className }: SidebarProps) {
 							</div>
 						</ScrollArea>
 					</div>
+
+					
 				</div>
 			</div>
 		</>
