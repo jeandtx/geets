@@ -156,7 +156,7 @@ export async function getUserPosts(email: string): Promise<Post[]> {
  * @param {string} email - The email of the user to retrieve the projects.
  * @returns {Promise<Array<Project>>} A promise that resolves to an array of projects.
  */
-export async function getParticipatingProjects(email: string): Promise<Project[]> {
+export async function getParticipantsProjects(email: string): Promise<Project[]> {
     const client = await clientPromise
     const db = client.db('geets')
     const projects = await db.collection('projects').find({ participants: email }).toArray()
