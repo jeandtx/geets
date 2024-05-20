@@ -23,7 +23,7 @@ export default function RootLayout({
 			<body className={inter.className}>
 				<div className="flex  w-full h-screen overflow-hidden">
 					<SessionWrapper>
-						<Sidebar className="w-1/6 bg-gray-200" />
+						<Sidebar className="w-1/5 bg-gray-200" />
 						<div className="lg:w-4/5 w-full">{children}</div>
 					</SessionWrapper>
 					<Toaster />
