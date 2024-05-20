@@ -142,42 +142,38 @@ export function InputPost({ className }: InputPostProps) {
                         />
                     </div>
 
-                    <div className='flex justify-between items-center w-full px-8'>
-                        <div className='flex gap-10'>
-                            <SelectProject onSelectProject={setSelectedProject} selectedProject={selectedProject} user={session?.user?.email || ''} />
-                            <CldUploadWidget
-                                uploadPreset='onrkam98'
-                                onSuccess={(result) => {
-                                    setImageUrl((result as any).info.secure_url)
-                                    setImageName((result as any).info.original_filename)
-                                }}
-                            >
-                                {({ open }) => {
-                                    return (
-                                        <button
-                                            className='overflow-hidden inline-flex items-center justify-center rounded-md px-6 py-3 text-base font-medium text-gray-500'
-                                            style={{ height: '40px', maxWidth: '200px', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}
-                                            type='button'
-                                            onClick={() => open()}
-                                        >
-                                            <div className='flex items-center justify-center'>
-                                                <Image className='h-6 w-6 text-blue-500 mr-2' />
-                                                {imageName}
-                                            </div>
-                                        </button>
-                                    )
-                                }}
-                            </CldUploadWidget>
-                        </div>
-                        <div className='flex'>
-                            <Button
-                                className='overflow-hidden inline-flex items-center bg-transparent hover:none hover:bg-transparent justify-center rounded-md px-6 py-3 text-base font-medium text-gray-500'
-                                type='submit'
-                            >
-                                <Send className='h-6 w-6 text-green-500 mr-2' />
-                                Envoyer
-                            </Button>
-                        </div>
+                    <div className='flex justify-between items-center w-full'>
+                        <SelectProject onSelectProject={setSelectedProject} selectedProject={selectedProject} user={session?.user?.email || ''} />
+                        <CldUploadWidget
+                            uploadPreset='onrkam98'
+                            onSuccess={(result) => {
+                                setImageUrl((result as any).info.secure_url)
+                                setImageName((result as any).info.original_filename)
+                            }}
+                        >
+                            {({ open }) => {
+                                return (
+                                    <button
+                                        className='overflow-hidden inline-flex items-center justify-center rounded-md px-6 py-3 text-base font-medium text-gray-500'
+                                        style={{ height: '40px', maxWidth: '200px', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}
+                                        type='button'
+                                        onClick={() => open()}
+                                    >
+                                        <div className='flex items-center justify-center'>
+                                            <Image className='h-6 w-6 text-blue-500 mr-2' />
+                                            {imageName}
+                                        </div>
+                                    </button>
+                                )
+                            }}
+                        </CldUploadWidget>
+                        <Button
+                            className='overflow-hidden inline-flex items-center bg-transparent hover:none hover:bg-transparent justify-center rounded-md px-6 py-3 text-base font-medium text-gray-500'
+                            type='submit'
+                        >
+                            <Send className='h-6 w-6 text-green-500 mr-2' />
+                            Envoyer
+                        </Button>
                     </div>
                 </form>
             </div>
