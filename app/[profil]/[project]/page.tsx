@@ -10,18 +10,13 @@ export default async function ProjectPage({
 	const { profil } = params;
 	const decodeEmail = decodeURIComponent(profil);
 
-	console.log("Decoded email:", decodeEmail);
 	const user = await getUser(decodeEmail);
-	console.log("Fetched user:", user);
 
 	const projectId = params.project;
-	console.log("Project ID:", projectId);
 
 	const project: Project | null = await getProject(projectId);
-	console.log("Fetched project:", project);
 
 	const posts: Post[] = await getPostsByProjectId(projectId);
-	console.log("Fetched posts:", posts);
 
 	return (
 		<div className="">
