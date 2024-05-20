@@ -37,7 +37,7 @@ export function Sidebar({ className }: SidebarProps) {
         <>
             <NavigationMenuDemo className='top-4 left-4 z-50 md:hidden block' />
             <div className={cn('pb-12  md:block hidden', className)}>
-                <div className='flex flex-col w-full h-full space-y-4 py-4 px-4 items-end'>
+                <div className='flex flex-col w-full h-full space-y-4 py-4 items-end'>
                     <div className='px-3 py-2 rounded-xl border border-slate-200 bg-white'>
                         <h2 className='mb-2 px-4 text-lg font-semibold tracking-tight'>Navigate</h2>
                         <div className='flex flex-col space-y-1'>

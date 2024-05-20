@@ -22,9 +22,11 @@ export default function RootLayout({
             <body className={`bg-stone-100 ${inter.className}`}>
                 <div className='flex w-screen h-screen'>
                     <SessionWrapper>
-                        <Sidebar className='w-1/5 h-full top-0 left-0' />
+                        <div className='columns-1 w-1/5 '>
+                            <Sidebar className='fixed w-1/5 px-4 top-0 left-0' />
+                        </div>
 
-                        <div className='flex flex-col'>{children}</div>
+                        <div className='flex flex-col w-4/5 overflow-x-hidden'>{children}</div>
                     </SessionWrapper>
                     <Toaster />
                 </div>
