@@ -53,7 +53,13 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, posts }) => {
                     <div className="flex flex-col">
                         <div className="flex flex-row gap-2 justify-between items-center">
                             <div className="flex flex-row gap-2 items-center">
-                                <img src={project.media} alt={project.title} className="w-16 h-16 object-cover rounded-lg" />
+                            <Img
+                                src={project.media || 'https://res.cloudinary.com/dekbkndn8/image/upload/v1715719366/samples/balloons.jpg'} 
+                                alt={project.title} 
+                                width={64} 
+                                height={64} 
+                                className="w-16 h-16 object-cover rounded-lg" 
+                            />
                                 <div className="flex flex-col">
                                     <div className="text-3xl font-medium text-black">{project.title}</div>
                                     <div className="text-s text-gray-500">{project.author}</div>
