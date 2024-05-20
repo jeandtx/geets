@@ -6,7 +6,7 @@ import Img from "next/image";
 import { updateParticipants } from "@/lib/actions";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
-import ProfileCard from '@/components/ui/profilcard'; // Assurez-vous que le chemin est correct
+import ProfileCard from '@/components/ui/profilcard'; 
 
 interface ProjectDetailsProps {
     project: Project;
@@ -53,13 +53,13 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, posts }) => {
                     <div className="flex flex-col">
                         <div className="flex flex-row gap-2 justify-between items-center">
                             <div className="flex flex-row gap-2 items-center">
-                            <Img
-                                src={project.media || 'https://res.cloudinary.com/dekbkndn8/image/upload/v1715719366/samples/balloons.jpg'} 
-                                alt={project.title} 
-                                width={64} 
-                                height={64} 
-                                className="w-16 h-16 object-cover rounded-lg" 
-                            />
+                                <Img
+                                    src={project.media || 'https://res.cloudinary.com/dekbkndn8/image/upload/v1715719366/samples/balloons.jpg'} 
+                                    alt={project.title} 
+                                    width={64} 
+                                    height={64} 
+                                    className="w-16 h-16 object-cover rounded-lg" 
+                                />
                                 <div className="flex flex-col">
                                     <div className="text-3xl font-medium text-black">{project.title}</div>
                                     <div className="text-s text-gray-500">{project.author}</div>
@@ -84,7 +84,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, posts }) => {
                             <div className="text-xl font-medium text-black">Participants</div>
                             <div className="flex flex-wrap gap-4">
                                 {participants.map((participantEmail) => (
-                                    <ProfileCard email={participantEmail} />
+                                    <ProfileCard key={participantEmail} email={participantEmail} />
                                 ))}
                             </div>
                         </div>
