@@ -28,7 +28,7 @@ export function Projects({ className, email }: ProjectsProps) {
 
 	return (
 		<>
-			<div className={cn("md:block hidden", className)}>
+			<div className={cn("", className)}>
 				<div className="px-3 py-2 rounded-xl border border-slate-200 bg-white min-w-[200px]">
 					<h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
 						Your Projects

@@ -1,5 +1,4 @@
 import { auth, signOut } from "@/app/auth";
-import clientPromise from "@/lib/mongodb";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { getUser } from "@/lib/actions";
