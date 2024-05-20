@@ -36,7 +36,7 @@ export interface User {
     localisation?: string;
     gender?: string;
     experience?: string;
-    available?: string;
+    available?: boolean;
     mobile?: string;
     allowEmails?: boolean;
     created?: Date;

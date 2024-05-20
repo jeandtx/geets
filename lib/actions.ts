@@ -19,7 +19,7 @@ export async function getPosts() {
 /**
  * Retrieves a user with the mail from the database.
  * @param {string} email - The email of the user to retrieve.
- * @returns {Promise<any>} A promise that resolves to the user.
+ * @returns {Promise<User>} A promise that resolves to the user.
     */
 export async function getUser(email: string) {
     const client = await clientPromise
@@ -30,6 +30,22 @@ export async function getUser(email: string) {
     const data: User = JSON.parse(JSON.stringify(user)) // Remove ObjectID (not serializable)
     return data
 }
+
+/**
+ * Retrieves a user with the id from the database.
+ * @param {string} id - The id of the user to retrieve.
+ * @returns {Promise<User>} A promise that resolves to the user.
+    */
+export async function getUserById(id: string) {
+    const client = await clientPromise
+    const db = client.db('geets')
+    const user = await db.collection('users').findOne({
+        _id: new ObjectId(id)
+    })
+    const data: User = JSON.parse(JSON.stringify(user)) // Remove ObjectID (not serializable)
+    return data
+}
+
 
 /**
  * Creates a project in the database.
@@ -75,16 +91,13 @@ export async function getProjects(email: string) {
  * @returns {Promise<any>} A promise that resolves to the project.
  */
 export async function getProject(projectId: string) {
-    try {
-        const client = await clientPromise;
-        const db = client.db("geets");
-        const project = await db.collection("projects").findOne({ _id: new ObjectId(projectId) });
-        const data: Project = JSON.parse(JSON.stringify(project)) // Remove ObjectID (not serializable)
-        return data;
-    } catch (err) {
-        console.error("Error fetching project:", err);
-        return null;
-    }
+
+    const client = await clientPromise;
+    const db = client.db("geets");
+    const project = await db.collection("projects").findOne({ _id: new ObjectId(projectId) });
+    const data: Project = JSON.parse(JSON.stringify(project)) // Remove ObjectID (not serializable)
+    return data;
+
 }
 
 /**
