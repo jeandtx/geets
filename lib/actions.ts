@@ -119,21 +119,18 @@ export async function getPostsByProjectId(projectId: string): Promise<Post[]> {
 
 export async function updateParticipants(projectId: string, newParticipant: string) {
     try {
-        // Récupérer le projet existant
         const project = await getProject(projectId);
         if (!project) {
             throw new Error(`Project with ID ${projectId} not found.`);
         }
 
-        // Vérifier si le participant existe déjà
+
         if (project?.participants?.includes(newParticipant)) {
             throw new Error(`Participant ${newParticipant} already exists in the project.`);
         }
 
-        // Ajouter le nouveau participant à la liste des participants
         const updatedParticipants = [...(project.participants || []), newParticipant];
 
-        // Mettre à jour le projet dans la base de données
         const client = await clientPromise;
         const db = client.db("geets");
         const result = await db.collection("projects").updateOne(

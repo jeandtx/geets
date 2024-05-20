@@ -1,7 +1,7 @@
 // page.tsx
 import { getUser, getProject, getPostsByProjectId } from "@/lib/actions";
 import { Post, Project } from "@/types/tables";
-import ProjectDetails from "@/components/ProjectDetails";
+import ProjectDetails from "@/components/project-details";
 
 export default async function ProjectPage({
     params,
