@@ -33,7 +33,7 @@ export default async function ProfilPage({
     const participatingProjects = await getParticipantsProjects(decodeEmail);
 
     return (
-        <div className="flex h-screen">
+        <div className="flex">
             <div className="w-screen flex flex-col space-y-5 justify-center items-center text-black">
                 <div>Search other profils from the database to try</div>
                 <Link href="/sanchezlori@example.com" className="text-textblue">
