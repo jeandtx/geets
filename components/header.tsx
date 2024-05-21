@@ -9,7 +9,7 @@ interface HeaderProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export async function Header({ className }: HeaderProps) {
 	const session = await auth();
-	const email = session?.user?.email ?? "";
+	const email = session?.user?.email ?? "login";
 
 	return (
 		<>
