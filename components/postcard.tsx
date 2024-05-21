@@ -69,7 +69,7 @@ export default function PostCard({ post }: PostProps) {
                 <div className='header px-10 flex items-center  mb-4 space-x-4'>
                     <Img
                         className='rounded-full'
-                        src={user?.profil_picture ?? 'https://loremflickr.com/640/480/nature'}
+                        src={user?.media ?? 'https://loremflickr.com/640/480/nature'}
                         alt='Placeholder image'
                         width={48}
                         height={48}
