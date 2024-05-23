@@ -9,7 +9,7 @@ let db: Db, users: Collection;
 async function connectToDatabase() {
     try {
         const client = await clientPromise;
-        db = client.db("geets"); // database name
+        db = client.db("bodyscan"); // database name
         users = db.collection('users');
         console.log("Connected to MongoDB");
     } catch (error) {

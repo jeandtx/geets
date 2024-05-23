@@ -11,7 +11,7 @@ import { get } from 'http';
  */
 export async function getPosts() {
     const client = await clientPromise
-    const db = client.db('geets')
+    const db = client.db('bodyscan')
     const posts = await db.collection('posts_fake').find({}).sort({ metacritic: -1 }).limit(10).toArray()
     const data: Post[] = JSON.parse(JSON.stringify(posts)) // Remove ObjectID (not serializable)
     return data
@@ -24,7 +24,7 @@ export async function getPosts() {
     */
 export async function getUser(email: string) {
     const client = await clientPromise
-    const db = client.db('geets')
+    const db = client.db('bodyscan')
     const user = await db.collection('users').findOne({
         email
     })
@@ -40,7 +40,7 @@ export async function getUser(email: string) {
     */
 export async function createProject(project: Project) {
     const client = await clientPromise
-    const db = client.db('geets')
+    const db = client.db('bodyscan')
     if (!project.title || !project.description || !project.author) {
         throw new Error('Missing field(s) in project. check title' + project.title + ' description ' + project.description + ' author ' + project.author)
     }
