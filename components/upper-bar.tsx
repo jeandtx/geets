@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import InfiniteScroll from "@/components/infinitescroll";
 import { getPosts } from "@/lib/actions";
 
 interface UpperbarProps extends React.HTMLAttributes<HTMLDivElement> {}
@@ -44,7 +43,6 @@ export const UpperBar = ({ className }: UpperbarProps) => {
 				</div>
 				<div className="border" style={{ width: "60vw" }}>
 					<TabsContent value="feed">
-						<InfiniteScroll fetchFunction={getPosts} />
 					</TabsContent>
 					<TabsContent value="recent">Recent.</TabsContent>
 					<TabsContent value="project">My project are</TabsContent>
