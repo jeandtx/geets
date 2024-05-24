@@ -23,14 +23,22 @@ export async function getPosts() {
  * @returns {Promise<any>} A promise that resolves to the user.
     */
 export async function getUser(email: string) {
-    const client = await clientPromise
-    const db = client.db('bodyscan')
+    const client = await clientPromise;
+    const db = client.db('bodyscan');
+
+    console.log("Attempting to find user with email:", email);
+
     const user = await db.collection('users').findOne({
         email
-    })
-    const data: User = JSON.parse(JSON.stringify(user)) // Remove ObjectID (not serializable)
-    return data
+    });
+
+    console.log("Found user:", user);
+
+    const data: User = JSON.parse(JSON.stringify(user)); // Remove ObjectID (not serializable)
+
+    return data;
 }
+
 
 /**
  * Creates a project in the database.
