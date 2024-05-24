@@ -12,10 +12,13 @@ export default function Login() {
 		console.log(email)
 		console.log(password)
 		let user = await getUser(email);
+		console.log(user)
 
 		if (user && user.length > 0) {
+			console.log("User already exists");
 			return "User already exists"; // TODO: Handle errors with useFormStatus
 		} else {
+			console.log("Creating user");
 			await createUser(email, password);
 			redirect("/login");
 		}
