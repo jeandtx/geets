@@ -10,9 +10,9 @@ export default function Feed() {
 				<InputPost />
 				<InfiniteScroll fetchFunction={getPosts} />
 			</div>
-			<div className="fixed top-5 right-5 w-1/8 bg-gray-200 justify-center items-center lg:block hidden">
-				<div className="px-3 py-2 rounded-xl border border-slate-200 bg-white min-w-[200px] h-[600px] flex items-center justify-center">
-					Right side{" "}
+			<div className="fixed top-5 left-3/4 w-1/8 bg-gray-200 justify-center items-start lg:block hidden">
+				<div className="px-3 py-2 rounded-xl border border-slate-200 bg-white h-[600px] flex items-start justify-center">
+					<div className="min-w-[200px]">Right side </div>
 				</div>
 			</div>
 		</div>
