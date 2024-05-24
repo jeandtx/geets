@@ -5,7 +5,9 @@ import React from "react";
 
 export default function Feed() {
 	return (
+		// <div className="flex h-screen bg-gray-100 md:w-full">
 		<div className="flex h-screen bg-gray-100 md:w-full overflow-hidden">
+			{/* <div className="flex flex-col space-y-8 py-5 w-full max-w-[550px]"> */}
 			<div className="flex flex-col space-y-8 py-5 w-full max-w-[550px] overflow-auto">
 				<InputPost />
 				<InfiniteScroll fetchFunction={getPosts} />
