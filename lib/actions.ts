@@ -49,3 +49,11 @@ export async function createProject(project: Project) {
     return data
 }
 
+
+export async function getAllUsers() {
+    const client = await clientPromise
+    const db = client.db('bodyscan')
+    const users = await db.collection('users').find({}).toArray()
+    const data: User[] = JSON.parse(JSON.stringify(users)) // Remove ObjectID (not serializable)
+    return data
+}
