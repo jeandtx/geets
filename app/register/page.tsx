@@ -9,6 +9,8 @@ export default function Login() {
 		"use server";
 		let email = formData.get("email") as string;
 		let password = formData.get("password") as string;
+		console.log(email)
+		console.log(password)
 		let user = await getUser(email);
 
 		if (user && user.length > 0) {
