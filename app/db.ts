@@ -20,6 +20,7 @@ async function connectToDatabase() {
 connectToDatabase();
 
 export async function getUser(email: string) {
+    console.log("Attempting to find user herewith email:", email);
     return await users.findOne({ email });
 }
 
