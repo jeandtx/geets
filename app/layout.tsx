@@ -19,14 +19,16 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<body className={`bg-stone-100 ${inter.className}`}>
-				<div className="flex w-screen h-screen">
+			<body
+				className={`bg-stone-100 ${inter.className} flex justify-center`}
+			>
+				<div className="flex h-screen">
 					<SessionWrapper>
 						<div className="columns-1 w-1/5 ">
-							<Header className="fixed w-1/5 px-4 top-0 left-0" />
+							<Header className="px-4" />
 						</div>
 
-						<div className="flex flex-col w-4/5 overflow-x-hidden">
+						<div className="flex flex-col w-4/5 overflow-x-hidden max-w-lg min-w-full">
 							{children}
 						</div>
 					</SessionWrapper>
