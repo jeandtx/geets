@@ -9,7 +9,7 @@ interface PostProps {
 	post: Post;
 }
 
-export default function PostCard({ post }: PostProps) {
+export default function PostCard({ post }: Readonly<PostProps>) {
 	const [user, setUser] = React.useState<User | null>(null);
 	const [project, setProject] = React.useState<Project | null>(null);
 
@@ -62,10 +62,6 @@ export default function PostCard({ post }: PostProps) {
 		console.log("Comment post");
 	}
 
-	function handleJoinPost() {
-		console.log("Join post");
-	}
-
 	return (
 		<div className="flex max-w-xl overflow-hidden rounded-xl border border-slate-200 bg-white">
 			<div className="wrapper py-7">
@@ -82,9 +78,11 @@ export default function PostCard({ post }: PostProps) {
 						style={{ height: "3.5rem", width: "3.5rem" }}
 					/>
 					<div>
-						<p className="text-lg text-gray-900 font-bold">
-							{user ? user.pseudo : "user pseudo"}
-						</p>
+						<Link href={`/${user?.email}`}>
+							<p className="text-lg text-gray-900 font-bold">
+								{user ? user.pseudo : "user pseudo"}
+							</p>
+						</Link>
 						<p className="text-sm text-gray-600">
 							{getTimeSincePosted(post?.time)} •{" "}
 							{project?.title ? project?.title : "Nom de projet"}
