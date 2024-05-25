@@ -34,7 +34,6 @@ export default function InfiniteScroll({
 		if (!inView) return;
 		const fetchPosts = async () => {
 			const newPosts = await fetchFunction(page);
-			console.log(page, newPosts);
 			setPage((prevPage: number) => prevPage + 1);
 			setPosts((prevPosts: any) => [...prevPosts, ...newPosts]);
 		};

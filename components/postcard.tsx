@@ -3,6 +3,7 @@ import Img from "next/image";
 import { MessageSquare, Rocket, ThumbsUp } from "lucide-react";
 import { Post, User, Project } from "@/types/tables";
 import { getUserById, getProject } from "@/lib/actions";
+import Link from "next/link";
 
 interface PostProps {
 	post: Post;
@@ -88,6 +89,9 @@ export default function PostCard({ post }: PostProps) {
 							{getTimeSincePosted(post?.time)} •{" "}
 							{project?.title ? project?.title : "Nom de projet"}
 						</p>
+						<p className="text-sm text-gray-600">
+							{post.project ? post.project : "ID du projet"}
+						</p>
 					</div>
 				</div>
 
@@ -112,9 +116,18 @@ export default function PostCard({ post }: PostProps) {
 
 				<div className="footer px-10 space-y-5">
 					<div className="icon-group flex justify-between items-center px-20">
-						<ThumbsUp onClick={handleLikePost} />
-						<MessageSquare onClick={handleCommentPost} />
-						<Rocket onClick={handleJoinPost} />
+						<ThumbsUp
+							onClick={handleLikePost}
+							className="cursor-pointer"
+						/>
+						<MessageSquare
+							onClick={handleCommentPost}
+							className="cursor-pointer"
+						/>
+
+						<Link href={`${user?.email}/${post.project}`}>
+							<Rocket className="cursor-pointer" />
+						</Link>
 					</div>
 				</div>
 			</div>
