@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
-import { AddWorkout } from "./AddWorkout";
+import { AddWorkout } from "@/components/AddWorkout";
 interface WorkoutModalProps {
     title: string;
 }
