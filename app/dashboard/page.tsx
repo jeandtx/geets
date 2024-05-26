@@ -1,13 +1,14 @@
 import { Metadata } from "next";
+import { DashboardContent } from "@/components/dashboardContent";
 
 export const metadata: Metadata = {
-	title: "Test zone",
+	title: "Dashboard",
 };
 
 export default async function Dashboard() {
 	return (
 		<div className="p-5">
-			test zone
+			<DashboardContent/>
 		</div>
 	);
 }

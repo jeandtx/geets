@@ -2,9 +2,9 @@
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 import {
-  FlaskConical,
-  BookHeart,
-  PersonStanding,
+  Zap,
+  Home,
+  CircleUserRoundIcon,
 } from "lucide-react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
@@ -25,46 +25,45 @@ export function Sidebar({ className }: SidebarProps) {
             <div className="space-y-1">
               <Link href={"/"}>
                 <Button variant="ghost" className="w-full justify-start">
-                  <BookHeart className="mr-2 h-4 w-4" />
-                  For You
+                  <Home className="mr-2 h-6 w-6" />
+                  Home
                 </Button>
               </Link>
-              <Link href={"/testing"}>
+              <Link href={"/dashboard"}>
                 <Button variant="ghost" className="w-full justify-start">
-                  <FlaskConical className="mr-2 h-4 w-4" />
-                  Testing Page
+                  <Zap className="mr-2 h-6 w-6" />
+                  Dash board
                 </Button>
               </Link>
               <Link href={`/${session.data?.user?.email}`}>
                 <Button variant="ghost" className="w-full justify-start">
-                  <PersonStanding className="mr-2 h-4 w-4" />
+                  <CircleUserRoundIcon className="mr-2 h-6 w-6" />
                   Profil
                 </Button>
               </Link>
             </div>
           </div>
-          
         </div>
       </div>
 
       {/* Navbar mobile */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white shadow-md md:hidden flex justify-around py-2">
-        <Link href={"/testing"}>
-          <Button variant="ghost" className="flex flex-col items-center">
-            <FlaskConical className="h-6 w-6" />
-            <span className="text-xs">Testing</span>
+      <div className="fixed bottom-0 left-0 right-0 bg-gray-200 shadow-md md:hidden flex justify-around py-2 rounded-tl-3xl rounded-tr-3xl">   
+           <Link href={"/dashboard"}>
+          <Button variant="ghost" className="h-15 w-15 flex flex-col items-center">
+            <Zap className="h-12 " />
+            <span className="text-sm">Dashboard</span>
           </Button>
         </Link>
         <Link href={"/"}>
-          <Button variant="ghost" className="flex flex-col items-center">
-            <BookHeart className="h-6 w-6" />
-            <span className="text-xs">For You</span>
+          <Button variant="ghost" className="h-15 w-15 flex flex-col items-center">
+            <Home className="h-12" />
+            <span className="text-sm">Home</span>
           </Button>
         </Link>
         <Link href={`/${session.data?.user?.email}`}>
-          <Button variant="ghost" className="flex flex-col items-center">
-            <PersonStanding className="h-6 w-6" />
-            <span className="text-xs">Profile</span>
+          <Button variant="ghost" className="h-15 w-15 flex flex-col items-center">
+            <CircleUserRoundIcon className="h-12" />
+            <span className="text-sm">Profile</span>
           </Button>
         </Link>
       </div>
