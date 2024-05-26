@@ -31,16 +31,10 @@ export default async function ProfilPage({
 
 	return (
 		<div className="flex h-screen">
-			<div className="w-screen h-screen flex flex-col space-y-5 justify-center items-center text-black">
-				<div>Search other profils from the database to try</div>
-				<Link href="/sanchezlori@example.com" className="text-textblue">
-					{" "}
-					for example sanchezlori@example.com
-				</Link>
-				<div>
-					Note that you have to be logged in to access this page and
-					any profil page
-				</div>
+			<div className="flex flex-col items-center justify-center w-full h-screen">
+				<div className="text-3xl font-bold pt-24">Hey </div>
+				
+				
 				<h1 className="text-3xl font-bold ">Profil of {decodeEmail}</h1>
 				{user ? (
 					<>

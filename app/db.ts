@@ -28,7 +28,7 @@ export async function getUser(email: string) {
     return await users.findOne({ email });
 }
 
-export async function createUser(email: string, password: string) {
+export async function createUser(email: string, password: string,name: string) {
     try {
         // Attendre que la connexion à la base de données soit établie avant d'exécuter l'opération
         await connectToDatabase();
@@ -40,15 +40,7 @@ export async function createUser(email: string, password: string) {
         const newUser = {
             email,
             password: hash,
-            pseudo: '',
-            name: '',
-            last_name: '',
-            age: 0,
-            location: '',
-            sexe: '',
-            experience: 0,
-            chercheARejoindreUnProjet: false,
-            mobile: '',
+            name: name,
             media: '',
             createdAt: new Date()
         };

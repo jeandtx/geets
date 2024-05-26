@@ -1,49 +1,80 @@
-"use client";
-import React, { useState, useRef, useEffect } from "react";
-import { MenuWorkout } from "./menuWorkout";
-interface AddWorkoutProps {
-    title: string;
-}
+import React, { useState } from "react";
+import { createWorkout } from "@/lib/actions";
+import { useSession } from 'next-auth/react';
+import { useToast } from "./ui/use-toast";
 
-export function AddWorkout({ title }: AddWorkoutProps) {
-    const [modalOpen, setModalOpen] = useState<boolean>(false);
-    const trigger = useRef<HTMLButtonElement>(null);
-    const modal = useRef<HTMLDivElement>(null);
+export function AddWorkout({ closeModal }: { closeModal: () => void }) {
+    const { toast } = useToast();
+    const { data: session } = useSession();
+    console.log("session is", session?.user?.email);
+    const [workoutTitle, setWorkoutTitle] = useState("");
+    const [exercises, setExercises] = useState<string[]>([""]);
 
-    useEffect(() => {
-        const clickHandler = ({ target }: MouseEvent) => {
-            if (!modal.current) return;
-            if (
-                !modalOpen ||
-                modal.current.contains(target as Node) ||
-                (trigger.current && trigger.current.contains(target as Node))
-            )
-                return;
-            setModalOpen(false);
-        };
+    const handleAddExercise = () => {
+        setExercises([...exercises, ""]);
+    };
 
-        document.addEventListener("click", clickHandler);
-        return () => document.removeEventListener("click", clickHandler);
-    }, [modalOpen]);
+    const handleExerciseChange = (index: number, value: string) => {
+        const updatedExercises = [...exercises];
+        updatedExercises[index] = value;
+        setExercises(updatedExercises);
+    };
+
+    const handleFormSubmit = async () => {
+        if (!session?.user?.email) {
+            console.error("User is not authenticated");
+            return;
+        }
+
+        try {
+            const response = await createWorkout(session.user.email, workoutTitle, exercises);
+            console.log("Workout created successfully:", response);
+            // Afficher le toaster
+            toast({
+                title: "Carré :)",
+            });
+            // Fermer la modal
+            closeModal();
+        } catch (error) {
+            console.error("Error creating workout:", error);
+            toast({
+                variant: "destructive",
+                title: "Flop",
+            });
+        }
+    };
 
     return (
-        <>
-        
+        <div className="p-4">
+            <input
+                type="text"
+                placeholder="Titre du Workout"
+                className="block w-full border border-gray-300 rounded-md p-2 mb-4"
+                value={workoutTitle}
+                onChange={(e) => setWorkoutTitle(e.target.value)}
+            />
+            {exercises.map((exercise, index) => (
+                <input
+                    key={index}
+                    type="text"
+                    placeholder={`Exercice ${index + 1}`}
+                    className="block w-full border border-gray-300 rounded-md p-2 mb-4"
+                    value={exercise}
+                    onChange={(e) => handleExerciseChange(index, e.target.value)}
+                />
+            ))}
             <button
-                ref={trigger}
-                onClick={() => setModalOpen(true)}
-                className="w-64 h-14 border-2 border-cyan-700 border-dashed text-cyan-700 font-medium py-2 px-4 rounded-full"
+                onClick={handleAddExercise}
+                className="block w-full bg-blue-500 text-white font-bold py-2 px-4 rounded-md mb-4"
             >
-                {title}
+                Ajouter exercice
             </button>
-
-            {modalOpen && (
-                <div className="fixed left-0 top-0 flex h-full min-h-screen w-full items-center justify-center bg-black bg-opacity-50 px-4 py-5">
-                    <div ref={modal} className="bg-white p-8 rounded-md">
-                        <MenuWorkout />
-                    </div>
-                </div>
-            )}
-        </>
+            <button
+                onClick={handleFormSubmit}
+                className="block w-full bg-green-500 text-white font-bold py-2 px-4 rounded-md"
+            >
+                Envoyer
+            </button>
+        </div>
     );
 }
