@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
-import { MenuWorkout } from "/Users/cleophasfournier/bodyscan_2/components/menuWorkout";
+import { MenuWorkout } from "./menuWorkout";
 interface AddWorkoutProps {
     title: string;
 }
