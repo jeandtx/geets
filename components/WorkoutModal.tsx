@@ -1,11 +1,11 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
-import { MenuWorkout } from "./menuWorkout";
-interface AddWorkoutProps {
+import { AddWorkout } from "@/components/AddWorkout";
+interface WorkoutModalProps {
     title: string;
 }
 
-export function AddWorkout({ title }: AddWorkoutProps) {
+export function WorkoutModal({ title }: WorkoutModalProps) {
     const [modalOpen, setModalOpen] = useState<boolean>(false);
     const trigger = useRef<HTMLButtonElement>(null);
     const modal = useRef<HTMLDivElement>(null);
@@ -26,9 +26,12 @@ export function AddWorkout({ title }: AddWorkoutProps) {
         return () => document.removeEventListener("click", clickHandler);
     }, [modalOpen]);
 
+    const closeModal = () => {
+        setModalOpen(false);
+    };
+
     return (
         <>
-        
             <button
                 ref={trigger}
                 onClick={() => setModalOpen(true)}
@@ -40,7 +43,7 @@ export function AddWorkout({ title }: AddWorkoutProps) {
             {modalOpen && (
                 <div className="fixed left-0 top-0 flex h-full min-h-screen w-full items-center justify-center bg-black bg-opacity-50 px-4 py-5">
                     <div ref={modal} className="bg-white p-8 rounded-md">
-                        <MenuWorkout />
+                        <AddWorkout closeModal={closeModal} />
                     </div>
                 </div>
             )}

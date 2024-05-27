@@ -1,21 +1,10 @@
 
 'use server'
 import clientPromise from './mongodb'
-import { Post, User, Project } from '../types/tables'
-import { ObjectId } from 'mongodb'; // Import the ObjectId type
+import {User, Workout } from '../types/tables'
+import { ObjectId } from 'mongodb'; 
 import { get } from 'http';
 
-/**
- * Retrieves posts from the database.
- * @returns {Promise<Array<any>>} A promise that resolves to an array of posts.
- */
-export async function getPosts() {
-    const client = await clientPromise
-    const db = client.db('bodyscan')
-    const posts = await db.collection('posts_fake').find({}).sort({ metacritic: -1 }).limit(10).toArray()
-    const data: Post[] = JSON.parse(JSON.stringify(posts)) // Remove ObjectID (not serializable)
-    return data
-}
 
 /**
  * Retrieves a user with the mail from the database.
@@ -40,22 +29,6 @@ export async function getUser(email: string) {
 }
 
 
-/**
- * Creates a project in the database.
- * @param {Project} project - The project to create.
- * @returns {Promise<any>} A promise that resolves to the created project.
- * @throws {Error} If the project have a missing field.
-    */
-export async function createProject(project: Project) {
-    const client = await clientPromise
-    const db = client.db('bodyscan')
-    if (!project.title || !project.description || !project.author) {
-        throw new Error('Missing field(s) in project. check title' + project.title + ' description ' + project.description + ' author ' + project.author)
-    }
-    const result = await db.collection('projects').insertOne({ ...project, _id: new ObjectId() });
-    const data = JSON.parse(JSON.stringify(result)) // Remove ObjectID (not serializable)
-    return data
-}
 
 
 export async function getAllUsers() {
@@ -64,4 +37,46 @@ export async function getAllUsers() {
     const users = await db.collection('users').find({}).toArray()
     const data: User[] = JSON.parse(JSON.stringify(users)) // Remove ObjectID (not serializable)
     return data
+}
+
+
+/**
+ * Creates a workout in the database.
+ * @param {string} email - The email of the user.
+ * @param {string} workoutTitle - The title of the workout.
+ * @param {string[]} exercises - An array of exercises.
+ * @returns {Promise<any>} A promise that resolves to the created workout.
+ * @throws {Error} If a parameter is missing.
+ */
+export async function createWorkout(email: string, workoutTitle: string, exercises: string[]) {
+    const client = await clientPromise;
+    const db = client.db('bodyscan');
+
+    if (!email || !workoutTitle || exercises.length === 0) {
+        throw new Error('Missing parameter(s). Check email, workoutTitle, and exercises.');
+    }
+
+    const workout: Workout = {
+        _id: new ObjectId().toHexString(), // Generate a new ObjectId and convert to string
+        email,
+        workoutTitle,
+        exercises,
+        date: new Date()
+    };
+
+    const result = await db.collection('workouts').insertOne({
+        ...workout,
+        _id: new ObjectId(workout._id) // Convert _id to ObjectId
+    });
+
+    const data = JSON.parse(JSON.stringify(result)); // Remove ObjectID (not serializable)
+    return data;
+}
+
+export async function getAllWorkouts(email: string) {
+    const client = await clientPromise;
+    const db = client.db('bodyscan');
+    const workouts = await db.collection('workouts').find({ email }).toArray();
+    const data: Workout[] = JSON.parse(JSON.stringify(workouts)); // Remove ObjectID (not serializable)
+    return data;
 }

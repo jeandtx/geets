@@ -1,7 +1,12 @@
 import React, { useState } from "react";
+import { createWorkout } from "@/lib/actions";
+import { useSession } from 'next-auth/react';
+import { useToast } from "./ui/use-toast";
 
-export function MenuWorkout
-() {
+export function AddWorkout({ closeModal }: { closeModal: () => void }) {
+    const { toast } = useToast();
+    const { data: session } = useSession();
+    console.log("session is", session?.user?.email);
     const [workoutTitle, setWorkoutTitle] = useState("");
     const [exercises, setExercises] = useState<string[]>([""]);
 
@@ -15,10 +20,28 @@ export function MenuWorkout
         setExercises(updatedExercises);
     };
 
-    const handleFormSubmit = () => {
-        // Mettre ici la logique pour envoyer le formulaire
-        console.log("Titre du workout :", workoutTitle);
-        console.log("Exercices :", exercises);
+    const handleFormSubmit = async () => {
+        if (!session?.user?.email) {
+            console.error("User is not authenticated");
+            return;
+        }
+
+        try {
+            const response = await createWorkout(session.user.email, workoutTitle, exercises);
+            console.log("Workout created successfully:", response);
+            // Afficher le toaster
+            toast({
+                title: "Carré :)",
+            });
+            // Fermer la modal
+            closeModal();
+        } catch (error) {
+            console.error("Error creating workout:", error);
+            toast({
+                variant: "destructive",
+                title: "Flop",
+            });
+        }
     };
 
     return (
@@ -55,4 +78,3 @@ export function MenuWorkout
         </div>
     );
 }
-

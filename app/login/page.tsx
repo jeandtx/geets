@@ -1,16 +1,16 @@
 import Link from "next/link";
-import { Form } from "@/components/form";
 import { signIn } from "@/app/auth";
 import { SubmitButton } from "@/components/ui/submit-button";
+import { SigninForm} from "@/components/SigninForm";
 
 export default function Login() {
 	return (
 		<div className="flex h-screen w-screen items-center justify-center mt-5">
 			<div className="z-10 w-full max-w-md overflow-hidden rounded-2xl border border-gray-100 shadow-xl">
 				<div className="flex flex-col space-y-1 bg-white px-4 py-6 pt-8 sm:px-16 ">
-					<h3 className="text-xl font-semibold">Sign In</h3>
+					<h3 className="text-xl font-semibold">Connexion</h3>
 				</div>
-				<Form
+				<SigninForm
 					action={async (formData: FormData) => {
 						"use server";
 						await signIn("credentials", {
@@ -26,20 +26,20 @@ export default function Login() {
 							color: "white",
 						}}
 					>
-						Sign In
+						Connexion
 					</SubmitButton>
 					<div className="flex flex-row justify-center space-x-4">
-						<div className="text-center text-sm text-plaintext">
+						{/* <div className="text-center text-sm text-plaintext">
 							Forget Password?{" "}
-						</div>
+						</div> */}
 						<div className="text-center text-sm text-plaintext">
-							{"Don't have an account? "}
+							{"Pas encore de compte ? "}
 							<Link href="/register" className="text-textblue">
-								Sign up
+								Inscris-toi
 							</Link>
 						</div>
 					</div>
-				</Form>
+				</SigninForm>
 			</div>
 		</div>
 	);
