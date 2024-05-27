@@ -24,10 +24,16 @@ export default async function ProfilPage({
 }: Readonly<{
 	params: { profil: string };
 }>) {
+	console.log("first step");
 	const session = await auth();
+	console.log("second step");
 	const { profil } = params;
+	console.log("third step");
 	const decodeEmail = decodeURIComponent(profil);
+	console.log("fourth step");
 	const user = await getUser(decodeEmail);
+	console.log("fifth step");
+
 
 	return (
 		<div className="flex h-screen">
