@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { createWorkout } from "@/lib/actions";
 import { useSession } from 'next-auth/react';
 import { useToast } from "./ui/use-toast";
+import { ExercisePerformance } from "@/types/tables";
 
 export function AddWorkout({ closeModal }: { closeModal: () => void }) {
     const { toast } = useToast();
@@ -27,7 +28,8 @@ export function AddWorkout({ closeModal }: { closeModal: () => void }) {
         }
 
         try {
-            const response = await createWorkout(session.user.email, workoutTitle, exercises);
+            const exercisePerformances: ExercisePerformance[] = exercises.map((exercise) => ({ name: exercise, exerciseId: "", sets: [] }));
+            const response = await createWorkout(session.user.email, workoutTitle, exercisePerformances);
             console.log("Workout created successfully:", response);
             // Afficher le toaster
             toast({

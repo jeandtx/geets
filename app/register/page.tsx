@@ -14,7 +14,7 @@ export default function Login() {
 		console.log(user)
 		let name = formData.get("name") as string;
 
-		if (user && user.length > 0) {
+		if (user) {
 			console.log("User already exists");
 			return "User already exists"; // TODO: Handle errors with useFormStatus
 		} else {

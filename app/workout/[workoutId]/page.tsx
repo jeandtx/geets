@@ -1,6 +1,7 @@
 // app/workout/[workoutId]/page.tsx
 import React from "react";
 import { getWorkout } from "@/lib/actions";
+import { ExercisePerformance } from "@/types/tables";
 
 export default async function WorkoutPage({
   params,
@@ -23,8 +24,18 @@ export default async function WorkoutPage({
         <div>Date: {new Date(workout.date).toLocaleDateString()}</div>
         <div>Exercises:</div>
         <ul>
-          {workout.exercises.map((exercise: string, index: number) => (
-            <li key={index}>{exercise}</li>
+          {workout.exercises.map((exercise: ExercisePerformance, index: number) => (
+            <li key={index}>
+              <div>Name: {exercise.name}</div>
+              <div>Sets:</div>
+              <ul>
+                {exercise.sets.map((set: any, setIndex: number) => ( // Explicitly specify the type of 'setIndex' as 'number'
+                  <li key={setIndex}>
+                    Set {set.setNumber}: {set.repetitions} reps @ {set.weight} kg
+                  </li>
+                ))}
+              </ul>
+            </li>
           ))}
         </ul>
       </div>

@@ -24,15 +24,15 @@ export default async function ProfilPage({
 }: Readonly<{
 	params: { profil: string };
 }>) {
-	console.log("first step");
+	
 	const session = await auth();
-	console.log("second step");
+	
 	const { profil } = params;
-	console.log("third step");
+	
 	const decodeEmail = decodeURIComponent(profil);
-	console.log("fourth step");
+	
 	const user = await getUser(decodeEmail);
-	console.log("fifth step");
+	
 
 
 	return (
@@ -45,14 +45,8 @@ export default async function ProfilPage({
 				{user ? (
 					<>
 						<div>Nom: {user.pseudo}</div>
-						<div>Nom: {user.first_name}</div>
-						<div>
-							Age:{" "}
-							{user.birth_date?.toLocaleString() ?? "no data"}
-						</div>
-						<div>Localisation: {user.localisation}</div>
-						<div>Sexe: {user.gender}</div>
-						<div>Expérience: {user.experience}</div>
+						
+						
 					</>
 				) : (
 					<div>User not found :(</div>

@@ -3,25 +3,26 @@ export interface User {
     email: string;
     password: string;
     pseudo?: string;
-    projectIds?: string[];
-    labels?: string[];
-    profil_picture?: string;
-    first_name?: string;
-    lastName?: string;
-    birth_date: Date;
-    localisation?: string;
-    gender?: string;
-    experience?: string;
-    available?: string;
-    mobile?: string;
-    allowEmails?: boolean;
     created?: Date;
+    name: string;
 }
 
-export interface Workout{
+export interface Workout {
     _id: string;
     email: string;
     workoutTitle: string;
-    exercises: string[];
     date: Date;
+    exercises: ExercisePerformance[]; // Embedded subdocuments for exercises
+}
+
+export interface ExercisePerformance {
+    exerciseId: string;
+    name: string;
+    sets: Set[];
+}
+
+export interface Set {
+    setNumber: number;
+    repetitions: number;
+    weight: number; // Weight lifted during this set
 }
