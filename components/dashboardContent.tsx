@@ -5,7 +5,6 @@ interface DashboardProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function DashboardContent({ className }: DashboardProps) {
     const [date, setDate] = React.useState<Date | undefined>(new Date())
-    console.log(date)
 
     return (
         <div className="w-auto">

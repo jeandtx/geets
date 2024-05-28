@@ -13,17 +13,17 @@ export const {
   ...authConfig,
   providers: [
     Credentials({
-      async authorize({ email, password }: any) {
-        const user = await getUser(email);
+      async authorize(credentials: Partial<{ email: string; password: string }>) {
+        const user = await getUser(credentials.email as string);
 
-        if (!user || user.length === 0) {
+        if (!user) {
           return null; // Aucun utilisateur trouvé avec cet email
         }
 
         // Vérifier si les mots de passe correspondent
-        const passwordsMatch = await compare(password, user.password);
+        const passwordsMatch = await compare(credentials.password as string, user.password);
         if (passwordsMatch) {
-          return { email: user.email, name: user.name };
+          return { email: user.email, name: user.pseudo }; // Assure que le nom est correctement renvoyé
         } else {
           return null;
         }
