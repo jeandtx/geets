@@ -42,6 +42,7 @@ export async function getUser(email: string) {
  * @returns {Promise<User>} A promise that resolves to the user.
     */
 export async function getUserById(id: string) {
+    console.log('id', id)
     const client = await clientPromise
     const db = client.db('geets')
     const user = await db.collection('users').findOne({
@@ -133,6 +134,56 @@ export async function getPostsByProjectId(projectId: string): Promise<Post[]> {
     }
 }
 
+/**
+ * Retrieves posts authored by the user from the database.
+ * @param {string} email - The email of the user to retrieve the posts.
+ * @returns {Promise<Array<Post>>} A promise that resolves to an array of posts.
+ */
+export async function getUserPosts(email: string): Promise<Post[]> {
+    const client = await clientPromise
+    const db = client.db('geets')
+    const posts = await db.collection('posts').find({ author: email }).toArray()
+    const data: Post[] = posts.map(post => ({
+        _id: post._id.toString(),
+        project: post.project,
+        content: post.content,
+        time: new Date(post.time),
+        author: post.author,
+        media: post.media,
+        labels: post.labels
+    }))
+    return data
+}
+
+/**
+ * Retrieves projects where the user is a participant.
+ * @param {string} email - The email of the user to retrieve the projects.
+ * @returns {Promise<Array<Project>>} A promise that resolves to an array of projects.
+ */
+export async function getParticipantsProjects(email: string): Promise<Project[]> {
+    const client = await clientPromise
+    const db = client.db('geets')
+    const projects = await db.collection('projects').find({ participants: email }).toArray()
+    const data: Project[] = projects.map(project => ({
+        _id: project._id.toString(),
+        author: project.author,
+        title: project.title,
+        created: project.created,
+        themes: project.themes,
+        description: project.description,
+        media: project.media,
+        labels: project.labels,
+        participants: project.participants
+    }))
+    return data
+
+}
+
+
+/**
+ * Retrieves all the projects from the database.
+ * @returns {Promise<any>} A promise that resolves to the projects.
+ */
 export async function updateParticipants(projectId: string, newParticipant: string) {
     try {
         const project = await getProject(projectId);
