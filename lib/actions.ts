@@ -17,8 +17,6 @@ export async function getPosts(page: number = 1) {
     const posts = await db.collection('posts_fake').find({}).sort({ _id: -1 }).skip(offset).limit(postsPerPage).toArray()
     const data: Post[] = JSON.parse(JSON.stringify(posts)) // Remove ObjectID (not serializable)
 
-    console.log(`Page: ${page}, Offset: ${offset}, Data: ${JSON.stringify(data)}`);
-
     return data
 }
 

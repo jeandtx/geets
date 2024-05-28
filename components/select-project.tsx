@@ -13,8 +13,8 @@ import { Lightbulb } from "lucide-react";
 import { Project } from "@/types/tables";
 
 interface SelectProjectProps {
-	onSelectProject: (projectId: string) => void;
-	selectedProject: string | null;
+	onSelectProject: (project: Project) => void;
+	selectedProject: Project | null;
 	user?: string;
 }
 
@@ -22,7 +22,7 @@ export default function SelectProject({
 	onSelectProject,
 	selectedProject,
 	user,
-}: SelectProjectProps) {
+}: Readonly<SelectProjectProps>) {
 	const [modalOpen, setModalOpen] = useState<boolean>(false);
 	const trigger = useRef<HTMLButtonElement>(null);
 	const modal = useRef<HTMLDivElement>(null);
@@ -60,7 +60,7 @@ export default function SelectProject({
 			if (
 				!modalOpen ||
 				modal.current.contains(target as Node) ||
-				(trigger.current && trigger.current.contains(target as Node))
+				trigger?.current?.contains(target as Node)
 			)
 				return;
 			setModalOpen(false);
@@ -71,8 +71,8 @@ export default function SelectProject({
 	}, [modalOpen]);
 
 	useEffect(() => {
-		const keyHandler = ({ keyCode }: KeyboardEvent) => {
-			if (!modalOpen || keyCode !== 27) return;
+		const keyHandler = ({ key }: KeyboardEvent) => {
+			if (!modalOpen || key !== "Escape") return;
 			setModalOpen(false);
 		};
 
@@ -80,7 +80,7 @@ export default function SelectProject({
 		return () => document.removeEventListener("keydown", keyHandler);
 	}, [modalOpen]);
 
-	const handleSelectItem = (itemName: string) => {
+	const handleSelectItem = (itemName: Project) => {
 		onSelectProject(itemName);
 		setModalOpen(false);
 	};
@@ -105,7 +105,7 @@ export default function SelectProject({
 				{" "}
 				<Lightbulb className="h-6 w-6 text-yellow-500 mr-2" />
 				{selectedProject
-					? projects.find((p) => p._id === selectedProject)?.title
+					? projects.find((p) => p._id === selectedProject._id)?.title
 					: "Ajouter un projet"}
 			</button>
 
@@ -135,7 +135,7 @@ export default function SelectProject({
 									<CarouselItem
 										key={project._id}
 										onClick={() =>
-											handleSelectItem(project._id)
+											handleSelectItem(project)
 										}
 										className="basis-1/3 cursor-pointer "
 									>
