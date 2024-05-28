@@ -6,15 +6,20 @@ import { ObjectId } from 'mongodb'; // Import the ObjectId type
 
 /**
  * Retrieves posts from the database.
+ * @param {number} page - The page number to retrieve.
  * @returns {Promise<Array<any>>} A promise that resolves to an array of posts.
  */
-export async function getPosts() {
+export async function getPosts(page: number = 1) {
     const client = await clientPromise
     const db = client.db('geets')
-    const posts = await db.collection('posts_fake').find({}).sort({ metacritic: -1 }).limit(10).toArray()
+    const postsPerPage = 2
+    const offset = (page - 1) * postsPerPage
+    const posts = await db.collection('posts_fake').find({}).sort({ _id: -1 }).skip(offset).limit(postsPerPage).toArray()
     const data: Post[] = JSON.parse(JSON.stringify(posts)) // Remove ObjectID (not serializable)
+
     return data
 }
+
 
 /**
  * Retrieves a user with the mail from the database.
@@ -37,6 +42,7 @@ export async function getUser(email: string) {
  * @returns {Promise<User>} A promise that resolves to the user.
     */
 export async function getUserById(id: string) {
+    console.log('id', id)
     const client = await clientPromise
     const db = client.db('geets')
     const user = await db.collection('users').findOne({
@@ -111,8 +117,6 @@ export async function getPostsByProjectId(projectId: string): Promise<Post[]> {
         const client = await clientPromise;
         const db = client.db("geets");
         const posts = await db.collection("posts").find({ project: projectId }).toArray();
-        console.log("Posts:", posts);
-        console.log("Project ID:", projectId);
 
         const data: Post[] = posts.map(post => ({
             _id: post._id.toString(),
@@ -172,4 +176,38 @@ export async function getParticipantsProjects(email: string): Promise<Project[]>
         participants: project.participants
     }))
     return data
+
+}
+
+
+/**
+ * Retrieves all the projects from the database.
+ * @returns {Promise<any>} A promise that resolves to the projects.
+ */
+export async function updateParticipants(projectId: string, newParticipant: string) {
+    try {
+        const project = await getProject(projectId);
+        if (!project) {
+            throw new Error(`Project with ID ${projectId} not found.`);
+        }
+
+
+        if (project?.participants?.includes(newParticipant)) {
+            throw new Error(`Participant ${newParticipant} already exists in the project.`);
+        }
+
+        const updatedParticipants = [...(project.participants || []), newParticipant];
+
+        const client = await clientPromise;
+        const db = client.db("geets");
+        const result = await db.collection("projects").updateOne(
+            { _id: new ObjectId(projectId) },
+            { $set: { participants: updatedParticipants } }
+        );
+
+        return result;
+    } catch (err) {
+        console.error("Error updating participants:", err);
+        return null;
+    }
 }

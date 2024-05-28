@@ -1,23 +1,17 @@
-// export interface Comment {
-//     _id: string;
-//     post: string;
-//     content: string;
-//     created: Date;
-// }
-
-// export interface Like{
-//     _id: string;
-//     post: string;
-//     user: string;
-//     created: Date;
-// }
-
 export interface Post {
     _id: string;
-    project: string;
+    project: {
+        _id: string;
+        title: string;
+    };
     content: string;
     time: Date;
-    author: string;
+    author: {
+        _id: string;
+        pseudo: string;
+        email: string;
+        media: string;
+    };
     media?: string;
     labels?: string[];
 }
@@ -29,7 +23,7 @@ export interface User {
     pseudo?: string;
     projectIds?: string[];
     labels?: string[];
-    profil_picture?: string;
+    media?: string;
     first_name?: string;
     lastName?: string;
     birth_date: Date;
@@ -41,13 +35,6 @@ export interface User {
     allowEmails?: boolean;
     created?: Date;
 }
-
-// export interface Participate{
-//     _id: string;
-//     project: string;
-//     user: string;
-//     created: Date;
-// }
 
 export interface Project {
     _id: string;

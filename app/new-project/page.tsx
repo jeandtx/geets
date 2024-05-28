@@ -9,15 +9,17 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 import { createProject } from "@/lib/actions";
 import { useSession } from "next-auth/react";
-import { CldUploadWidget } from 'next-cloudinary';
+import { CldUploadWidget } from "next-cloudinary";
 
 export default function NewProject() {
 	const [label, setLabel] = useState<string>("");
 	const [labels, setLabels] = useState<string[]>([]);
 	const [theme, setTheme] = useState<string>("");
 	const [themes, setThemes] = useState<string[]>([]);
+	const [participant, setParticipant] = useState<string>("");
+	const [participants, setParticipants] = useState<string[]>([]);
 	const { toast } = useToast();
-	const session = useSession();
+	const { data: session } = useSession();
 	const [imageUrl, setImageUrl] = useState<string>("");
 	const [imageName, setImageName] = useState<string>("Ajouter une photo");
 
@@ -25,10 +27,10 @@ export default function NewProject() {
 		_id: "Generated",
 		author: "",
 		title: "",
-		themes: themes,
+		themes: [],
 		description: "",
-		media: imageUrl,
-		labels: labels,
+		media: "",
+		labels: [],
 		participants: [],
 	});
 
@@ -40,18 +42,24 @@ export default function NewProject() {
 	};
 
 	useEffect(() => {
+		if (session && session.user && session.user.email) {
+			setParticipants([session.user.email]);
+		}
+	}, [session]);
+
+	useEffect(() => {
 		setProject({
 			...project,
 			themes: themes,
 			labels: labels,
 			media: imageUrl,
+			participants: participants,
 		});
-	}, [themes, labels, imageUrl]);
+	}, [themes, labels, imageUrl, participants]);
 
 	const handleSubmit = (e: any) => {
 		e.preventDefault();
-		const user =
-			session.data && session.data.user && session.data.user.email;
+		const user = session?.user?.email;
 		if (!user) {
 			toast({
 				variant: "destructive",
@@ -64,6 +72,7 @@ export default function NewProject() {
 			setProject({
 				...project,
 				author: user,
+				participants: [user, ...participants.filter(p => p !== user)]
 			});
 		}
 		createProject(project)
@@ -81,18 +90,17 @@ export default function NewProject() {
 					description:
 						"Please check the email or password and try again.",
 				});
-				return;
 			});
 	};
 
 	return (
-		<div>
+		<div className="flex flex-col w-full mx-auto mt-8 bg-white p-8 rounded-lg shadow-lg">
 			<div>
 				<h1 className="text-3xl font-bold text-center mt-8">
 					New Project
 				</h1>
 			</div>
-			<div className="flex flex-col space-y-4 w-1/2 mx-auto mt-8">
+			<div className="flex flex-col space-y-4 w-10/12 mx-auto mt-8 ">
 				<Input
 					type="text"
 					name="title"
@@ -138,8 +146,8 @@ export default function NewProject() {
 				/>
 
 				{/* Media Upload Section */}
-				<CldUploadWidget 
-					uploadPreset="onrkam98" 
+				<CldUploadWidget
+					uploadPreset="onrkam98"
 					onSuccess={(result) => {
 						setImageUrl((result as any).info.secure_url);
 						setImageName((result as any).info.original_filename); // Update the image name
@@ -147,10 +155,15 @@ export default function NewProject() {
 				>
 					{({ open }) => {
 						return (
-							<button 
+							<button
 								className="overflow-hidden inline-flex items-center justify-center rounded-md bg-primary px-6 py-3 text-base font-medium text-white"
-								style={{ height: "40px", whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden" }} 
-								type="button" 
+								style={{
+									height: "40px",
+									whiteSpace: "nowrap",
+									textOverflow: "ellipsis",
+									overflow: "hidden",
+								}}
+								type="button"
 								onClick={() => open()}
 							>
 								{imageName}
@@ -190,12 +203,39 @@ export default function NewProject() {
 						))}
 					</div>
 				</form>
-				<Input
-					type="text"
-					name="participants"
-					onChange={handleChange}
-					placeholder="Participants"
-				/>
+				
+				<form
+					onSubmit={(e) => {
+						e.preventDefault();
+						setParticipants((prev) => [...prev, participant]);
+						setParticipant("");
+					}}
+				>
+					<Input
+						type="text"
+						name="participants"
+						onChange={(e) => {
+							setParticipant(e.target.value);
+						}}
+						value={participant}
+						placeholder="Participants"
+					/>
+					<div className="flex flex-wrap gap-2 mt-2">
+						{participants.map((participant) => (
+							<Badge
+								key={participant}
+								onClick={() => {
+									setParticipants((prev) =>
+										prev.filter((p) => p !== participant)
+									);
+								}}
+							>
+								{participant}
+							</Badge>
+						))}
+					</div>
+				</form>
+				
 				<form onSubmit={handleSubmit} className="flex flex-col gap-2">
 					<Button type="submit">Submit</Button>
 				</form>

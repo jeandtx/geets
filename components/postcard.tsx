@@ -1,107 +1,117 @@
-import React from 'react'
-import Img from 'next/image'
-import { MessageSquare, Rocket, ThumbsUp } from 'lucide-react'
-import { Post, User, Project } from '@/types/tables'
-import { getUserById, getProject } from '@/lib/actions'
+import React from "react";
+import Img from "next/image";
+import { MessageSquare, Rocket, ThumbsUp } from "lucide-react";
+import { Post } from "@/types/tables";
+import Link from "next/link";
 
 interface PostProps {
-    post: Post
+	post: Post;
 }
 
-export default function PostCard({ post }: PostProps) {
-    const [user, setUser] = React.useState<User | null>(null)
-    const [project, setProject] = React.useState<Project | null>(null)
+export default function PostCard({ post }: Readonly<PostProps>) {
+	function getTimeSincePosted(time: Date) {
+		if (!time) return "Il y a un certain temps";
+		time = new Date(time);
+		const currentTime = new Date();
+		const diff = currentTime.getTime() - time.getTime();
 
-    React.useEffect(() => {
-        const fetchUser = async () => {
-            // const user: User = await getUserById(post.author); // TODO - Uncomment this line when data is stronger
-            const user: User = await getUserById('66311cf7f7f9f319e96ee5aa')
-            setUser(user)
-        }
-        const fetchProject = async () => {
-            // const project: Project = await getProject(post.project); // TODO - Uncomment this line when data is stronger
-            const project: Project = await getProject('664a103fab759e59e6bd0f91')
-            setProject(project)
-        }
-        fetchProject()
-        fetchUser()
-    }, [post])
+		const years = Math.floor(diff / 1000 / 60 / 60 / 24 / 365);
+		const months = Math.floor(diff / 1000 / 60 / 60 / 24 / 30);
+		const days = Math.floor(diff / 1000 / 60 / 60 / 24);
+		const hours = Math.floor(diff / 1000 / 60 / 60);
+		const minutes = Math.floor(diff / 1000 / 60);
+		const seconds = Math.floor(diff / 1000);
 
-    // TODO - Make sure the time is a Date object (currently a string)
-    function getTimeSincePosted(time: Date) {
-        if (!time) return 'Il y a un certain temps'
+		if (years > 0) return `Il y a ${years} ans`;
+		if (months > 0) return `Il y a ${months} mois`;
+		if (days > 0) return `Il y a ${days} jours`;
+		if (hours > 0) return `Il y a ${hours} heures`;
+		if (minutes > 0) return `Il y a ${minutes} minutes`;
+		if (seconds > 0) return `Il y a ${seconds} secondes`;
+		return "Il y a un certain temps";
+	}
 
-        time = new Date(time) // TODO - Remove this line when the time is a Date object
-        const currentTime = new Date()
-        const diff = currentTime.getTime() - time.getTime()
+	function handleLikePost() {
+		console.log("Like post");
+	}
 
-        const years = Math.floor(diff / 1000 / 60 / 60 / 24 / 365)
-        const months = Math.floor(diff / 1000 / 60 / 60 / 24 / 30)
-        const days = Math.floor(diff / 1000 / 60 / 60 / 24)
-        const hours = Math.floor(diff / 1000 / 60 / 60)
-        const minutes = Math.floor(diff / 1000 / 60)
-        const seconds = Math.floor(diff / 1000)
+	function handleCommentPost() {
+		console.log("Comment post");
+	}
 
-        if (years > 0) return `Il y a ${years} ans`
-        if (months > 0) return `Il y a ${months} mois`
-        if (days > 0) return `Il y a ${days} jours`
-        if (hours > 0) return `Il y a ${hours} heures`
-        if (minutes > 0) return `Il y a ${minutes} minutes`
-        if (seconds > 0) return `Il y a ${seconds} secondes`
-        return 'Il y a un certain temps'
-    }
+	return (
+		<div className="flex max-w-xl overflow-hidden rounded-xl border border-slate-200 bg-white">
+			<div className="wrapper py-7">
+				<div className="header px-10 flex items-center  mb-4 space-x-4">
+					<Img
+						className="rounded-full"
+						src={
+							post.author?.media ??
+							"https://loremflickr.com/640/480/nature"
+						}
+						alt="Placeholder image"
+						width={48}
+						height={48}
+						style={{ height: "3.5rem", width: "3.5rem" }}
+					/>
+					<div>
+						<Link href={`/${post.author?.email}`}>
+							<p className="text-lg text-gray-900 font-bold">
+								{post.author
+									? post.author?.pseudo
+									: "user pseudo"}
+							</p>
+						</Link>
+						<p className="text-sm text-gray-600">
+							{getTimeSincePosted(post?.time)} •{" "}
+							{post.project
+								? post.project?.title
+								: "Nom de projet"}
+						</p>
+						<p className="text-sm text-gray-600">
+							{post.project ? post.project?._id : "ID du projet"}
+						</p>
+					</div>
+				</div>
 
-    function handleLikePost() {
-        console.log('Like post')
-    }
+				<div className="body px-10 space-y-5">
+					<p className="text-gray-900 mb-0">
+						{post.content ? post.content : "Contenu du post"}
+					</p>
+					<Img
+						className="w-full h-full object-cover rounded-xl"
+						src={
+							post.media
+								? post.media
+								: "https://loremflickr.com/640/480/nature"
+						}
+						alt="Placeholder image"
+						width={1280}
+						height={960}
+					/>
+				</div>
 
-    function handleCommentPost() {
-        console.log('Comment post')
-    }
+				<hr className="border-gray-300 my-5" />
 
-    function handleJoinPost() {
-        console.log('Join post')
-    }
+				<div className="footer px-10 space-y-5">
+					<div className="icon-group flex justify-between items-center px-20">
+						<ThumbsUp
+							onClick={handleLikePost}
+							className="cursor-pointer"
+						/>
+						<MessageSquare
+							onClick={handleCommentPost}
+							className="cursor-pointer"
+						/>
 
-    return (
-        <div className='flex max-w-xl overflow-hidden rounded-xl border border-slate-200 bg-white'>
-            <div className='wrapper py-7'>
-                <div className='header px-10 flex items-center  mb-4 space-x-4'>
-                    <Img
-                        className='rounded-full'
-                        src={user?.profil_picture ?? 'https://loremflickr.com/640/480/nature'}
-                        alt='Placeholder image'
-                        width={48}
-                        height={48}
-                        style={{ height: '3.5rem', width: '3.5rem' }}
-                    />
-                    <div>
-                        <p className='text-lg text-gray-900 font-bold'>{user ? user.pseudo : 'user pseudo'}</p>
-                        <p className='text-sm text-gray-600'>
-                            {getTimeSincePosted(post?.time)} • {project?.title ? project?.title : 'Nom de projet'}
-                        </p>
-                    </div>
-                </div>
-
-                <div className='body px-10 space-y-5'>
-                    <p className='text-gray-900 mb-0'>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                        ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-                        occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                    </p>
-                    <Img className='w-full h-full object-cover rounded-xl' src={post.media ? post.media : 'https://loremflickr.com/640/480/nature'} alt='Placeholder image' width={1280} height={960} />
-                </div>
-
-                <hr className='border-gray-300 my-5' />
-
-                <div className='footer px-10 space-y-5'>
-                    <div className='icon-group flex justify-between items-center px-20'>
-                        <ThumbsUp onClick={handleLikePost} />
-                        <MessageSquare onClick={handleCommentPost} />
-                        <Rocket onClick={handleJoinPost} />
-                    </div>
-                </div>
-            </div>
-        </div>
-    )
+						<Link
+							href={`${post.author?.email}/${post.project?._id}`}
+						>
+							<Rocket className="cursor-pointer" />
+						</Link>
+					</div>
+				</div>
+			</div>
+		</div>
+	);
 }
