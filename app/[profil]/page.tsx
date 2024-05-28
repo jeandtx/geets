@@ -61,9 +61,14 @@ export default async function ProfilPage({
 							<td>{user.first_name}</td>
 						</tr>
 						<tr>
+							<td>LastName:</td>
+							<td>{user.lastName}</td>
+						</tr>
+						<tr>
 							<td>Age:</td>
 							<td>
-								{user.birth_date?.toLocaleString() ?? "no data"}
+								{user.birth_date?.toLocaleDateString() ??
+									"No data"}
 							</td>
 						</tr>
 						<tr>
@@ -71,12 +76,28 @@ export default async function ProfilPage({
 							<td>{user.localisation}</td>
 						</tr>
 						<tr>
-							<td>Sexe:</td>
+							<td>Gender:</td>
 							<td>{user.gender}</td>
 						</tr>
 						<tr>
 							<td>Experience:</td>
 							<td>{user.experience}</td>
+						</tr>
+						<tr>
+							<td>Available:</td>
+							<td>{user.available ? "Yes" : "No"}</td>
+						</tr>
+						<tr>
+							<td>Mobile:</td>
+							<td>{user.mobile}</td>
+						</tr>
+						<tr>
+							<td>Allow Emails:</td>
+							<td>{user.allowEmails ? "Yes" : "No"}</td>
+						</tr>
+						<tr>
+							<td>Account Creation:</td>
+							<td>{user.created?.toLocaleDateString()}</td>
 						</tr>
 					</tbody>
 				</table>
