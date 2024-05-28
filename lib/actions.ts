@@ -6,15 +6,20 @@ import { ObjectId } from 'mongodb'; // Import the ObjectId type
 
 /**
  * Retrieves posts from the database.
+ * @param {number} page - The page number to retrieve.
  * @returns {Promise<Array<any>>} A promise that resolves to an array of posts.
  */
-export async function getPosts() {
+export async function getPosts(page: number = 1) {
     const client = await clientPromise
     const db = client.db('geets')
-    const posts = await db.collection('posts_fake').find({}).sort({ metacritic: -1 }).limit(10).toArray()
+    const postsPerPage = 2
+    const offset = (page - 1) * postsPerPage
+    const posts = await db.collection('posts_fake').find({}).sort({ _id: -1 }).skip(offset).limit(postsPerPage).toArray()
     const data: Post[] = JSON.parse(JSON.stringify(posts)) // Remove ObjectID (not serializable)
+
     return data
 }
+
 
 /**
  * Retrieves a user with the mail from the database.
@@ -111,8 +116,6 @@ export async function getPostsByProjectId(projectId: string): Promise<Post[]> {
         const client = await clientPromise;
         const db = client.db("geets");
         const posts = await db.collection("posts").find({ project: projectId }).toArray();
-        console.log("Posts:", posts);
-        console.log("Project ID:", projectId);
 
         const data: Post[] = posts.map(post => ({
             _id: post._id.toString(),

@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 import { createProject } from "@/lib/actions";
 import { useSession } from "next-auth/react";
-import { CldUploadWidget } from 'next-cloudinary';
+import { CldUploadWidget } from "next-cloudinary";
 
 export default function NewProject() {
 	const [label, setLabel] = useState<string>("");
@@ -90,18 +90,17 @@ export default function NewProject() {
 					description:
 						"Please check the email or password and try again.",
 				});
-				return;
 			});
 	};
 
 	return (
-		<div>
+		<div className="flex flex-col w-full mx-auto mt-8 bg-white p-8 rounded-lg shadow-lg">
 			<div>
 				<h1 className="text-3xl font-bold text-center mt-8">
 					New Project
 				</h1>
 			</div>
-			<div className="flex flex-col space-y-4 w-1/2 mx-auto mt-8">
+			<div className="flex flex-col space-y-4 w-10/12 mx-auto mt-8 ">
 				<Input
 					type="text"
 					name="title"
@@ -147,8 +146,8 @@ export default function NewProject() {
 				/>
 
 				{/* Media Upload Section */}
-				<CldUploadWidget 
-					uploadPreset="onrkam98" 
+				<CldUploadWidget
+					uploadPreset="onrkam98"
 					onSuccess={(result) => {
 						setImageUrl((result as any).info.secure_url);
 						setImageName((result as any).info.original_filename); // Update the image name
@@ -156,10 +155,15 @@ export default function NewProject() {
 				>
 					{({ open }) => {
 						return (
-							<button 
+							<button
 								className="overflow-hidden inline-flex items-center justify-center rounded-md bg-primary px-6 py-3 text-base font-medium text-white"
-								style={{ height: "40px", whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden" }} 
-								type="button" 
+								style={{
+									height: "40px",
+									whiteSpace: "nowrap",
+									textOverflow: "ellipsis",
+									overflow: "hidden",
+								}}
+								type="button"
 								onClick={() => open()}
 							>
 								{imageName}
