@@ -80,3 +80,12 @@ export async function getAllWorkouts(email: string) {
     const data: Workout[] = JSON.parse(JSON.stringify(workouts)); // Remove ObjectID (not serializable)
     return data;
 }
+
+
+export async function getWorkout(workoutId: string) {
+    const client = await clientPromise;
+    console.log("workoutId", workoutId);
+    const db = client.db("bodyscan"); 
+    const workout = await db.collection("workouts").findOne({ _id: new ObjectId(workoutId) });
+    return workout;
+}
