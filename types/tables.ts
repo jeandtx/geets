@@ -29,7 +29,7 @@ export interface User {
     pseudo?: string;
     projectIds?: string[];
     labels?: string[];
-    profil_picture?: string;
+    media?: string;
     first_name?: string;
     lastName?: string;
     birth_date: Date;

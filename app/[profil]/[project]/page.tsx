@@ -1,15 +1,15 @@
+// page.tsx
 import { getUser, getProject, getPostsByProjectId } from "@/lib/actions";
 import { Post, Project } from "@/types/tables";
-import Img from "next/image";
+import ProjectDetails from "@/components/project-details";
 
 export default async function ProjectPage({
-	params,
+    params,
 }: Readonly<{
-	params: { profil: string; project: string };
+    params: { profil: string; project: string };
 }>) {
-	const { profil } = params;
-	const decodeEmail = decodeURIComponent(profil);
-
+    const { profil } = params;
+    const decodeEmail = decodeURIComponent(profil);
 	const user = await getUser(decodeEmail);
 
 	const projectId = params.project;

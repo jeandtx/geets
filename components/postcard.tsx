@@ -69,7 +69,7 @@ export default function PostCard({ post }: Readonly<PostProps>) {
 					<Img
 						className="rounded-full"
 						src={
-							user?.profil_picture ??
+							user?.media ??
 							"https://loremflickr.com/640/480/nature"
 						}
 						alt="Placeholder image"
@@ -88,7 +88,7 @@ export default function PostCard({ post }: Readonly<PostProps>) {
 							{project?.title ? project?.title : "Nom de projet"}
 						</p>
 						<p className="text-sm text-gray-600">
-							{post.project ? post.project : "ID du projet"}
+							{post.project ? post.project._id : "ID du projet"}
 						</p>
 					</div>
 				</div>

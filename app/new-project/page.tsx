@@ -16,8 +16,10 @@ export default function NewProject() {
 	const [labels, setLabels] = useState<string[]>([]);
 	const [theme, setTheme] = useState<string>("");
 	const [themes, setThemes] = useState<string[]>([]);
+	const [participant, setParticipant] = useState<string>("");
+	const [participants, setParticipants] = useState<string[]>([]);
 	const { toast } = useToast();
-	const session = useSession();
+	const { data: session } = useSession();
 	const [imageUrl, setImageUrl] = useState<string>("");
 	const [imageName, setImageName] = useState<string>("Ajouter une photo");
 
@@ -25,10 +27,10 @@ export default function NewProject() {
 		_id: "Generated",
 		author: "",
 		title: "",
-		themes: themes,
+		themes: [],
 		description: "",
-		media: imageUrl,
-		labels: labels,
+		media: "",
+		labels: [],
 		participants: [],
 	});
 
@@ -40,18 +42,24 @@ export default function NewProject() {
 	};
 
 	useEffect(() => {
+		if (session && session.user && session.user.email) {
+			setParticipants([session.user.email]);
+		}
+	}, [session]);
+
+	useEffect(() => {
 		setProject({
 			...project,
 			themes: themes,
 			labels: labels,
 			media: imageUrl,
+			participants: participants,
 		});
-	}, [themes, labels, imageUrl]);
+	}, [themes, labels, imageUrl, participants]);
 
 	const handleSubmit = (e: any) => {
 		e.preventDefault();
-		const user =
-			session.data && session.data.user && session.data.user.email;
+		const user = session?.user?.email;
 		if (!user) {
 			toast({
 				variant: "destructive",
@@ -64,6 +72,7 @@ export default function NewProject() {
 			setProject({
 				...project,
 				author: user,
+				participants: [user, ...participants.filter(p => p !== user)]
 			});
 		}
 		createProject(project)
@@ -194,12 +203,39 @@ export default function NewProject() {
 						))}
 					</div>
 				</form>
-				<Input
-					type="text"
-					name="participants"
-					onChange={handleChange}
-					placeholder="Participants"
-				/>
+				
+				<form
+					onSubmit={(e) => {
+						e.preventDefault();
+						setParticipants((prev) => [...prev, participant]);
+						setParticipant("");
+					}}
+				>
+					<Input
+						type="text"
+						name="participants"
+						onChange={(e) => {
+							setParticipant(e.target.value);
+						}}
+						value={participant}
+						placeholder="Participants"
+					/>
+					<div className="flex flex-wrap gap-2 mt-2">
+						{participants.map((participant) => (
+							<Badge
+								key={participant}
+								onClick={() => {
+									setParticipants((prev) =>
+										prev.filter((p) => p !== participant)
+									);
+								}}
+							>
+								{participant}
+							</Badge>
+						))}
+					</div>
+				</form>
+				
 				<form onSubmit={handleSubmit} className="flex flex-col gap-2">
 					<Button type="submit">Submit</Button>
 				</form>
