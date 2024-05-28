@@ -1,6 +1,4 @@
 import React from 'react';
-import { Workout } from '@/components/workout';
-import { WorkoutModal } from '@/components/WorkoutModal';
 import  WorkoutMenu  from '@/components/WorkoutMenu';
 export default function Home() {
     return (

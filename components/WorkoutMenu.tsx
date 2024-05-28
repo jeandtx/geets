@@ -37,7 +37,7 @@ export default function WorkoutMenu() {
             <div className="text-3xl font-bold pt-24">Ma séance du jour</div>
             <div className='flex flex-col items-center pt-36 w-full h-screen gap-3'>
                 {workouts.map(workout => (
-                    <WorkoutComponent key={workout._id} title={workout.workoutTitle} />
+                    <WorkoutComponent key={workout._id} title={workout.workoutTitle} workoutId={workout._id} />
                 ))}
                 <WorkoutModal title={"+"} />
             </div>
