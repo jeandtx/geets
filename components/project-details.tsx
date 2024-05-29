@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { Post, Project } from "@/types/tables";
 import Img from "next/image";
-import { updateParticipants } from "@/lib/data/project";
+import { updateProject } from "@/lib/data/project";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import ProfileCard from "@/components/ui/profilcard";
@@ -13,10 +13,17 @@ interface ProjectDetailsProps {
 	posts: Post[];
 }
 
-const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, posts }) => {
+export default function ProjectDetails({
+	project,
+	posts,
+}: Readonly<ProjectDetailsProps>) {
+	// const [participants, setParticipants] = useState<string[]>(
+	// 	project.participants || []
+	// );
 	const [participants, setParticipants] = useState<string[]>(
-		project.participants || []
+		Array.isArray(project.participants) ? project.participants : []
 	);
+
 	const { data: session } = useSession();
 	const { toast } = useToast();
 
@@ -30,10 +37,10 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, posts }) => {
 			return;
 		}
 
-		const result = await updateParticipants(
-			project._id.toString(),
-			newParticipant
-		);
+		const result = await updateProject({
+			...project,
+			participants: [...participants, newParticipant],
+		});
 		if (result) {
 			setParticipants([...participants, newParticipant]);
 			toast({
@@ -63,7 +70,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, posts }) => {
 										project.media ??
 										"https://res.cloudinary.com/dekbkndn8/image/upload/v1715719366/samples/balloons.jpg"
 									}
-									alt={project.title}
+									alt={project.title + "Image"}
 									width={64}
 									height={64}
 									className="w-16 h-16 object-cover rounded-lg"
@@ -135,7 +142,8 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, posts }) => {
 											<div>Content: {post.content}</div>
 											<div>
 												Time:{" "}
-												{post.time.toLocaleString()}
+												{/* {post.time.toLocaleString()} */}
+												{/* // TODO: resolve time hydration warning */}
 											</div>
 											<div>
 												Author: {post.author?.email}
@@ -163,6 +171,4 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, posts }) => {
 			</div>
 		</div>
 	);
-};
-
-export default ProjectDetails;
+}

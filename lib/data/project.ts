@@ -4,6 +4,7 @@ import clientPromise from '@/lib/mongodb'
 import { Project } from '@/types/tables'
 import { ObjectId } from 'mongodb';
 
+
 /**
  * Creates a project in the database.
  * @param {Project} project - The project to create.
@@ -28,7 +29,6 @@ export async function createProject(project: Project) {
  * @returns {Promise<any>} A promise that resolves to the projects.
  * @throws {Error} If the user is not logged in.
  */
-
 export async function getProjects(query: Partial<Project>): Promise<Project[]> {
     try {
         const client = await clientPromise;
@@ -37,6 +37,7 @@ export async function getProjects(query: Partial<Project>): Promise<Project[]> {
             ...query,
             _id: query._id ? new ObjectId(query._id) : undefined
         }
+        delete queryWithObjectId._id
         const projects = await db.collection("projects").find(queryWithObjectId).toArray();
         const data: Project[] = JSON.parse(JSON.stringify(projects)) // Remove ObjectID (not serializable)
         return data;
@@ -64,33 +65,47 @@ export async function getProject(projectId: string) {
 
 
 /**
- * Retrieves all the projects from the database.
- * @returns {Promise<any>} A promise that resolves to the projects.
+ * Update a project in the database.
+ * @param {Project} project - The project to update.
+ * @returns {Promise<any>} A promise that resolves to the updated project.
+ * @throws {Error} If the project have a missing field.
  */
-export async function updateParticipants(projectId: string, newParticipant: string) {
-    try {
-        const project = await getProject(projectId);
-        if (!project) {
-            throw new Error(`Project with ID ${projectId} not found.`);
-        }
+export async function updateProject(project: Project) {
+    const client = await clientPromise;
+    const db = client.db('geets');
 
-
-        if (project?.participants?.includes(newParticipant)) {
-            throw new Error(`Participant ${newParticipant} already exists in the project.`);
-        }
-
-        const updatedParticipants = [...(project.participants || []), newParticipant];
-
-        const client = await clientPromise;
-        const db = client.db("geets");
-        const result = await db.collection("projects").updateOne(
-            { _id: new ObjectId(projectId) },
-            { $set: { participants: updatedParticipants } }
-        );
-
-        return result;
-    } catch (err) {
-        console.error("Error updating participants:", err);
-        return null;
+    if (!project._id) {
+        throw new Error('Missing field(s) in project. Check id: ' + project._id);
     }
+
+    const projectId = new ObjectId(project._id); // Ensure _id is a valid ObjectId
+    let projectWithoutObjectId = {
+        ...project,
+        _id: project._id ? new ObjectId(project._id) : undefined
+    }
+    delete projectWithoutObjectId._id
+    const result = await db.collection('projects').updateOne({ _id: projectId }, { $set: projectWithoutObjectId });
+
+    const data = JSON.parse(JSON.stringify(result)); // Remove ObjectID (not serializable)
+    return data;
+}
+
+/**
+ * Delete a project from the database.
+ * @param {string} projectId - The id of the project to delete.
+ * @returns {Promise<any>} A promise that resolves to the deleted project.
+ * @throws {Error} If the project id is missing.
+ */
+export async function deleteProject(projectId: string) {
+    const client = await clientPromise;
+    const db = client.db('geets');
+
+    if (!projectId) {
+        throw new Error('Missing field(s) in project. Check id: ' + projectId);
+    }
+
+    const result = await db.collection('projects').deleteOne({ _id: new ObjectId(projectId) });
+
+    const data = JSON.parse(JSON.stringify(result)); // Remove ObjectID (not serializable)
+    return data;
 }

@@ -4,7 +4,8 @@ import Link from "next/link";
 import { getUser } from "@/lib/data/user";
 import { getProjects } from "@/lib/data/project";
 import { getUserPosts } from "@/lib/data/post";
-import { Project } from "@/types/tables";
+import type { Project } from "@/types/tables";
+import { ProjectCard } from "@/components/project";
 
 function SignOut() {
 	return (
@@ -37,7 +38,7 @@ export default async function ProfilPage({
 
 	return (
 		<div className="flex flex-col items-center w-full space-y-5 text-black py-5">
-			<h1 className="text-3xl font-bold">Your Profile</h1>
+			<h1 className="text-3xl font-bold">{user.email}</h1>
 			{user ? (
 				<table>
 					<thead>
@@ -145,27 +146,7 @@ export default async function ProfilPage({
 			{userProjects.length > 0 ? (
 				<div className="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full px-10">
 					{userProjects.map((project) => (
-						<div
-							key={project._id.toString()}
-							className="flex max-w-xl overflow-hidden rounded-xl border border-slate-200 bg-white"
-						>
-							<div className="wrapper py-7">
-								<div className="header px-10 mb-4">
-									<div>
-										<Link
-											href={`/${project.author}/${project._id}`}
-										>
-											<p className="text-lg text-gray-900 font-bold">
-												{project.title}
-											</p>
-										</Link>
-										<p className="text-sm text-gray-600">
-											{project.description}
-										</p>
-									</div>
-								</div>
-							</div>
-						</div>
+						<ProjectCard key={project._id} project={project} />
 					))}
 				</div>
 			) : (

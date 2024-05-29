@@ -20,12 +20,13 @@ export default function NewProject() {
 	const [participants, setParticipants] = useState<string[]>([]);
 	const { toast } = useToast();
 	const { data: session } = useSession();
+	const [email, setEmail] = useState<string>("");
 	const [imageUrl, setImageUrl] = useState<string>("");
 	const [imageName, setImageName] = useState<string>("Ajouter une photo");
 
 	const [project, setProject] = useState<Project>({
 		_id: "Generated",
-		author: "",
+		author: "email",
 		title: "",
 		themes: [],
 		description: "",
@@ -42,8 +43,13 @@ export default function NewProject() {
 	};
 
 	useEffect(() => {
-		if (session && session.user && session.user.email) {
+		if (session?.user?.email) {
 			setParticipants([session.user.email]);
+			setEmail(session.user.email);
+			setProject({
+				...project,
+				author: email,
+			});
 		}
 	}, [session]);
 
@@ -59,8 +65,7 @@ export default function NewProject() {
 
 	const handleSubmit = (e: any) => {
 		e.preventDefault();
-		const user = session?.user?.email;
-		if (!user) {
+		if (email === "") {
 			toast({
 				variant: "destructive",
 				title: "Uh oh! Something went wrong.",
@@ -71,8 +76,11 @@ export default function NewProject() {
 		} else {
 			setProject({
 				...project,
-				author: user,
-				participants: [user, ...participants.filter((p) => p !== user)],
+				author: email,
+				participants: [
+					email,
+					...participants.filter((p) => p !== email),
+				],
 			});
 		}
 		createProject(project)
