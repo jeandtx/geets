@@ -1,13 +1,9 @@
 'use server'
 import clientPromise from './mongodb'
-import { User, Workout, ExercisePerformance } from '../types/tables'
+import { User, Workout, Session,ExerciseInput } from '../types/tables'
 import { ObjectId } from 'mongodb';
 
-/**
- * Retrieves a user with the email from the database.
- * @param {string} email - The email of the user to retrieve.
- * @returns {Promise<User | null>} A promise that resolves to the user.
- */
+
 export async function getUser(email: string): Promise<User | null> {
     const client = await clientPromise;
     const db = client.db('bodyscan');
@@ -23,7 +19,8 @@ export async function getUser(email: string): Promise<User | null> {
         email: user.email,
         password: user.password,
         pseudo: user.pseudo,
-        created: user.created
+        created: user.created,
+        name: user.name
     } as User : null;
 }
 
@@ -37,21 +34,14 @@ export async function getAllUsers(): Promise<User[]> {
         email: user.email,
         password: user.password,
         pseudo: user.pseudo,
-        created: user.created
+        created: user.created,
+        name: user.name
     })) as User[];
 }
 
-/**
- * Creates a workout in the database.
- * @param {string} email - The email of the user.
- * @param {string} workoutTitle - The title of the workout.
- * @param {ExercisePerformance[]} exercises - An array of exercises with performance details.
- * @returns {Promise<Workout>} A promise that resolves to the created workout.
- * @throws {Error} If a parameter is missing.
- */
-export async function createWorkout(email: string, workoutTitle: string, exercises: ExercisePerformance[]): Promise<Workout> {
-    if (!email || !workoutTitle || exercises.length === 0) {
-        throw new Error('Missing parameter(s). Check email, workoutTitle, and exercises.');
+export async function createWorkout(email: string, workoutTitle: string, exerciseName: string[]): Promise<Workout> {
+    if (!email || !workoutTitle || exerciseName.length === 0) {
+        throw new Error('Missing parameter(s). Check email, workoutTitle, and exerciseIds.');
     }
 
     try {
@@ -63,7 +53,7 @@ export async function createWorkout(email: string, workoutTitle: string, exercis
             email,
             workoutTitle,
             date: new Date(),
-            exercises
+            exercises: exerciseName
         };
 
         await db.collection('workouts').insertOne(workout);
@@ -77,6 +67,7 @@ export async function createWorkout(email: string, workoutTitle: string, exercis
         throw error;
     }
 }
+
 
 export async function getAllWorkouts(email: string): Promise<Workout[]> {
     const client = await clientPromise;
@@ -92,6 +83,7 @@ export async function getAllWorkouts(email: string): Promise<Workout[]> {
     })) as Workout[];
 }
 
+
 export async function getWorkout(workoutId: string): Promise<Workout | null> {
     const client = await clientPromise;
     console.log("workoutId", workoutId);
@@ -105,4 +97,43 @@ export async function getWorkout(workoutId: string): Promise<Workout | null> {
         date: workout.date,
         exercises: workout.exercises
     } as Workout : null;
+}
+
+export async function createSession(workoutId: string, exercises: { [key: string]: ExerciseInput }): Promise<Session | null> {
+    if (!workoutId || !exercises) {
+        throw new Error('Missing parameter(s). Check workoutId and exercises.');
+    }
+
+    try {
+        const client = await clientPromise;
+        const db = client.db('bodyscan');
+
+        // Transformer les données des exercices pour correspondre à la structure de la Session
+        const transformedExercises = Object.keys(exercises).reduce((acc, exerciseName) => {
+            acc[exerciseName] = [{
+                sets: parseInt(exercises[exerciseName].sets, 10),
+                weight: parseInt(exercises[exerciseName].weight, 10)
+            }];
+            return acc;
+        }, {} as { [key: string]: { sets: number, weight: number }[] });
+
+        // Créer la nouvelle session
+        const session = {
+            _id: new ObjectId(),
+            date: new Date(),
+            exercises: transformedExercises
+        };
+
+        // Insérer la nouvelle session dans la collection sessions
+        await db.collection('sessions').insertOne(session);
+
+        return {
+            _id: session._id.toString(),
+            date: session.date,
+            exercises: session.exercises
+        } as Session;
+    } catch (error) {
+        console.error("Error creating session:", error);
+        throw error;
+    }
 }
