@@ -11,7 +11,7 @@ export async function POST(req: Request) {
     console.log(body);
 
     try {
-        await db.collection('posts').insertOne(
+        await db.collection('posts_fake').insertOne(
             {
                 ...body,
                 _id: new ObjectId()

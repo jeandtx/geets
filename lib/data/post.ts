@@ -15,7 +15,7 @@ export async function getPosts(page: number = 1) {
     const db = client.db('geets')
     const postsPerPage = 2
     const offset = (page - 1) * postsPerPage
-    const posts = await db.collection('posts_fake').find({}).sort({ _id: -1 }).skip(offset).limit(postsPerPage).toArray()
+    const posts = await db.collection('posts_fake').find({}).sort({ time: 1 }).skip(offset).limit(postsPerPage).toArray()
     const data: Post[] = JSON.parse(JSON.stringify(posts)) // Remove ObjectID (not serializable)
 
     return data
@@ -61,7 +61,7 @@ export async function getPostsByProjectId(projectId: string): Promise<Post[]> {
 export async function getUserPosts(email: string): Promise<Post[]> {
     const client = await clientPromise
     const db = client.db('geets')
-    const posts = await db.collection('posts').find({ author: email }).toArray()
+    const posts = await db.collection('posts').find({ "author.email": email }).toArray()
     const data: Post[] = posts.map(post => ({
         _id: post._id.toString(),
         project: post.project,

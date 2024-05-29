@@ -57,9 +57,9 @@ export default function PostCard({ post }: Readonly<PostProps>) {
 					<div>
 						<Link href={`/${post.author?.email}`}>
 							<p className="text-lg text-gray-900 font-bold">
-								{post.author
+								{post.author?.pseudo
 									? post.author?.pseudo
-									: "user pseudo"}
+									: post.author?.email}
 							</p>
 						</Link>
 						<p className="text-sm text-gray-600">

@@ -97,15 +97,13 @@ export async function updateProject(project: Project) {
  * @throws {Error} If the project id is missing.
  */
 export async function deleteProject(projectId: string) {
+    // todo delete all related posts
     const client = await clientPromise;
     const db = client.db('geets');
-
     if (!projectId) {
         throw new Error('Missing field(s) in project. Check id: ' + projectId);
     }
-
     const result = await db.collection('projects').deleteOne({ _id: new ObjectId(projectId) });
-
     const data = JSON.parse(JSON.stringify(result)); // Remove ObjectID (not serializable)
     return data;
 }
