@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { getUser } from "@/lib/data/user";
 import { User } from "@/types/tables";
+import Link from "next/link";
 
 interface ProfileCardProps {
 	email: string;
@@ -51,9 +52,11 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ email }) => {
 				<AvatarFallback>{user.email?.charAt(0) || "A"}</AvatarFallback>
 			</Avatar>
 			<div className="ml-4">
-				<div className="text-xl font-bold">
-					{user.email || "Anonymous"}
-				</div>
+				<Link href={`/${encodeURIComponent(user.email)}`}>
+					<div className="text-xl font-bold">
+						{user.email || "Anonymous"}
+					</div>
+				</Link>
 				<div className="text-sm text-gray-500">Membre du projet</div>
 			</div>
 		</div>
