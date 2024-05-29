@@ -14,7 +14,7 @@ export default async function ProjectsPage() {
 	if (!userEmail) {
 		return <div>Please log in to view your projects.</div>;
 	}
-	const projects: Project[] = await getProjects(userEmail);
+	const projects: Project[] = await getProjects({ author: userEmail });
 
 	const projectList = projects
 		.filter(
@@ -23,7 +23,7 @@ export default async function ProjectsPage() {
 		)
 		.map((project) => (
 			<div
-				key={project._id}
+				key={project._id.toString()}
 				className="w-[300px] bg-black-400 rounded-lg shadow-md m-2 p-2 text-center"
 			>
 				<div>
@@ -31,7 +31,7 @@ export default async function ProjectsPage() {
 						<Link
 							href={`/${encodeURIComponent(
 								userEmail
-							)}/${encodeURIComponent(project._id)}`}
+							)}/${encodeURIComponent(project._id.toString())}`}
 						>
 							{project.title}
 						</Link>

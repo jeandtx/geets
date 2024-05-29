@@ -2,7 +2,7 @@ import { signOut } from "@/app/auth";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { getUser } from "@/lib/data/user";
-import { getProjects, getParticipantsProjects } from "@/lib/data/project";
+import { getProjects } from "@/lib/data/project";
 import { getUserPosts } from "@/lib/data/post";
 import { Project } from "@/types/tables";
 
@@ -30,8 +30,10 @@ export default async function ProfilPage({
 	const decodeEmail = decodeURIComponent(profil);
 	const user = await getUser(decodeEmail);
 	const userPosts = await getUserPosts(decodeEmail);
-	const userProjects = await getProjects(decodeEmail);
-	const participatingProjects = await getParticipantsProjects(decodeEmail);
+	const userProjects = await getProjects({ author: decodeEmail });
+	const participatingProjects = await getProjects({
+		participants: [decodeEmail],
+	});
 
 	return (
 		<div className="flex flex-col items-center w-full space-y-5 text-black py-5">
@@ -144,7 +146,7 @@ export default async function ProfilPage({
 				<div className="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full px-10">
 					{userProjects.map((project) => (
 						<div
-							key={project._id}
+							key={project._id.toString()}
 							className="flex max-w-xl overflow-hidden rounded-xl border border-slate-200 bg-white"
 						>
 							<div className="wrapper py-7">
@@ -179,7 +181,7 @@ export default async function ProfilPage({
 							const author = await getUser(project.author);
 							return (
 								<div
-									key={project._id}
+									key={project._id.toString()}
 									className="flex max-w-xl overflow-hidden rounded-xl border border-slate-200 bg-white"
 								>
 									<div className="wrapper py-7">

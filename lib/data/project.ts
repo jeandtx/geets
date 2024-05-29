@@ -24,16 +24,20 @@ export async function createProject(project: Project) {
 
 /**
  * Retrieves all the projects of an user that is logged in.
- * @param {string} email - The email of the user to retrieve the projects.
+ * @param {Partial<Project>} query - to filter the projects.
  * @returns {Promise<any>} A promise that resolves to the projects.
  * @throws {Error} If the user is not logged in.
  */
 
-export async function getProjects(email: string) {
+export async function getProjects(query: Partial<Project>): Promise<Project[]> {
     try {
         const client = await clientPromise;
         const db = client.db("geets");
-        const projects = await db.collection("projects").find({ author: email }).toArray();
+        let queryWithObjectId = {
+            ...query,
+            _id: query._id ? new ObjectId(query._id) : undefined
+        }
+        const projects = await db.collection("projects").find(queryWithObjectId).toArray();
         const data: Project[] = JSON.parse(JSON.stringify(projects)) // Remove ObjectID (not serializable)
         return data;
     } catch (err) {
@@ -55,31 +59,6 @@ export async function getProject(projectId: string) {
     const project = await db.collection("projects").findOne({ _id: new ObjectId(projectId) });
     const data: Project = JSON.parse(JSON.stringify(project)) // Remove ObjectID (not serializable)
     return data;
-
-}
-
-
-/**
- * Retrieves projects where the user is a participant.
- * @param {string} email - The email of the user to retrieve the projects.
- * @returns {Promise<Array<Project>>} A promise that resolves to an array of projects.
- */
-export async function getParticipantsProjects(email: string): Promise<Project[]> {
-    const client = await clientPromise
-    const db = client.db('geets')
-    const projects = await db.collection('projects').find({ participants: email }).toArray()
-    const data: Project[] = projects.map(project => ({
-        _id: project._id.toString(),
-        author: project.author,
-        title: project.title,
-        created: project.created,
-        themes: project.themes,
-        description: project.description,
-        media: project.media,
-        labels: project.labels,
-        participants: project.participants
-    }))
-    return data
 
 }
 
