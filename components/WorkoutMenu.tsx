@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import { Workout as WorkoutComponent } from "@/components/workout";
 import { WorkoutModal } from "@/components/WorkoutModal";
 import { getAllWorkouts } from "@/lib/actions"; // Assurez-vous que le chemin est correct
-import { Workout, ExercisePerformance } from "@/types/tables"; // Importez les types corrects
+import { Workout } from "@/types/tables"; // Importez les types corrects
 
 export default function WorkoutMenu() {
     const { data: session } = useSession();
