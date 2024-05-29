@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { Post, Project } from "@/types/tables";
 import Img from "next/image";
-import { updateParticipants } from "@/lib/actions";
+import { updateParticipants } from "@/lib/data/project";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import ProfileCard from "@/components/ui/profilcard";

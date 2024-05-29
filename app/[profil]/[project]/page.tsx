@@ -1,5 +1,7 @@
 // page.tsx
-import { getUser, getProject, getPostsByProjectId } from "@/lib/actions";
+import { getUser } from "@/lib/data/user";
+import { getProject } from "@/lib/data/project";
+import { getPostsByProjectId } from "@/lib/data/post";
 import { Post, Project } from "@/types/tables";
 import Img from "next/image";
 

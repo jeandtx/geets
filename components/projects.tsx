@@ -4,7 +4,7 @@ import { Button } from "./ui/button";
 import { ScrollArea } from "./ui/scroll-area";
 import { SquareKanban } from "lucide-react";
 import Link from "next/link";
-import { getProjects } from "@/lib/actions";
+import { getProjects } from "@/lib/data/project";
 import { useEffect, useState } from "react";
 import { Project } from "@/types/tables";
 

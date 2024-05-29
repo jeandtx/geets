@@ -1,12 +1,9 @@
 import { signOut } from "@/app/auth";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import {
-	getUser,
-	getUserPosts,
-	getProjects,
-	getParticipantsProjects,
-} from "@/lib/actions";
+import { getUser } from "@/lib/data/user";
+import { getProjects, getParticipantsProjects } from "@/lib/data/project";
+import { getUserPosts } from "@/lib/data/post";
 import { Project } from "@/types/tables";
 
 function SignOut() {

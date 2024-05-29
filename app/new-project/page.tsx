@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Project } from "@/types/tables";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
-import { createProject } from "@/lib/actions";
+import { createProject } from "@/lib/data/project";
 import { useSession } from "next-auth/react";
 import { CldUploadWidget } from "next-cloudinary";
 
@@ -72,7 +72,7 @@ export default function NewProject() {
 			setProject({
 				...project,
 				author: user,
-				participants: [user, ...participants.filter(p => p !== user)]
+				participants: [user, ...participants.filter((p) => p !== user)],
 			});
 		}
 		createProject(project)
@@ -203,7 +203,7 @@ export default function NewProject() {
 						))}
 					</div>
 				</form>
-				
+
 				<form
 					onSubmit={(e) => {
 						e.preventDefault();
@@ -235,7 +235,7 @@ export default function NewProject() {
 						))}
 					</div>
 				</form>
-				
+
 				<form onSubmit={handleSubmit} className="flex flex-col gap-2">
 					<Button type="submit">Submit</Button>
 				</form>

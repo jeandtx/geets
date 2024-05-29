@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { auth } from "@/app/auth";
-import { getProjects } from "@/lib/actions";
+import { getProjects } from "@/lib/data/project";
 import Link from "next/link";
 import { Project } from "@/types/tables";
 
