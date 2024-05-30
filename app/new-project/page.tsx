@@ -102,152 +102,170 @@ export default function NewProject() {
 	};
 
 	return (
-		<div className="flex flex-col w-full mx-auto mt-8 bg-white p-8 rounded-lg shadow-lg">
-			<div>
-				<h1 className="text-3xl font-bold text-center mt-8">
-					New Project
-				</h1>
-			</div>
-			<div className="flex flex-col space-y-4 w-10/12 mx-auto mt-8 ">
-				<Input
-					type="text"
-					name="title"
-					onChange={handleChange}
-					placeholder="Title"
-					required
-				/>
-				<form
-					onSubmit={(e) => {
-						e.preventDefault();
-						setThemes((prev) => [...prev, theme]);
-						setTheme("");
-					}}
-				>
-					<Input
-						type="text"
-						name="themes"
-						onChange={(e) => {
-							setTheme(e.target.value);
-						}}
-						value={theme}
-						placeholder="Themes"
-					/>
-					<div className="flex flex-wrap gap-2 mt-2">
-						{themes.map((theme) => (
-							<Badge
-								key={theme}
-								onClick={() => {
-									setThemes((prev) =>
-										prev.filter((t) => t !== theme)
-									);
-								}}
-							>
-								{theme}
-							</Badge>
-						))}
+		<>
+			{email === "" ? (
+				<div className="flex flex-col w-full mx-auto mt-8 bg-white p-8 rounded-lg shadow-lg">
+					Loading
+				</div>
+			) : (
+				<div className="flex flex-col w-full mx-auto mt-8 bg-white p-8 rounded-lg shadow-lg">
+					<div>
+						<h1 className="text-3xl font-bold text-center mt-8">
+							New Project
+						</h1>
 					</div>
-				</form>
-				<Textarea
-					name="description"
-					onChange={handleChange}
-					placeholder="Description"
-				/>
-
-				{/* Media Upload Section */}
-				<CldUploadWidget
-					uploadPreset="onrkam98"
-					onSuccess={(result) => {
-						setImageUrl((result as any).info.secure_url);
-						setImageName((result as any).info.original_filename); // Update the image name
-					}}
-				>
-					{({ open }) => {
-						return (
-							<button
-								className="overflow-hidden inline-flex items-center justify-center rounded-md bg-primary px-6 py-3 text-base font-medium text-white"
-								style={{
-									height: "40px",
-									whiteSpace: "nowrap",
-									textOverflow: "ellipsis",
-									overflow: "hidden",
+					<div className="flex flex-col space-y-4 w-10/12 mx-auto mt-8 ">
+						<Input
+							type="text"
+							name="title"
+							onChange={handleChange}
+							placeholder="Title"
+							required
+						/>
+						<form
+							onSubmit={(e) => {
+								e.preventDefault();
+								setThemes((prev) => [...prev, theme]);
+								setTheme("");
+							}}
+						>
+							<Input
+								type="text"
+								name="themes"
+								onChange={(e) => {
+									setTheme(e.target.value);
 								}}
-								type="button"
-								onClick={() => open()}
-							>
-								{imageName}
-							</button>
-						);
-					}}
-				</CldUploadWidget>
+								value={theme}
+								placeholder="Themes"
+							/>
+							<div className="flex flex-wrap gap-2 mt-2">
+								{themes.map((theme) => (
+									<Badge
+										key={theme}
+										onClick={() => {
+											setThemes((prev) =>
+												prev.filter((t) => t !== theme)
+											);
+										}}
+									>
+										{theme}
+									</Badge>
+								))}
+							</div>
+						</form>
+						<Textarea
+							name="description"
+							onChange={handleChange}
+							placeholder="Description"
+						/>
 
-				<form
-					onSubmit={(e) => {
-						e.preventDefault();
-						setLabels((prev) => [...prev, label]);
-						setLabel("");
-					}}
-				>
-					<Input
-						type="text"
-						name="labels"
-						onChange={(e) => {
-							setLabel(e.target.value);
-						}}
-						value={label}
-						placeholder="Labels"
-					/>
-					<div className="flex flex-wrap gap-2 mt-2">
-						{labels.map((label) => (
-							<Badge
-								key={label}
-								onClick={() => {
-									setLabels((prev) =>
-										prev.filter((l) => l !== label)
-									);
+						{/* Media Upload Section */}
+						<CldUploadWidget
+							uploadPreset="onrkam98"
+							onSuccess={(result) => {
+								setImageUrl((result as any).info.secure_url);
+								setImageName(
+									(result as any).info.original_filename
+								); // Update the image name
+							}}
+						>
+							{({ open }) => {
+								return (
+									<button
+										className="overflow-hidden inline-flex items-center justify-center rounded-md bg-primary px-6 py-3 text-base font-medium text-white"
+										style={{
+											height: "40px",
+											whiteSpace: "nowrap",
+											textOverflow: "ellipsis",
+											overflow: "hidden",
+										}}
+										type="button"
+										onClick={() => open()}
+									>
+										{imageName}
+									</button>
+								);
+							}}
+						</CldUploadWidget>
+
+						<form
+							onSubmit={(e) => {
+								e.preventDefault();
+								setLabels((prev) => [...prev, label]);
+								setLabel("");
+							}}
+						>
+							<Input
+								type="text"
+								name="labels"
+								onChange={(e) => {
+									setLabel(e.target.value);
 								}}
-							>
-								{label}
-							</Badge>
-						))}
+								value={label}
+								placeholder="Labels"
+							/>
+							<div className="flex flex-wrap gap-2 mt-2">
+								{labels.map((label) => (
+									<Badge
+										key={label}
+										onClick={() => {
+											setLabels((prev) =>
+												prev.filter((l) => l !== label)
+											);
+										}}
+									>
+										{label}
+									</Badge>
+								))}
+							</div>
+						</form>
+
+						<form
+							onSubmit={(e) => {
+								e.preventDefault();
+								setParticipants((prev) => [
+									...prev,
+									participant,
+								]);
+								setParticipant("");
+							}}
+						>
+							<Input
+								type="text"
+								name="participants"
+								onChange={(e) => {
+									setParticipant(e.target.value);
+								}}
+								value={participant}
+								placeholder="Participants"
+							/>
+							<div className="flex flex-wrap gap-2 mt-2">
+								{participants.map((participant) => (
+									<Badge
+										key={participant}
+										onClick={() => {
+											setParticipants((prev) =>
+												prev.filter(
+													(p) => p !== participant
+												)
+											);
+										}}
+									>
+										{participant}
+									</Badge>
+								))}
+							</div>
+						</form>
+
+						<form
+							onSubmit={handleSubmit}
+							className="flex flex-col gap-2"
+						>
+							<Button type="submit">Submit</Button>
+						</form>
 					</div>
-				</form>
-
-				<form
-					onSubmit={(e) => {
-						e.preventDefault();
-						setParticipants((prev) => [...prev, participant]);
-						setParticipant("");
-					}}
-				>
-					<Input
-						type="text"
-						name="participants"
-						onChange={(e) => {
-							setParticipant(e.target.value);
-						}}
-						value={participant}
-						placeholder="Participants"
-					/>
-					<div className="flex flex-wrap gap-2 mt-2">
-						{participants.map((participant) => (
-							<Badge
-								key={participant}
-								onClick={() => {
-									setParticipants((prev) =>
-										prev.filter((p) => p !== participant)
-									);
-								}}
-							>
-								{participant}
-							</Badge>
-						))}
-					</div>
-				</form>
-
-				<form onSubmit={handleSubmit} className="flex flex-col gap-2">
-					<Button type="submit">Submit</Button>
-				</form>
-			</div>
-		</div>
+				</div>
+			)}
+		</>
 	);
 }
