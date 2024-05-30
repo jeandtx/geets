@@ -78,18 +78,31 @@ export async function createProject(project: Project) {
  */
 
 export async function getProjects(email: string) {
-    try {
-        const client = await clientPromise;
-        const db = client.db("geets");
-        const projects = await db.collection("projects").find({ author: email }).toArray();
-        const data: Project[] = JSON.parse(JSON.stringify(projects)) // Remove ObjectID (not serializable)
-        return data;
-    } catch (err) {
-        console.error("Error fetching projects:", err);
-        return [];
-    }
-}
+    const client = await clientPromise;
+    const db = client.db("geets");
 
+    // Rechercher les projets où l'utilisateur est l'auteur
+    const projects = await db.collection('projects').find({
+        participants: { $elemMatch: { name: email, role: 'author' } }
+    }).toArray();
+
+    // Mapper les données du projet et convertir les ObjectId en string
+    const data: Project[] = projects.map(project => ({
+        _id: project._id.toString(),
+        title: project.title,
+        created: project.created,
+        themes: project.themes,
+        description: project.description,
+        media: project.media,
+        labels: project.labels,
+        participants: project.participants.map((p: any) => ({
+            name: p.name,
+            role: p.role
+        }))
+    }));
+
+    return data;
+}
 
 /**
  * Retrieves one unique project from the database using the project title.
@@ -155,28 +168,37 @@ export async function getUserPosts(email: string): Promise<Post[]> {
     return data
 }
 
-/**
- * Retrieves projects where the user is a participant.
- * @param {string} email - The email of the user to retrieve the projects.
- * @returns {Promise<Array<Project>>} A promise that resolves to an array of projects.
- */
 export async function getParticipantsProjects(email: string): Promise<Project[]> {
-    const client = await clientPromise
-    const db = client.db('geets')
-    const projects = await db.collection('projects').find({ participants: email }).toArray()
-    const data: Project[] = projects.map(project => ({
+    const client = await clientPromise;
+    const db = client.db('geets');
+    
+    // Rechercher les projets où le participant avec l'email spécifié existe
+    const projects = await db.collection('projects').find({
+        participants: { $elemMatch: { name: email } }
+    }).toArray();
+
+    // Filtrer les projets où l'utilisateur est l'auteur
+    const filteredProjects = projects.filter(project => {
+        const author = project.participants.find((p: Participant) => p.role === 'author');
+        return author?.name !== email;
+    });
+
+    // Mapper les données du projet et convertir les ObjectId en string
+    const data: Project[] = filteredProjects.map(project => ({
         _id: project._id.toString(),
-        author: project.author,
         title: project.title,
         created: project.created,
         themes: project.themes,
         description: project.description,
         media: project.media,
         labels: project.labels,
-        participants: project.participants
-    }))
-    return data
-
+        participants: project.participants.map((p: any) => ({
+            name: p.name,
+            role: p.role
+        }))
+    }));
+    
+    return data;
 }
 
 /**

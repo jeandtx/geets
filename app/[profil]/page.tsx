@@ -4,8 +4,8 @@ import Link from "next/link";
 import {
 	getUser,
 	getUserPosts,
-	getProjects,
 	getParticipantsProjects,
+	getProjects,
 } from "@/lib/actions";
 import { Project } from "@/types/tables";
 
@@ -143,31 +143,32 @@ export default async function ProfilPage({
 				<div>No posts found</div>
 			)}
 			<h2 className="text-2xl font-bold">My Projects</h2>
-			{userProjects.length > 0 ? (
+			{Array.isArray(userProjects) && userProjects.length > 0 ? (
 				<div className="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full px-10">
-					{userProjects.map((project) => (
-						<div
-							key={project._id}
-							className="flex max-w-xl overflow-hidden rounded-xl border border-slate-200 bg-white"
-						>
-							<div className="wrapper py-7">
-								<div className="header px-10 mb-4">
-									<div>
-										<Link
-											href={`/${project.author}/${project._id}`}
-										>
-											<p className="text-lg text-gray-900 font-bold">
-												{project.title}
+					{userProjects.map((project) => {
+						const author = project.participants?.find((p: any) => p.role === "author");
+						return (
+							<div
+								key={project._id}
+								className="flex mxax-w-xl overflow-hidden rounded-xl border border-slate-200 bg-white"
+							>
+								<div className="wrapper py-7">
+									<div className="header px-10 mb-4">
+										<div>
+											<Link href={`/${author?.name}/${project._id}`}>
+												<p className="text-lg text-gray-900 font-bold">
+													{project.title}
+												</p>
+											</Link>
+											<p className="text-sm text-gray-600">
+												{project.description}
 											</p>
-										</Link>
-										<p className="text-sm text-gray-600">
-											{project.description}
-										</p>
+										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-					))}
+						);
+					})}
 				</div>
 			) : (
 				<div>No projects found</div>
@@ -179,7 +180,8 @@ export default async function ProfilPage({
 				<div className="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full px-10">
 					{await Promise.all(
 						participatingProjects.map(async (project: Project) => {
-							const author = await getUser(project.author);
+							const author = project.participants?.find(p => p.role === "author");
+							const authorInfo = await getUser(author?.name || '');
 							return (
 								<div
 									key={project._id}
@@ -188,9 +190,7 @@ export default async function ProfilPage({
 									<div className="wrapper py-7">
 										<div className="header px-10 mb-4">
 											<div>
-												<Link
-													href={`/${project.author}/${project._id}`}
-												>
+												<Link href={`/${author?.name}/${project._id}`}>
 													<p className="text-lg text-gray-900 font-bold">
 														{project.title}
 													</p>
@@ -200,8 +200,8 @@ export default async function ProfilPage({
 												</p>
 												<p className="text-sm text-gray-600">
 													Author:{" "}
-													{author
-														? author.pseudo
+													{authorInfo
+														? authorInfo.pseudo
 														: "Unknown"}
 												</p>
 											</div>
