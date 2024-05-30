@@ -162,8 +162,7 @@ export default function SelectProject({
 													</span>
 												) : (
 													<span className="text-xl font-semibold">
-														Connecte toi pour
-														ajouter un projet
+														Connecte toi
 													</span>
 												)}
 											</CardContent>
