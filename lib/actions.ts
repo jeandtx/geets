@@ -1,7 +1,7 @@
 
 'use server'
 import clientPromise from './mongodb'
-import { Post, User, Project } from '../types/tables'
+import { Post, User, Project,Participant } from '../types/tables'
 import { ObjectId } from 'mongodb'; // Import the ObjectId type
 
 /**
@@ -62,8 +62,8 @@ export async function getUserById(id: string) {
 export async function createProject(project: Project) {
     const client = await clientPromise
     const db = client.db('geets')
-    if (!project.title || !project.description || !project.author) {
-        throw new Error('Missing field(s) in project. check title' + project.title + ' description ' + project.description + ' author ' + project.author)
+    if (!project.title || !project.description || !project.participants) {
+        throw new Error('Missing field(s) in project. check title' + project.title + ' description ' + project.description + ' particpants ' + project.participants)
     }
     const result = await db.collection('projects').insertOne({ ...project, _id: new ObjectId() });
     const data = JSON.parse(JSON.stringify(result)) // Remove ObjectID (not serializable)
@@ -179,21 +179,23 @@ export async function getParticipantsProjects(email: string): Promise<Project[]>
 
 }
 
-
 /**
  * Retrieves all the projects from the database.
  * @returns {Promise<any>} A promise that resolves to the projects.
  */
-export async function updateParticipants(projectId: string, newParticipant: string) {
+export async function updateParticipants(projectId: string, newParticipant: Participant) {
     try {
         const project = await getProject(projectId);
         if (!project) {
             throw new Error(`Project with ID ${projectId} not found.`);
         }
 
+        const participantExists = project?.participants?.some(
+            (participant: Participant) => participant.name === newParticipant.name
+        );
 
-        if (project?.participants?.includes(newParticipant)) {
-            throw new Error(`Participant ${newParticipant} already exists in the project.`);
+        if (participantExists) {
+            throw new Error(`Participant ${newParticipant.name} already exists in the project.`);
         }
 
         const updatedParticipants = [...(project.participants || []), newParticipant];

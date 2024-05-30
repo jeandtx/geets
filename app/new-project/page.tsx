@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Project } from "@/types/tables";
+import { Project, Participant } from "@/types/tables";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 import { createProject } from "@/lib/actions";
@@ -16,8 +16,9 @@ export default function NewProject() {
 	const [labels, setLabels] = useState<string[]>([]);
 	const [theme, setTheme] = useState<string>("");
 	const [themes, setThemes] = useState<string[]>([]);
-	const [participant, setParticipant] = useState<string>("");
-	const [participants, setParticipants] = useState<string[]>([]);
+	const [participantName, setParticipantName] = useState<string>("");
+	const [participantRole, setParticipantRole] = useState<string>("");
+	const [participants, setParticipants] = useState<Participant[]>([]);
 	const { toast } = useToast();
 	const { data: session } = useSession();
 	const [imageUrl, setImageUrl] = useState<string>("");
@@ -25,7 +26,6 @@ export default function NewProject() {
 
 	const [project, setProject] = useState<Project>({
 		_id: "Generated",
-		author: "",
 		title: "",
 		themes: [],
 		description: "",
@@ -43,7 +43,7 @@ export default function NewProject() {
 
 	useEffect(() => {
 		if (session && session.user && session.user.email) {
-			setParticipants([session.user.email]);
+			setParticipants([{ name: session.user.email, role: "author" }]);
 		}
 	}, [session]);
 
@@ -59,22 +59,6 @@ export default function NewProject() {
 
 	const handleSubmit = (e: any) => {
 		e.preventDefault();
-		const user = session?.user?.email;
-		if (!user) {
-			toast({
-				variant: "destructive",
-				title: "Uh oh! Something went wrong.",
-				description:
-					"Please check the email or password and try again.",
-			});
-			return;
-		} else {
-			setProject({
-				...project,
-				author: user,
-				participants: [user, ...participants.filter(p => p !== user)]
-			});
-		}
 		createProject(project)
 			.then(() => {
 				toast({
@@ -91,6 +75,17 @@ export default function NewProject() {
 						"Please check the email or password and try again.",
 				});
 			});
+	};
+
+	const handleAddParticipant = () => {
+		if (participantName && participantRole) {
+			setParticipants((prev) => [
+				...prev,
+				{ name: participantName, role: participantRole },
+			]);
+			setParticipantName("");
+			setParticipantRole("");
+		}
 	};
 
 	return (
@@ -204,38 +199,44 @@ export default function NewProject() {
 					</div>
 				</form>
 				
-				<form
-					onSubmit={(e) => {
-						e.preventDefault();
-						setParticipants((prev) => [...prev, participant]);
-						setParticipant("");
-					}}
-				>
+				<div className="flex space-x-2">
 					<Input
 						type="text"
-						name="participants"
+						name="participantName"
 						onChange={(e) => {
-							setParticipant(e.target.value);
+							setParticipantName(e.target.value);
 						}}
-						value={participant}
-						placeholder="Participants"
+						value={participantName}
+						placeholder="Participant Name"
 					/>
-					<div className="flex flex-wrap gap-2 mt-2">
-						{participants.map((participant) => (
+					<Input
+						type="text"
+						name="participantRole"
+						onChange={(e) => {
+							setParticipantRole(e.target.value);
+						}}
+						value={participantRole}
+						placeholder="Participant Role"
+					/>
+					<Button onClick={handleAddParticipant}>Add</Button>
+				</div>
+				<div className="flex flex-wrap gap-2 mt-2">
+					{participants
+						.filter((p) => p.role !== "author")
+						.map((participant) => (
 							<Badge
-								key={participant}
+								key={participant.name}
 								onClick={() => {
 									setParticipants((prev) =>
-										prev.filter((p) => p !== participant)
+										prev.filter((p) => p.name !== participant.name)
 									);
 								}}
 							>
-								{participant}
+								{participant.name} ({participant.role})
 							</Badge>
 						))}
-					</div>
-				</form>
-				
+				</div>
+
 				<form onSubmit={handleSubmit} className="flex flex-col gap-2">
 					<Button type="submit">Submit</Button>
 				</form>
