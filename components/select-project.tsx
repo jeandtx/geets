@@ -11,11 +11,12 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Lightbulb } from "lucide-react";
 import { Project } from "@/types/tables";
+import { getProjects } from "@/lib/actions";
 
 interface SelectProjectProps {
 	onSelectProject: (project: Project) => void;
 	selectedProject: Project | null;
-	user?: string;
+	user: string;
 }
 
 export default function SelectProject({
@@ -27,32 +28,25 @@ export default function SelectProject({
 	const trigger = useRef<HTMLButtonElement>(null);
 	const modal = useRef<HTMLDivElement>(null);
 	const [projects, setProjects] = useState<Project[]>([]);
+	// const [projects, setProjects] = useState<Project[] | null>(null);
+	
 
 	useEffect(() => {
 		const fetchProjects = async () => {
-			if (!user) {
-				return;
-			}
-
-			try {
-				const res = await fetch("/api/" + user + "/projects");
-				if (res.ok && res.body) {
-					const reader = res.body.getReader();
-					const result = await reader.read();
-					const decoder = new TextDecoder("utf-8");
-					const text = decoder.decode(result.value);
-					const projects = JSON.parse(text);
-					setProjects(projects.response);
-				}
-			} catch (error) {
-				console.error("Error fetching projects:", error);
-			}
+			
+				const projects = await getProjects(user);
+				console.log("projects", projects);
+				const data: Project[] = JSON.parse(JSON.stringify(projects));
+				setProjects(data);
+		
 		};
-
-		if (!projects.length) {
+		if (projects.length === 0) {
 			fetchProjects();
 		}
-	}, [user]);
+
+		
+	}, [projects,user]);
+
 
 	useEffect(() => {
 		const clickHandler = ({ target }: MouseEvent) => {
