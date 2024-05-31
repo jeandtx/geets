@@ -1,8 +1,13 @@
-import { auth, signOut } from "@/app/auth";
-import clientPromise from "@/lib/mongodb";
+import { signOut } from "@/app/auth";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { getUser } from "@/lib/actions";
+import {
+	getUser,
+	getUserPosts,
+	getParticipantsProjects,
+	getProjects,
+} from "@/lib/actions";
+import { Project } from "@/types/tables";
 
 function SignOut() {
 	return (
@@ -24,51 +29,193 @@ export default async function ProfilPage({
 }: Readonly<{
 	params: { profil: string };
 }>) {
-	const session = await auth();
 	const { profil } = params;
 	const decodeEmail = decodeURIComponent(profil);
 	const user = await getUser(decodeEmail);
+	const userPosts = await getUserPosts(decodeEmail);
+	const userProjects = await getProjects(decodeEmail);
+	const participatingProjects = await getParticipantsProjects(decodeEmail);
 
 	return (
-		<div className="flex h-screen">
-			<div className="w-screen h-screen flex flex-col space-y-5 justify-center items-center text-black">
-				<div>Search other profils from the database to try</div>
-				<Link href="/sanchezlori@example.com" className="text-textblue">
-					{" "}
-					for example sanchezlori@example.com
-				</Link>
-				<div>
-					Note that you have to be logged in to access this page and
-					any profil page
+		<div className="flex flex-col items-center w-full space-y-5 text-black py-5">
+			<h1 className="text-3xl font-bold">Your Profile</h1>
+			{user ? (
+				<table>
+					<thead>
+						<tr>
+							<th>Field</th>
+							<th>Value</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Pseudo:</td>
+							<td>{user.pseudo}</td>
+						</tr>
+						<tr>
+							<td>Email:</td>
+							<td>{user.email}</td>
+						</tr>
+						<tr>
+							<td>Name:</td>
+							<td>{user.first_name}</td>
+						</tr>
+						<tr>
+							<td>LastName:</td>
+							<td>{user.lastName}</td>
+						</tr>
+						<tr>
+							<td>Age:</td>
+							<td>
+								{user.birth_date?.toLocaleDateString() ??
+									"No data"}
+							</td>
+						</tr>
+						<tr>
+							<td>Localisation:</td>
+							<td>{user.localisation}</td>
+						</tr>
+						<tr>
+							<td>Gender:</td>
+							<td>{user.gender}</td>
+						</tr>
+						<tr>
+							<td>Experience:</td>
+							<td>{user.experience}</td>
+						</tr>
+						<tr>
+							<td>Available:</td>
+							<td>{user.available ? "Yes" : "No"}</td>
+						</tr>
+						<tr>
+							<td>Mobile:</td>
+							<td>{user.mobile}</td>
+						</tr>
+						<tr>
+							<td>Allow Emails:</td>
+							<td>{user.allowEmails ? "Yes" : "No"}</td>
+						</tr>
+						<tr>
+							<td>Account Creation:</td>
+							<td>{user.created?.toLocaleDateString()}</td>
+						</tr>
+					</tbody>
+				</table>
+			) : (
+				<div>User not found :(</div>
+			)}
+			<h2 className="text-2xl font-bold">My Posts</h2>
+			{userPosts.length > 0 ? (
+				<div className="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full px-10">
+					{await Promise.all(
+						userPosts.map(async (post) => {
+							return (
+								<div
+									key={post._id}
+									className="flex max-w-xl overflow-hidden rounded-xl border border-slate-200 bg-white"
+								>
+									<div className="wrapper py-7">
+										<div className="header px-10 mb-4">
+											<div>
+												<p className="text-sm text-gray-600">
+													{post.project?.title
+														? post.project.title
+														: "Nom de projet"}{" "}
+													•{" "}
+													{post.project?._id
+														? post.project._id
+														: "ID de projet"}
+												</p>
+											</div>
+										</div>
+										<div className="body px-10 space-y-5">
+											<p className="text-gray-900 mb-0">
+												{post.content}
+											</p>
+										</div>
+									</div>
+								</div>
+							);
+						})
+					)}
 				</div>
-				<h1 className="text-3xl font-bold ">Profil of {decodeEmail}</h1>
-				{user ? (
-					<>
-						<div>Nom: {user.pseudo}</div>
-						<div>Nom: {user.first_name}</div>
-						<div>
-							Age:{" "}
-							{user.birth_date?.toLocaleString() ?? "no data"}
-						</div>
-						<div>Localisation: {user.localisation}</div>
-						<div>Sexe: {user.gender}</div>
-						<div>Expérience: {user.experience}</div>
-					</>
-				) : (
-					<div>User not found :(</div>
-				)}
-				<div className="text-2xl font-bold ">
-					You are logged in as {session?.user?.email}
+			) : (
+				<div>No posts found</div>
+			)}
+			<h2 className="text-2xl font-bold">My Projects</h2>
+			{Array.isArray(userProjects) && userProjects.length > 0 ? (
+				<div className="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full px-10">
+					{userProjects.map((project) => {
+						const author = project.participants?.find((p: any) => p.role === "author");
+						return (
+							<div
+								key={project._id}
+								className="flex mxax-w-xl overflow-hidden rounded-xl border border-slate-200 bg-white"
+							>
+								<div className="wrapper py-7">
+									<div className="header px-10 mb-4">
+										<div>
+											<Link href={`/${author?.name}/${project._id}`}>
+												<p className="text-lg text-gray-900 font-bold">
+													{project.title}
+												</p>
+											</Link>
+											<p className="text-sm text-gray-600">
+												{project.description}
+											</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						);
+					})}
 				</div>
-
-				<Link
-					href={`/${session?.user?.email}`}
-					className="text-textblue"
-				>
-					Back to my profile
-				</Link>
-				<SignOut />
-			</div>
+			) : (
+				<div>No projects found</div>
+			)}
+			<h2 className="text-2xl font-bold">
+				Projects I am Participating In
+			</h2>
+			{participatingProjects.length > 0 ? (
+				<div className="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full px-10">
+					{await Promise.all(
+						participatingProjects.map(async (project: Project) => {
+							const author = project.participants?.find(p => p.role === "author");
+							const authorInfo = await getUser(author?.name || '');
+							return (
+								<div
+									key={project._id}
+									className="flex max-w-xl overflow-hidden rounded-xl border border-slate-200 bg-white"
+								>
+									<div className="wrapper py-7">
+										<div className="header px-10 mb-4">
+											<div>
+												<Link href={`/${author?.name}/${project._id}`}>
+													<p className="text-lg text-gray-900 font-bold">
+														{project.title}
+													</p>
+												</Link>
+												<p className="text-sm text-gray-600">
+													{project.description}
+												</p>
+												<p className="text-sm text-gray-600">
+													Author:{" "}
+													{authorInfo
+														? authorInfo.pseudo
+														: "Unknown"}
+												</p>
+											</div>
+										</div>
+									</div>
+								</div>
+							);
+						})
+					)}
+				</div>
+			) : (
+				<div>No participating projects found</div>
+			)}
+			<SignOut />
 		</div>
 	);
 }

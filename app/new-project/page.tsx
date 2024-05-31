@@ -4,27 +4,33 @@ import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Project } from "@/types/tables";
+import { Project, Participant } from "@/types/tables";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 import { createProject } from "@/lib/actions";
 import { useSession } from "next-auth/react";
+import { CldUploadWidget } from "next-cloudinary";
 
 export default function NewProject() {
 	const [label, setLabel] = useState<string>("");
 	const [labels, setLabels] = useState<string[]>([]);
 	const [theme, setTheme] = useState<string>("");
 	const [themes, setThemes] = useState<string[]>([]);
+	const [participantName, setParticipantName] = useState<string>("");
+	const [participantRole, setParticipantRole] = useState<string>("");
+	const [participants, setParticipants] = useState<Participant[]>([]);
 	const { toast } = useToast();
-	const session = useSession();
+	const { data: session } = useSession();
+	const [imageUrl, setImageUrl] = useState<string>("");
+	const [imageName, setImageName] = useState<string>("Ajouter une photo");
+
 	const [project, setProject] = useState<Project>({
 		_id: "Generated",
-		author: "",
 		title: "",
-		themes: themes,
+		themes: [],
 		description: "",
 		media: "",
-		labels: labels,
+		labels: [],
 		participants: [],
 	});
 
@@ -36,37 +42,29 @@ export default function NewProject() {
 	};
 
 	useEffect(() => {
+		if (session && session.user && session.user.email) {
+			setParticipants([{ name: session.user.email, role: "author" }]);
+		}
+	}, [session]);
+
+	useEffect(() => {
 		setProject({
 			...project,
 			themes: themes,
 			labels: labels,
+			media: imageUrl,
+			participants: participants,
 		});
-	}, [themes, labels]);
+	}, [themes, labels, imageUrl, participants]);
 
 	const handleSubmit = (e: any) => {
 		e.preventDefault();
-		const user =
-			session.data && session.data.user && session.data.user.email;
-		if (!user) {
-			toast({
-				variant: "destructive",
-				title: "Uh oh! Something went wrong.",
-				description:
-					"Please check the email or password and try again.",
-			});
-			return;
-		} else {
-			setProject({
-				...project,
-				author: user,
-			});
-		}
 		createProject(project)
 			.then(() => {
 				toast({
 					title: "Success!",
 					description:
-						"Your form has been submitted. with " + project.title,
+						"Your form has been submitted with " + project.title,
 				});
 			})
 			.catch(() => {
@@ -76,18 +74,28 @@ export default function NewProject() {
 					description:
 						"Please check the email or password and try again.",
 				});
-				return;
 			});
 	};
 
+	const handleAddParticipant = () => {
+		if (participantName && participantRole) {
+			setParticipants((prev) => [
+				...prev,
+				{ name: participantName, role: participantRole },
+			]);
+			setParticipantName("");
+			setParticipantRole("");
+		}
+	};
+
 	return (
-		<div>
+		<div className="flex flex-col w-full mx-auto mt-8 bg-white p-8 rounded-lg shadow-lg">
 			<div>
 				<h1 className="text-3xl font-bold text-center mt-8">
 					New Project
 				</h1>
 			</div>
-			<div className="flex flex-col space-y-4 w-1/2 mx-auto mt-8">
+			<div className="flex flex-col space-y-4 w-10/12 mx-auto mt-8 ">
 				<Input
 					type="text"
 					name="title"
@@ -131,12 +139,33 @@ export default function NewProject() {
 					onChange={handleChange}
 					placeholder="Description"
 				/>
-				<Input
-					type="text"
-					name="media"
-					onChange={handleChange}
-					placeholder="Media"
-				/>
+
+				{/* Media Upload Section */}
+				<CldUploadWidget
+					uploadPreset="onrkam98"
+					onSuccess={(result) => {
+						setImageUrl((result as any).info.secure_url);
+						setImageName((result as any).info.original_filename); // Update the image name
+					}}
+				>
+					{({ open }) => {
+						return (
+							<button
+								className="overflow-hidden inline-flex items-center justify-center rounded-md bg-primary px-6 py-3 text-base font-medium text-white"
+								style={{
+									height: "40px",
+									whiteSpace: "nowrap",
+									textOverflow: "ellipsis",
+									overflow: "hidden",
+								}}
+								type="button"
+								onClick={() => open()}
+							>
+								{imageName}
+							</button>
+						);
+					}}
+				</CldUploadWidget>
 
 				<form
 					onSubmit={(e) => {
@@ -169,12 +198,45 @@ export default function NewProject() {
 						))}
 					</div>
 				</form>
-				<Input
-					type="text"
-					name="participants"
-					onChange={handleChange}
-					placeholder="Participants"
-				/>
+				
+				<div className="flex space-x-2">
+					<Input
+						type="text"
+						name="participantName"
+						onChange={(e) => {
+							setParticipantName(e.target.value);
+						}}
+						value={participantName}
+						placeholder="Participant Name"
+					/>
+					<Input
+						type="text"
+						name="participantRole"
+						onChange={(e) => {
+							setParticipantRole(e.target.value);
+						}}
+						value={participantRole}
+						placeholder="Participant Role"
+					/>
+					<Button onClick={handleAddParticipant}>Add</Button>
+				</div>
+				<div className="flex flex-wrap gap-2 mt-2">
+					{participants
+						.filter((p) => p.role !== "author")
+						.map((participant) => (
+							<Badge
+								key={participant.name}
+								onClick={() => {
+									setParticipants((prev) =>
+										prev.filter((p) => p.name !== participant.name)
+									);
+								}}
+							>
+								{participant.name} ({participant.role})
+							</Badge>
+						))}
+				</div>
+
 				<form onSubmit={handleSubmit} className="flex flex-col gap-2">
 					<Button type="submit">Submit</Button>
 				</form>

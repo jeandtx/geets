@@ -1,17 +1,15 @@
 import { Metadata } from "next";
 import { InputPost } from "@/components/inputpost";
-import { UpperBar } from "@/components/upper-bar";
 
 export const metadata: Metadata = {
-	title: "Test zone",
+	title: "Testing page",
 };
 
-export default async function Dashboard() {
+export default async function TestingPage() {
 	return (
-		<div className="p-5">
-			<InputPost />
-			<div className="">
-				<UpperBar />
+		<div className="p-2 ">
+			<div className="p-4 rounded-2xl bg-white">
+				<InputPost />
 			</div>
 		</div>
 	);

@@ -1,24 +1,17 @@
-// export interface Comment {
-//     _id: string;
-//     post: string;
-//     content: string;
-//     created: Date;
-// }
-
-// export interface Like{
-//     _id: string;
-//     post: string;
-//     user: string;
-//     created: Date;
-// }
-
 export interface Post {
     _id: string;
-    project: string;
-    title: string;
-    content?: string;
+    project: {
+        _id: string;
+        title: string;
+    };
+    content: string;
     time: Date;
-    author: string;
+    author: {
+        _id: string;
+        pseudo: string;
+        email: string;
+        media: string;
+    };
     media?: string;
     labels?: string[];
 }
@@ -30,34 +23,31 @@ export interface User {
     pseudo?: string;
     projectIds?: string[];
     labels?: string[];
-    profil_picture?: string;
+    media?: string;
     first_name?: string;
     lastName?: string;
     birth_date: Date;
     localisation?: string;
     gender?: string;
     experience?: string;
-    available?: string;
+    available?: boolean;
     mobile?: string;
     allowEmails?: boolean;
     created?: Date;
 }
 
-// export interface Participate{
-//     _id: string;
-//     project: string;
-//     user: string;
-//     created: Date;
-// }
+export interface Participant {
+    name: string;
+    role: string;
+}
 
 export interface Project {
     _id: string;
-    author: string;
     title: string;
     created?: Date;
     themes?: string[];
     description?: string;
     media?: string;
     labels?: string[];
-    participants?: string[];
+    participants?: Participant[];
 }
