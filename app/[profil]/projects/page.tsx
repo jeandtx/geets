@@ -19,7 +19,7 @@ export default async function ProjectsPage() {
 	const projectList = projects
 		.filter(
 			(project) =>
-				project.title && project.description && project.author !== null
+				project.title && project.description !== null
 		)
 		.map((project) => (
 			<div
@@ -36,9 +36,8 @@ export default async function ProjectsPage() {
 							{project.title}
 						</Link>
 					</div>
-					<div>Owner: {project.author}</div>
 					<div>Description: {project.description}</div>
-					<div>Participants: {project.participants}</div>
+					<div>Participants: "to update"</div>
 					<div>
 						Themes:{" "}
 						{project.themes
