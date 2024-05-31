@@ -36,14 +36,18 @@ export interface User {
     created?: Date;
 }
 
+export interface Participant {
+    name: string;
+    role: string;
+}
+
 export interface Project {
     _id: string;
-    author: string;
     title: string;
     created?: Date;
     themes?: string[];
     description?: string;
     media?: string;
     labels?: string[];
-    participants?: string[];
+    participants?: Participant[];
 }

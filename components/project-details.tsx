@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
-import { Post, Project } from "@/types/tables";
+import { Post, Project, Participant } from "@/types/tables";
 import Img from "next/image";
 import { updateParticipants } from "@/lib/actions";
 import { useToast } from "@/components/ui/use-toast";
@@ -14,14 +14,14 @@ interface ProjectDetailsProps {
 }
 
 const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, posts }) => {
-	const [participants, setParticipants] = useState<string[]>(
+	const [participants, setParticipants] = useState<Participant[]>(
 		project.participants || []
 	);
 	const { data: session } = useSession();
 	const { toast } = useToast();
 
-	const handleAddParticipant = async (newParticipant: string) => {
-		if (participants.includes(newParticipant)) {
+	const handleAddParticipant = async (newParticipantEmail: string) => {
+		if (participants.some(p => p.name === newParticipantEmail)) {
 			toast({
 				title: "Already a participant",
 				description: `You are already a participant in this project.`,
@@ -30,6 +30,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, posts }) => {
 			return;
 		}
 
+		const newParticipant: Participant = { name: newParticipantEmail, role: "participant" };
 		const result = await updateParticipants(
 			project._id.toString(),
 			newParticipant
@@ -49,6 +50,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, posts }) => {
 			});
 			console.error("Failed to update participants.");
 		}
+		console.log("project media is", project.media);
 	};
 
 	return (
@@ -72,9 +74,11 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, posts }) => {
 									<div className="text-3xl font-medium text-black">
 										{project.title}
 									</div>
-									<div className="text-s text-gray-500">
-										{project.author}
-									</div>
+									{participants.find(p => p.role === 'author') && (
+										<div className="text-s text-gray-500">
+											{participants.find(p => p.role === 'author')?.name}
+										</div>
+									)}
 								</div>
 							</div>
 							{session?.user?.email && (
@@ -105,10 +109,11 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, posts }) => {
 								Participants
 							</div>
 							<div className="flex flex-wrap gap-4">
-								{participants.map((participantEmail) => (
+								{participants.map(participant => (
 									<ProfileCard
-										key={participantEmail}
-										email={participantEmail}
+										key={participant.name}
+										email={participant.name}
+										role={participant.role}
 									/>
 								))}
 							</div>

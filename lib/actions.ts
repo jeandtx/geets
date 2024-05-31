@@ -1,7 +1,7 @@
 
 'use server'
 import clientPromise from './mongodb'
-import { Post, User, Project } from '../types/tables'
+import { Post, User, Project,Participant } from '../types/tables'
 import { ObjectId } from 'mongodb'; // Import the ObjectId type
 
 /**
@@ -62,8 +62,8 @@ export async function getUserById(id: string) {
 export async function createProject(project: Project) {
     const client = await clientPromise
     const db = client.db('geets')
-    if (!project.title || !project.description || !project.author) {
-        throw new Error('Missing field(s) in project. check title' + project.title + ' description ' + project.description + ' author ' + project.author)
+    if (!project.title || !project.description || !project.participants) {
+        throw new Error('Missing field(s) in project. check title' + project.title + ' description ' + project.description + ' particpants ' + project.participants)
     }
     const result = await db.collection('projects').insertOne({ ...project, _id: new ObjectId() });
     const data = JSON.parse(JSON.stringify(result)) // Remove ObjectID (not serializable)
@@ -78,18 +78,31 @@ export async function createProject(project: Project) {
  */
 
 export async function getProjects(email: string) {
-    try {
-        const client = await clientPromise;
-        const db = client.db("geets");
-        const projects = await db.collection("projects").find({ author: email }).toArray();
-        const data: Project[] = JSON.parse(JSON.stringify(projects)) // Remove ObjectID (not serializable)
-        return data;
-    } catch (err) {
-        console.error("Error fetching projects:", err);
-        return [];
-    }
-}
+    const client = await clientPromise;
+    const db = client.db("geets");
 
+    // Rechercher les projets où l'utilisateur est l'auteur
+    const projects = await db.collection('projects').find({
+        participants: { $elemMatch: { name: email, role: 'author' } }
+    }).toArray();
+
+    // Mapper les données du projet et convertir les ObjectId en string
+    const data: Project[] = projects.map(project => ({
+        _id: project._id.toString(),
+        title: project.title,
+        created: project.created,
+        themes: project.themes,
+        description: project.description,
+        media: project.media,
+        labels: project.labels,
+        participants: project.participants.map((p: any) => ({
+            name: p.name,
+            role: p.role
+        }))
+    }));
+
+    return data;
+}
 
 /**
  * Retrieves one unique project from the database using the project title.
@@ -155,45 +168,56 @@ export async function getUserPosts(email: string): Promise<Post[]> {
     return data
 }
 
-/**
- * Retrieves projects where the user is a participant.
- * @param {string} email - The email of the user to retrieve the projects.
- * @returns {Promise<Array<Project>>} A promise that resolves to an array of projects.
- */
 export async function getParticipantsProjects(email: string): Promise<Project[]> {
-    const client = await clientPromise
-    const db = client.db('geets')
-    const projects = await db.collection('projects').find({ participants: email }).toArray()
-    const data: Project[] = projects.map(project => ({
+    const client = await clientPromise;
+    const db = client.db('geets');
+    
+    // Rechercher les projets où le participant avec l'email spécifié existe
+    const projects = await db.collection('projects').find({
+        participants: { $elemMatch: { name: email } }
+    }).toArray();
+
+    // Filtrer les projets où l'utilisateur est l'auteur
+    const filteredProjects = projects.filter(project => {
+        const author = project.participants.find((p: Participant) => p.role === 'author');
+        return author?.name !== email;
+    });
+
+    // Mapper les données du projet et convertir les ObjectId en string
+    const data: Project[] = filteredProjects.map(project => ({
         _id: project._id.toString(),
-        author: project.author,
         title: project.title,
         created: project.created,
         themes: project.themes,
         description: project.description,
         media: project.media,
         labels: project.labels,
-        participants: project.participants
-    }))
-    return data
-
+        participants: project.participants.map((p: any) => ({
+            name: p.name,
+            role: p.role
+        }))
+    }));
+    
+    return data;
 }
-
 
 /**
  * Retrieves all the projects from the database.
  * @returns {Promise<any>} A promise that resolves to the projects.
  */
-export async function updateParticipants(projectId: string, newParticipant: string) {
+export async function updateParticipants(projectId: string, newParticipant: Participant) {
     try {
         const project = await getProject(projectId);
         if (!project) {
             throw new Error(`Project with ID ${projectId} not found.`);
         }
 
+        const participantExists = project?.participants?.some(
+            (participant: Participant) => participant.name === newParticipant.name
+        );
 
-        if (project?.participants?.includes(newParticipant)) {
-            throw new Error(`Participant ${newParticipant} already exists in the project.`);
+        if (participantExists) {
+            throw new Error(`Participant ${newParticipant.name} already exists in the project.`);
         }
 
         const updatedParticipants = [...(project.participants || []), newParticipant];
