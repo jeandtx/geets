@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { createWorkout } from "@/lib/actions";
 import { useSession } from 'next-auth/react';
-import { useToast } from "./ui/use-toast";
+import { useToast } from "../ui/use-toast";
 
 export function AddWorkout({ closeModal }: { closeModal: () => void }) {
     const { toast } = useToast();

@@ -4,7 +4,8 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import SessionWrapper from "./sessionwrapper";
 import { Sidebar } from "@/components/sidebar";
-import Link from "next/link";
+import { WorkoutProvider } from "./context/WorkoutContext";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -25,12 +26,14 @@ export default function RootLayout({
 			<body className={inter.className}>
 				<div className="flex w-full h-screen overflow-hidden">
 					<SessionWrapper>
+						<WorkoutProvider>
 						<Sidebar className="w-1/5 bg-gray-200" />
 						<div className="lg:w-4/5 w-full">{children}</div>
+						</WorkoutProvider>
 					</SessionWrapper>
 				</div>
+				<Toaster />
 			</body>
-					<Toaster />
 		</html>
 	);
 }

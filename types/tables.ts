@@ -15,6 +15,7 @@ export interface Workout {
 }
 export interface Session {
     _id: string;
+    workoutId: string;
     date: Date;
     exercises: {
         [exerciseName: string]: {

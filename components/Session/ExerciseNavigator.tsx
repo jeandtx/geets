@@ -62,7 +62,7 @@ const ExerciseNavigator: React.FC<ExerciseNavigatorProps> = ({ exercises, id }) 
       // Rediriger vers la page précédente après un court délai pour afficher le toaster
       setTimeout(() => {
         router.back();
-      }, 2500);
+      }, 1000);
     } catch (error) {
       console.error("Error creating session:", error);
       toast({

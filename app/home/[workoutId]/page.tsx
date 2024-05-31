@@ -1,6 +1,6 @@
 import React from "react";
 import { getWorkout } from "@/lib/actions";
-import ExerciseNavigator from "@/components/ExerciseNavigator";
+import ExerciseNavigator from "@/components/Session/ExerciseNavigator";
 
 export default async function WorkoutPage({
   params,

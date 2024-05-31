@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { signIn } from "@/app/auth";
 import { SubmitButton } from "@/components/ui/submit-button";
-import { SigninForm} from "@/components/SigninForm";
+import { SigninForm} from "@/components/AuthPart/SigninForm";
 
 export default function Login() {
 	return (

@@ -23,7 +23,7 @@ export function Sidebar({ className }: SidebarProps) {
               Navigate
             </h2>
             <div className="space-y-1">
-              <Link href={"/"}>
+              <Link href={"/home"}>
                 <Button variant="ghost" className="w-full justify-start">
                   <Home className="mr-2 h-6 w-6" />
                   Home
@@ -54,7 +54,7 @@ export function Sidebar({ className }: SidebarProps) {
             <span className="text-sm">Dashboard</span>
           </Button>
         </Link>
-        <Link href={"/"}>
+        <Link href={"/home"}>
           <Button variant="ghost" className="h-15 w-15 flex flex-col items-center">
             <Home className="h-12" />
             <span className="text-sm">Home</span>

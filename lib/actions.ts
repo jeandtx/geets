@@ -120,6 +120,7 @@ export async function createSession(workoutId: string, exercises: { [key: string
         // Créer la nouvelle session
         const session = {
             _id: new ObjectId(),
+            workoutId: new ObjectId(workoutId),
             date: new Date(),
             exercises: transformedExercises
         };
@@ -137,3 +138,13 @@ export async function createSession(workoutId: string, exercises: { [key: string
         throw error;
     }
 }
+export async function getSessions(workoutId: string): Promise<{ id: string; date: string }[]> {
+    const client = await clientPromise;
+    const db = client.db('bodyscan');
+    const sessions = await db.collection('sessions').find({ workoutId: new ObjectId(workoutId) }).toArray();
+  
+    return sessions.map(session => ({
+      id: session._id.toString(),
+      date: session.date,
+    }));
+  }
