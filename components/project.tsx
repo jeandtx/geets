@@ -23,6 +23,7 @@ export function ProjectCard({
 			description: "Your project has been deleted.",
 		});
 	};
+	const author = project.participants?.find((p) => p.role === "author");
 	return (
 		<div
 			className={cn(
@@ -33,7 +34,7 @@ export function ProjectCard({
 			<div className="wrapper py-7 w-full">
 				<div className="header px-10 mb-4  flex flex-row justify-between">
 					<div>
-						<Link href={`/${project.author}/${project._id}`}>
+						<Link href={`/${author}/${project._id}`}>
 							<p className="text-lg text-gray-900 font-bold">
 								{project.title}
 							</p>
