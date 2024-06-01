@@ -18,7 +18,13 @@ export function Projects({ className, email }: Readonly<ProjectsProps>) {
 	useEffect(() => {
 		const fetchProjects = async () => {
 			if (email !== "" && projects === null) {
-				const projects = await getProjects({ author: email });
+				const projects = await getProjects({
+					participants: {
+						$elemMatch: {
+							name: email,
+						},
+					},
+				});
 				const data: Project[] = JSON.parse(JSON.stringify(projects));
 				setProjects(data);
 			}

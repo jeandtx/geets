@@ -14,7 +14,13 @@ export default async function ProjectsPage() {
 	if (!userEmail) {
 		return <div>Please log in to view your projects.</div>;
 	}
-	const projects: Project[] = await getProjects({ author: userEmail });
+	const projects: Project[] = await getProjects({
+		participants: {
+			$elemMatch: {
+				name: userEmail,
+			},
+		},
+	});
 
 	const projectList = projects
 		.filter((project) => project.title && project.description !== null)
