@@ -23,7 +23,7 @@ export function ProjectCard({
 			description: "Your project has been deleted.",
 		});
 	};
-	const author = project.participants?.find((p) => p.role === "author");
+	const author = project.participants?.find((p) => p.role === "author")?.name;
 	return (
 		<div
 			className={cn(

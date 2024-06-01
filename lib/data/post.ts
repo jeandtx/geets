@@ -15,7 +15,7 @@ export async function getPosts(page: number = 1) {
     const db = client.db('geets')
     const postsPerPage = 2
     const offset = (page - 1) * postsPerPage
-    const posts = await db.collection('posts_fake').find({}).sort({ time: 1 }).skip(offset).limit(postsPerPage).toArray()
+    const posts = await db.collection('posts').find({}).sort({ time: 1 }).skip(offset).limit(postsPerPage).toArray()
     const data: Post[] = JSON.parse(JSON.stringify(posts)) // Remove ObjectID (not serializable)
 
     return data
