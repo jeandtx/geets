@@ -31,9 +31,17 @@ export default async function ProfilPage({
 	const decodeEmail = decodeURIComponent(profil);
 	const user = await getUser(decodeEmail);
 	const userPosts = await getUserPosts(decodeEmail);
-	const userProjects = await getProjects({ author: decodeEmail });
+	const userProjects = await getProjects({
+		participants: {
+			name: decodeEmail,
+			role: "author",
+		},
+	});
 	const participatingProjects = await getProjects({
-		participants: [decodeEmail],
+		participants: {
+			name: decodeEmail,
+			role: { $ne: "author" },
+		},
 	});
 
 	return (
@@ -143,7 +151,7 @@ export default async function ProfilPage({
 				<div>No posts found</div>
 			)}
 			<h2 className="text-2xl font-bold">My Projects</h2>
-			{userProjects.length > 0 ? (
+			{Array.isArray(userProjects) && userProjects.length > 0 ? (
 				<div className="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full px-10">
 					{userProjects.map((project) => (
 						<ProjectCard key={project._id} project={project} />
@@ -159,7 +167,16 @@ export default async function ProfilPage({
 				<div className="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full px-10">
 					{await Promise.all(
 						participatingProjects.map(async (project: Project) => {
-							const author = await getUser(project.author);
+							const author = project.participants
+								? project.participants.find(
+										(participant) =>
+											participant.role === "author"
+								  )
+								: null;
+
+							const authorInfo = await getUser(
+								author?.name || ""
+							);
 							return (
 								<div
 									key={project._id.toString()}
@@ -169,7 +186,7 @@ export default async function ProfilPage({
 										<div className="header px-10 mb-4">
 											<div>
 												<Link
-													href={`/${project.author}/${project._id}`}
+													href={`/${author?.name}/${project._id}`}
 												>
 													<p className="text-lg text-gray-900 font-bold">
 														{project.title}
@@ -180,8 +197,8 @@ export default async function ProfilPage({
 												</p>
 												<p className="text-sm text-gray-600">
 													Author:{" "}
-													{author
-														? author.pseudo
+													{authorInfo
+														? authorInfo.pseudo
 														: "Unknown"}
 												</p>
 											</div>

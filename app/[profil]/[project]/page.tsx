@@ -1,5 +1,4 @@
 // page.tsx
-import { getUser } from "@/lib/data/user";
 import { getProject } from "@/lib/data/project";
 import { getPostsByProjectId } from "@/lib/data/post";
 import { Post, Project } from "@/types/tables";

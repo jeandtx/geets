@@ -14,8 +14,8 @@ import { ObjectId } from 'mongodb';
 export async function createProject(project: Project) {
     const client = await clientPromise
     const db = client.db('geets')
-    if (!project.title || !project.description || !project.author) {
-        throw new Error('Missing field(s) in project. check title' + project.title + ' description ' + project.description + ' author ' + project.author)
+    if (!project.title || !project.description || !project.participants) {
+        throw new Error('Missing field(s) in project. check title' + project.title + ' description ' + project.description + ' author ' + project.participants)
     }
     const result = await db.collection('projects').insertOne({ ...project, _id: new ObjectId() });
     const data = JSON.parse(JSON.stringify(result)) // Remove ObjectID (not serializable)
@@ -29,7 +29,7 @@ export async function createProject(project: Project) {
  * @returns {Promise<any>} A promise that resolves to the projects.
  * @throws {Error} If the user is not logged in.
  */
-export async function getProjects(query: Partial<Project>): Promise<Project[]> {
+export async function getProjects(query: Partial<Project> | any): Promise<Project[]> {
     try {
         const client = await clientPromise;
         const db = client.db("geets");

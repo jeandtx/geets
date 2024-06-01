@@ -17,10 +17,7 @@ export default async function ProjectsPage() {
 	const projects: Project[] = await getProjects({ author: userEmail });
 
 	const projectList = projects
-		.filter(
-			(project) =>
-				project.title && project.description && project.author !== null
-		)
+		.filter((project) => project.title && project.description !== null)
 		.map((project) => (
 			<div
 				key={project._id.toString()}
@@ -36,9 +33,8 @@ export default async function ProjectsPage() {
 							{project.title}
 						</Link>
 					</div>
-					<div>Owner: {project.author}</div>
 					<div>Description: {project.description}</div>
-					<div>Participants: {project.participants}</div>
+					<div>Participants: &quot;to update&quot;</div>
 					<div>
 						Themes:{" "}
 						{project.themes

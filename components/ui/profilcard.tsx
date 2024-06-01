@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { getUser } from "@/lib/data/user";
 import { User } from "@/types/tables";
-import Link from "next/link";
 
 interface ProfileCardProps {
 	email: string;
+	role: string;
 }
 
-const ProfileCard: React.FC<ProfileCardProps> = ({ email }) => {
+const ProfileCard: React.FC<ProfileCardProps> = ({ email, role }) => {
 	const [user, setUser] = useState<User | null>(null);
 
 	useEffect(() => {
@@ -30,13 +30,15 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ email }) => {
 				<Avatar>
 					<AvatarImage
 						src="https://avatars.githubusercontent.com/u/124599?v=4"
-						alt="n"
+						alt="Anonymous"
 					/>
-					<AvatarFallback>A</AvatarFallback>
+					<AvatarFallback>
+						{email.charAt(0).toUpperCase()}
+					</AvatarFallback>
 				</Avatar>
 				<div className="ml-4">
 					<div className="text-xl font-bold">{email}</div>
-					<div className="text-sm text-gray-500">Membre anonyme</div>
+					<div className="text-sm text-gray-500">{role}</div>
 				</div>
 			</div>
 		);
@@ -49,15 +51,15 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ email }) => {
 					src={user.media ?? ""}
 					alt={user.first_name ?? "Anonymous"}
 				/>
-				<AvatarFallback>{user.email?.charAt(0) || "A"}</AvatarFallback>
+				<AvatarFallback>
+					{user.email?.charAt(0).toUpperCase() || "A"}
+				</AvatarFallback>
 			</Avatar>
 			<div className="ml-4">
-				<Link href={`/${encodeURIComponent(user.email)}`}>
-					<div className="text-xl font-bold">
-						{user.email || "Anonymous"}
-					</div>
-				</Link>
-				<div className="text-sm text-gray-500">Membre du projet</div>
+				<div className="text-xl font-bold">
+					{user.email || "Anonymous"}
+				</div>
+				<div className="text-sm text-gray-500">{role}</div>
 			</div>
 		</div>
 	);
