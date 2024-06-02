@@ -1,9 +1,9 @@
-import { signOut } from "@/app/auth";
+import { auth, signOut } from "@/app/auth";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { getUser } from "@/lib/data/user";
 import { getProjects } from "@/lib/data/project";
-import { getUserPosts } from "@/lib/data/post";
+import { getPosts } from "@/lib/data/post";
 import type { Project } from "@/types/tables";
 import { ProjectCard } from "@/components/project";
 
@@ -30,7 +30,9 @@ export default async function ProfilPage({
 	const { profil } = params;
 	const decodeEmail = decodeURIComponent(profil);
 	const user = await getUser(decodeEmail);
-	const userPosts = await getUserPosts(decodeEmail);
+	const userPosts = await getPosts(-1, {
+		"author.email": decodeEmail,
+	});
 	const userProjects = await getProjects({
 		participants: {
 			name: decodeEmail,
@@ -39,8 +41,7 @@ export default async function ProfilPage({
 	});
 	const participatingProjects = await getProjects({
 		participants: {
-			name: decodeEmail,
-			role: { $ne: "author" },
+			$elemMatch: { name: decodeEmail, role: { $ne: "author" } },
 		},
 	});
 
@@ -161,7 +162,7 @@ export default async function ProfilPage({
 				<div>No projects found</div>
 			)}
 			<h2 className="text-2xl font-bold">
-				Projects I am Participating In
+				Projects {decodeEmail} is participating in
 			</h2>
 			{participatingProjects.length > 0 ? (
 				<div className="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full px-10">
@@ -198,7 +199,7 @@ export default async function ProfilPage({
 												<p className="text-sm text-gray-600">
 													Author:{" "}
 													{authorInfo
-														? authorInfo.pseudo
+														? authorInfo.email
 														: "Unknown"}
 												</p>
 											</div>
