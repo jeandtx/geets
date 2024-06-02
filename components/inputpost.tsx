@@ -9,6 +9,7 @@ import SelectProject from "./select-project";
 import { CldUploadWidget } from "next-cloudinary";
 import { Post, Project } from "../types/tables";
 import { Image, Send } from "lucide-react";
+import { useUserInfo } from '@/app/context/UserInfoContext'; // Assurez-vous de modifier le chemin d'importation
 
 export interface InputPostProps {
 	className?: string;
@@ -20,20 +21,18 @@ export function InputPost({ className }: Readonly<InputPostProps>) {
 	const [isExpanded, setIsExpanded] = useState(false);
 	const formRef = useRef<HTMLFormElement>(null);
 	const [textareaHeight, setTextareaHeight] = useState("min-h-[40px]");
-	const [selectedProject, setSelectedProject] = useState<Project | null>(
-		null
-	);
+	const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 	const [imageUrl, setImageUrl] = useState<string | null>(null);
 	const [imageName, setImageName] = useState<string>("Ajouter une photo");
-
 	const { toast } = useToast();
+	const { userInfo, status } = useUserInfo();
+
+	const DEFAULT_USER_IMAGE = "https://res.cloudinary.com/dekbkndn8/image/upload/v1715719366/samples/balloons.jpg";
+
 
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
-			if (
-				formRef.current &&
-				!formRef.current.contains(event.target as Node)
-			) {
+			if (formRef.current && !formRef.current.contains(event.target as Node)) {
 				setIsExpanded(false);
 				setTextareaHeight("min-h-[40px]");
 			}
@@ -62,8 +61,7 @@ export function InputPost({ className }: Readonly<InputPostProps>) {
 			toast({
 				variant: "destructive",
 				title: "Uh oh! Something went wrong.",
-				description:
-					"Please provide a description and select a project.",
+				description: "Please provide a description and select a project.",
 			});
 			return;
 		}
@@ -77,6 +75,8 @@ export function InputPost({ className }: Readonly<InputPostProps>) {
 			return;
 		}
 
+		const userMedia = userInfo?.media || DEFAULT_USER_IMAGE;
+
 		const post: Post = {
 			_id: "",
 			project: {
@@ -89,9 +89,9 @@ export function InputPost({ className }: Readonly<InputPostProps>) {
 				_id: "",
 				pseudo: session.user.name ?? "",
 				email: session.user.email,
-				media: imageUrl ?? "",
+				media: userMedia,
 			},
-			media: imageUrl ?? undefined,
+			media: imageUrl ?? "",
 			labels: [],
 		};
 
@@ -123,6 +123,18 @@ export function InputPost({ className }: Readonly<InputPostProps>) {
 			});
 	};
 
+	const handleSelectProject = (project: Project | null) => {
+		if (!session) {
+			toast({
+				variant: "destructive",
+				title: "Not authenticated",
+				description: "Please log in to select a project.",
+			});
+			return;
+		}
+		setSelectedProject(project);
+	};
+
 	return (
 		<div className={className}>
 			<form
@@ -132,7 +144,7 @@ export function InputPost({ className }: Readonly<InputPostProps>) {
 			>
 				<div className="flex gap-2">
 					<Avatar>
-						<AvatarImage src="https://github.com/shadcn.png" />
+						<AvatarImage src={userInfo?.media || DEFAULT_USER_IMAGE} />
 						<AvatarFallback>CN</AvatarFallback>
 					</Avatar>
 					<Textarea
@@ -161,7 +173,7 @@ export function InputPost({ className }: Readonly<InputPostProps>) {
 
 				<div className="flex justify-between items-center w-full">
 					<SelectProject
-						onSelectProject={setSelectedProject}
+						onSelectProject={handleSelectProject}
 						selectedProject={selectedProject}
 						user={session?.user?.email ?? ""}
 					/>
@@ -169,9 +181,7 @@ export function InputPost({ className }: Readonly<InputPostProps>) {
 						uploadPreset="onrkam98"
 						onSuccess={(result) => {
 							setImageUrl((result as any).info.secure_url);
-							setImageName(
-								(result as any).info.original_filename
-							);
+							setImageName((result as any).info.original_filename);
 						}}
 					>
 						{({ open }) => {
@@ -188,8 +198,7 @@ export function InputPost({ className }: Readonly<InputPostProps>) {
 									type="button"
 									onClick={() => open()}
 								>
-									<div className="flex items-center justify-center">
-										{/* eslint-disable-next-line jsx-a11y/alt-text */}
+									<div className="flex items-center justify">
 										<Image className="h-6 w-6 text-blue-500 mr-2" />
 										{imageName}
 									</div>

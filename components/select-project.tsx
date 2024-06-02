@@ -40,7 +40,6 @@ export default function SelectProject({
 					},
 				},
 			});
-			console.log("projects", projects);
 			const data: Project[] = JSON.parse(JSON.stringify(projects));
 			setProjects(data);
 		};

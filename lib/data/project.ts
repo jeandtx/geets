@@ -12,14 +12,24 @@ import { ObjectId } from 'mongodb';
  * @throws {Error} If the project have a missing field.
     */
 export async function createProject(project: Project) {
-    const client = await clientPromise
-    const db = client.db('geets')
-    if (!project.title || !project.description || !project.participants) {
-        throw new Error('Missing field(s) in project. check title' + project.title + ' description ' + project.description + ' author ' + project.participants)
+    console.log('Project:', project);
+    const client = await clientPromise;
+    const db = client.db('geets');
+
+    const DEFAULT_IMAGE_URL = "https://res.cloudinary.com/dekbkndn8/image/upload/v1715719366/samples/balloons.jpg";
+
+    // Ensure that the project has a media URL, otherwise use the default image URL
+    if (!project.media) {
+        project.media = DEFAULT_IMAGE_URL;
     }
+
+    if (!project.title || !project.description || !project.participants) {
+        throw new Error('Missing field(s) in project. Check title: ' + project.title + ', description: ' + project.description + ', participants: ' + project.participants);
+    }
+
     const result = await db.collection('projects').insertOne({ ...project, _id: new ObjectId() });
-    const data = JSON.parse(JSON.stringify(result)) // Remove ObjectID (not serializable)
-    return data
+    const data = JSON.parse(JSON.stringify(result)); // Remove ObjectID (not serializable)
+    return data;
 }
 
 
