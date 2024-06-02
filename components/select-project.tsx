@@ -43,10 +43,9 @@ export default function SelectProject({
 			const data: Project[] = JSON.parse(JSON.stringify(projects));
 			setProjects(data);
 		};
-		if (projects.length === 0) {
-			fetchProjects();
-		}
-	}, [projects, user]);
+
+		fetchProjects();
+	}, [user]);
 
 	useEffect(() => {
 		const clickHandler = ({ target }: MouseEvent) => {
