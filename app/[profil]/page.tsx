@@ -1,13 +1,11 @@
-import { signOut } from "@/app/auth";
+import { auth, signOut } from "@/app/auth";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import {
-	getUser,
-	getUserPosts,
-	getParticipantsProjects,
-	getProjects,
-} from "@/lib/actions";
-import { Project } from "@/types/tables";
+import { getUser } from "@/lib/data/user";
+import { getProjects } from "@/lib/data/project";
+import { getPosts } from "@/lib/data/post";
+import type { Project } from "@/types/tables";
+import { ProjectCard } from "@/components/project";
 
 function SignOut() {
 	return (
@@ -32,13 +30,24 @@ export default async function ProfilPage({
 	const { profil } = params;
 	const decodeEmail = decodeURIComponent(profil);
 	const user = await getUser(decodeEmail);
-	const userPosts = await getUserPosts(decodeEmail);
-	const userProjects = await getProjects(decodeEmail);
-	const participatingProjects = await getParticipantsProjects(decodeEmail);
+	const userPosts = await getPosts(-1, {
+		"author.email": decodeEmail,
+	});
+	const userProjects = await getProjects({
+		participants: {
+			name: decodeEmail,
+			role: "author",
+		},
+	});
+	const participatingProjects = await getProjects({
+		participants: {
+			$elemMatch: { name: decodeEmail, role: { $ne: "author" } },
+		},
+	});
 
 	return (
 		<div className="flex flex-col items-center w-full space-y-5 text-black py-5">
-			<h1 className="text-3xl font-bold">Your Profile</h1>
+			<h1 className="text-3xl font-bold">{user.email}</h1>
 			{user ? (
 				<table>
 					<thead>
@@ -145,52 +154,41 @@ export default async function ProfilPage({
 			<h2 className="text-2xl font-bold">My Projects</h2>
 			{Array.isArray(userProjects) && userProjects.length > 0 ? (
 				<div className="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full px-10">
-					{userProjects.map((project) => {
-						const author = project.participants?.find((p: any) => p.role === "author");
-						return (
-							<div
-								key={project._id}
-								className="flex mxax-w-xl overflow-hidden rounded-xl border border-slate-200 bg-white"
-							>
-								<div className="wrapper py-7">
-									<div className="header px-10 mb-4">
-										<div>
-											<Link href={`/${author?.name}/${project._id}`}>
-												<p className="text-lg text-gray-900 font-bold">
-													{project.title}
-												</p>
-											</Link>
-											<p className="text-sm text-gray-600">
-												{project.description}
-											</p>
-										</div>
-									</div>
-								</div>
-							</div>
-						);
-					})}
+					{userProjects.map((project) => (
+						<ProjectCard key={project._id} project={project} />
+					))}
 				</div>
 			) : (
 				<div>No projects found</div>
 			)}
 			<h2 className="text-2xl font-bold">
-				Projects I am Participating In
+				Projects {decodeEmail} is participating in
 			</h2>
 			{participatingProjects.length > 0 ? (
 				<div className="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full px-10">
 					{await Promise.all(
 						participatingProjects.map(async (project: Project) => {
-							const author = project.participants?.find(p => p.role === "author");
-							const authorInfo = await getUser(author?.name || '');
+							const author = project.participants
+								? project.participants.find(
+										(participant) =>
+											participant.role === "author"
+								  )
+								: null;
+
+							const authorInfo = await getUser(
+								author?.name || ""
+							);
 							return (
 								<div
-									key={project._id}
+									key={project._id.toString()}
 									className="flex max-w-xl overflow-hidden rounded-xl border border-slate-200 bg-white"
 								>
 									<div className="wrapper py-7">
 										<div className="header px-10 mb-4">
 											<div>
-												<Link href={`/${author?.name}/${project._id}`}>
+												<Link
+													href={`/${author?.name}/${project._id}`}
+												>
 													<p className="text-lg text-gray-900 font-bold">
 														{project.title}
 													</p>
@@ -201,7 +199,7 @@ export default async function ProfilPage({
 												<p className="text-sm text-gray-600">
 													Author:{" "}
 													{authorInfo
-														? authorInfo.pseudo
+														? authorInfo.email
 														: "Unknown"}
 												</p>
 											</div>

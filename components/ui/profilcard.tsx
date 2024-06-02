@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { getUser } from "@/lib/actions";
+import { getUser } from "@/lib/data/user";
 import { User } from "@/types/tables";
 
 interface ProfileCardProps {
