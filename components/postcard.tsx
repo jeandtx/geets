@@ -56,26 +56,29 @@ export default function PostCard({ post }: Readonly<PostProps>) {
 					/>
 					<div>
 						<Link href={`/${post.author?.email}`}>
-							<p className="text-lg text-gray-900 font-bold">
+							<p className="text-lg text-gray-900 font-bold hover:text-blue-500">
 								{post.author?.pseudo
 									? post.author?.pseudo
 									: post.author?.email}
 							</p>
 						</Link>
-						
+
 						{/* div align line  */}
 						<div className="flex items-center space-x-2">
-						<p className="text-sm text-gray-600">
-						{getTimeSincePosted(post?.time)}
-						</p>
-						<p className="text-sm text-gray-600">•</p>
-						<Link href={`/${post.author?.email}/${post.project?._id}`}>
-						<p className="text-sm text-gray-600 hover:text-blue-500">
-						{post.project ? post.project?.title : "Nom de projet"}
-						</p>
-						</Link>
+							<p className="text-sm text-gray-600">
+								{getTimeSincePosted(post?.time)}
+							</p>
+							<p className="text-sm text-gray-600">•</p>
+							<Link
+								href={`/${post.author?.email}/${post.project?._id}`}
+							>
+								<p className="text-sm text-gray-600 hover:text-blue-500">
+									{post.project
+										? post.project?.title
+										: "Nom de projet"}
+								</p>
+							</Link>
 						</div>
-					
 					</div>
 				</div>
 
@@ -92,7 +95,6 @@ export default function PostCard({ post }: Readonly<PostProps>) {
 							height={960}
 						/>
 					)}
-					
 				</div>
 
 				<hr className="border-gray-300 my-5" />

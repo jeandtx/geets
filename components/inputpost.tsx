@@ -9,7 +9,8 @@ import SelectProject from "./select-project";
 import { CldUploadWidget } from "next-cloudinary";
 import { Post, Project } from "../types/tables";
 import { Image, Send } from "lucide-react";
-import { useUserInfo } from '@/app/context/UserInfoContext'; // Assurez-vous de modifier le chemin d'importation
+import { useUserInfo } from "@/app/context/UserInfoContext"; // Assurez-vous de modifier le chemin d'importation
+import { createPost } from "@/lib/data/post";
 
 export interface InputPostProps {
 	className?: string;
@@ -21,18 +22,23 @@ export function InputPost({ className }: Readonly<InputPostProps>) {
 	const [isExpanded, setIsExpanded] = useState(false);
 	const formRef = useRef<HTMLFormElement>(null);
 	const [textareaHeight, setTextareaHeight] = useState("min-h-[40px]");
-	const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+	const [selectedProject, setSelectedProject] = useState<Project | null>(
+		null
+	);
 	const [imageUrl, setImageUrl] = useState<string | null>(null);
 	const [imageName, setImageName] = useState<string>("Ajouter une photo");
 	const { toast } = useToast();
 	const { userInfo, status } = useUserInfo();
 
-	const DEFAULT_USER_IMAGE = "https://res.cloudinary.com/dekbkndn8/image/upload/v1715719366/samples/balloons.jpg";
-
+	const DEFAULT_USER_IMAGE =
+		"https://res.cloudinary.com/dekbkndn8/image/upload/v1715719366/samples/balloons.jpg";
 
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
-			if (formRef.current && !formRef.current.contains(event.target as Node)) {
+			if (
+				formRef.current &&
+				!formRef.current.contains(event.target as Node)
+			) {
 				setIsExpanded(false);
 				setTextareaHeight("min-h-[40px]");
 			}
@@ -61,7 +67,8 @@ export function InputPost({ className }: Readonly<InputPostProps>) {
 			toast({
 				variant: "destructive",
 				title: "Uh oh! Something went wrong.",
-				description: "Please provide a description and select a project.",
+				description:
+					"Please provide a description and select a project.",
 			});
 			return;
 		}
@@ -91,17 +98,11 @@ export function InputPost({ className }: Readonly<InputPostProps>) {
 				email: session.user.email,
 				media: userMedia,
 			},
-			media: imageUrl ?? "",
+			media: imageUrl ?? undefined,
 			labels: [],
 		};
 
-		await fetch("/api/posts", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(post),
-		})
+		await createPost(post)
 			.then(() => {
 				toast({
 					title: "Post submitted successfully",
@@ -144,7 +145,9 @@ export function InputPost({ className }: Readonly<InputPostProps>) {
 			>
 				<div className="flex gap-2">
 					<Avatar>
-						<AvatarImage src={userInfo?.media || DEFAULT_USER_IMAGE} />
+						<AvatarImage
+							src={userInfo?.media || DEFAULT_USER_IMAGE}
+						/>
 						<AvatarFallback>CN</AvatarFallback>
 					</Avatar>
 					<Textarea
@@ -181,7 +184,9 @@ export function InputPost({ className }: Readonly<InputPostProps>) {
 						uploadPreset="onrkam98"
 						onSuccess={(result) => {
 							setImageUrl((result as any).info.secure_url);
-							setImageName((result as any).info.original_filename);
+							setImageName(
+								(result as any).info.original_filename
+							);
 						}}
 					>
 						{({ open }) => {

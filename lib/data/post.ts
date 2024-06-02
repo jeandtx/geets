@@ -2,7 +2,25 @@
 'use server'
 import clientPromise from '@/lib/mongodb'
 import { Post } from '@/types/tables'
-import { ObjectId } from 'mongodb';
+import { ObjectId } from 'mongodb'
+
+/**
+ * Creates a post in the database.
+ * @param {Post} post - The post to create.
+ * @returns {Promise<any>} A promise that resolves to the created post.
+ * @throws {Error} If the post have a missing field.
+ */
+export async function createPost(post: Post) {
+    console.log('Post:', post)
+    const client = await clientPromise
+    const db = client.db('geets')
+    if (!post.media) {
+        post.media = "https://res.cloudinary.com/dekbkndn8/image/upload/v1715719366/samples/balloons.jpg"
+    }
+    const result = await db.collection('posts').insertOne({ ...post, _id: new ObjectId() })
+    const data = JSON.parse(JSON.stringify(result)) // Remove ObjectID (not serializable)
+    return data
+}
 
 
 /**
