@@ -4,10 +4,10 @@ import { useToast } from "./ui/use-toast";
 export function Form({
 	action,
 	children,
-}: {
+}: Readonly<{
 	action: any;
 	children: React.ReactNode;
-}) {
+}>) {
 	const { toast } = useToast();
 
 	function handleSubmit(e: any) {
@@ -26,6 +26,7 @@ export function Form({
 				});
 			});
 	}
+
 	return (
 		<form
 			action={handleSubmit}

@@ -56,21 +56,29 @@ export default function PostCard({ post }: Readonly<PostProps>) {
 					/>
 					<div>
 						<Link href={`/${post.author?.email}`}>
-							<p className="text-lg text-gray-900 font-bold">
-								{post.author
+							<p className="text-lg text-gray-900 font-bold hover:text-blue-500">
+								{post.author?.pseudo
 									? post.author?.pseudo
-									: "user pseudo"}
+									: post.author?.email}
 							</p>
 						</Link>
-						<p className="text-sm text-gray-600">
-							{getTimeSincePosted(post?.time)} •{" "}
-							{post.project
-								? post.project?.title
-								: "Nom de projet"}
-						</p>
-						<p className="text-sm text-gray-600">
-							{post.project ? post.project?._id : "ID du projet"}
-						</p>
+
+						{/* div align line  */}
+						<div className="flex items-center space-x-2">
+							<p className="text-sm text-gray-600">
+								{getTimeSincePosted(post?.time)}
+							</p>
+							<p className="text-sm text-gray-600">•</p>
+							<Link
+								href={`/${post.author?.email}/${post.project?._id}`}
+							>
+								<p className="text-sm text-gray-600 hover:text-blue-500">
+									{post.project
+										? post.project?.title
+										: "Nom de projet"}
+								</p>
+							</Link>
+						</div>
 					</div>
 				</div>
 
@@ -78,17 +86,15 @@ export default function PostCard({ post }: Readonly<PostProps>) {
 					<p className="text-gray-900 mb-0">
 						{post.content ? post.content : "Contenu du post"}
 					</p>
-					<Img
-						className="w-full h-full object-cover rounded-xl"
-						src={
-							post.media
-								? post.media
-								: "https://loremflickr.com/640/480/nature"
-						}
-						alt="Placeholder image"
-						width={1280}
-						height={960}
-					/>
+					{post.media && (
+						<Img
+							className="w-full h-full object-cover rounded-xl"
+							src={post.media}
+							alt="Placeholder image"
+							width={1280}
+							height={960}
+						/>
+					)}
 				</div>
 
 				<hr className="border-gray-300 my-5" />

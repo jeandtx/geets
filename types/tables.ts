@@ -49,5 +49,8 @@ export interface Project {
     description?: string;
     media?: string;
     labels?: string[];
-    participants?: Participant[];
+    participants?: {
+        name: string;
+        role: string;
+    }[];
 }

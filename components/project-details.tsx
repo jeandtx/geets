@@ -3,25 +3,29 @@ import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { Post, Project, Participant } from "@/types/tables";
 import Img from "next/image";
-import { updateParticipants } from "@/lib/actions";
+import { updateProject } from "@/lib/data/project";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
-import ProfileCard from "@/components/ui/profilcard";
+import ProfileCard from "@/components/profilcard";
 
 interface ProjectDetailsProps {
 	project: Project;
 	posts: Post[];
 }
 
-const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, posts }) => {
+export default function ProjectDetails({
+	project,
+	posts,
+}: Readonly<ProjectDetailsProps>) {
 	const [participants, setParticipants] = useState<Participant[]>(
 		project.participants || []
 	);
+
 	const { data: session } = useSession();
 	const { toast } = useToast();
 
 	const handleAddParticipant = async (newParticipantEmail: string) => {
-		if (participants.some(p => p.name === newParticipantEmail)) {
+		if (participants.some((p) => p.name === newParticipantEmail)) {
 			toast({
 				title: "Already a participant",
 				description: `You are already a participant in this project.`,
@@ -29,12 +33,15 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, posts }) => {
 			});
 			return;
 		}
+		const newParticipant: Participant = {
+			name: newParticipantEmail,
+			role: "participant",
+		};
 
-		const newParticipant: Participant = { name: newParticipantEmail, role: "participant" };
-		const result = await updateParticipants(
-			project._id.toString(),
-			newParticipant
-		);
+		const result = await updateProject({
+			...project,
+			participants: [...participants, newParticipant],
+		});
 		if (result) {
 			setParticipants([...participants, newParticipant]);
 			toast({
@@ -65,7 +72,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, posts }) => {
 										project.media ??
 										"https://res.cloudinary.com/dekbkndn8/image/upload/v1715719366/samples/balloons.jpg"
 									}
-									alt={project.title}
+									alt={project.title + "Image"}
 									width={64}
 									height={64}
 									className="w-16 h-16 object-cover rounded-lg"
@@ -74,9 +81,15 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, posts }) => {
 									<div className="text-3xl font-medium text-black">
 										{project.title}
 									</div>
-									{participants.find(p => p.role === 'author') && (
+									{participants.find(
+										(p) => p.role === "author"
+									) && (
 										<div className="text-s text-gray-500">
-											{participants.find(p => p.role === 'author')?.name}
+											{
+												participants.find(
+													(p) => p.role === "author"
+												)?.name
+											}
 										</div>
 									)}
 								</div>
@@ -109,7 +122,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, posts }) => {
 								Participants
 							</div>
 							<div className="flex flex-wrap gap-4">
-								{participants.map(participant => (
+								{participants.map((participant) => (
 									<ProfileCard
 										key={participant.name}
 										email={participant.name}
@@ -140,7 +153,8 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, posts }) => {
 											<div>Content: {post.content}</div>
 											<div>
 												Time:{" "}
-												{post.time.toLocaleString()}
+												{/* {post.time.toLocaleString()} */}
+												{/* // TODO: resolve time hydration warning */}
 											</div>
 											<div>
 												Author: {post.author?.email}
@@ -168,6 +182,4 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, posts }) => {
 			</div>
 		</div>
 	);
-};
-
-export default ProjectDetails;
+}

@@ -1,5 +1,5 @@
 import InfiniteScroll from "./infinitescroll";
-import { getPosts } from "@/lib/actions";
+import { getPosts } from "@/lib/data/post";
 import { InputPost } from "@/components/inputpost";
 import React from "react";
 

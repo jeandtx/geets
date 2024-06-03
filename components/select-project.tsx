@@ -11,7 +11,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Lightbulb } from "lucide-react";
 import { Project } from "@/types/tables";
-import { getProjects } from "@/lib/actions";
+import { getProjects } from "@/lib/data/project";
 
 interface SelectProjectProps {
 	onSelectProject: (project: Project) => void;
@@ -29,24 +29,23 @@ export default function SelectProject({
 	const modal = useRef<HTMLDivElement>(null);
 	const [projects, setProjects] = useState<Project[]>([]);
 	// const [projects, setProjects] = useState<Project[] | null>(null);
-	
 
 	useEffect(() => {
 		const fetchProjects = async () => {
-			
-				const projects = await getProjects(user);
-				console.log("projects", projects);
-				const data: Project[] = JSON.parse(JSON.stringify(projects));
-				setProjects(data);
-		
+			const projects = await getProjects({
+				participants: {
+					$elemMatch: {
+						name: user,
+						role: "author",
+					},
+				},
+			});
+			const data: Project[] = JSON.parse(JSON.stringify(projects));
+			setProjects(data);
 		};
-		if (projects.length === 0) {
-			fetchProjects();
-		}
 
-		
-	}, [projects,user]);
-
+		fetchProjects();
+	}, [user]);
 
 	useEffect(() => {
 		const clickHandler = ({ target }: MouseEvent) => {
@@ -156,8 +155,7 @@ export default function SelectProject({
 													</span>
 												) : (
 													<span className="text-xl font-semibold">
-														Connecte toi pour
-														ajouter un projet
+														Connecte toi
 													</span>
 												)}
 											</CardContent>

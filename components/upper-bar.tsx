@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import InfiniteScroll from "@/components/infinitescroll";
-import { getPosts } from "@/lib/actions";
+import { getPosts } from "@/lib/data/post";
 
 interface UpperbarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
