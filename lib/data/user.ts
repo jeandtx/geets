@@ -49,7 +49,7 @@ export async function updateUser(user: User) {
         _id: user._id ? new ObjectId(user._id) : undefined
     }
     delete userWithoutObjectId._id
-    const response = db.collection('users').updateOne({ _id: userId }, { $set: user })
+    const response = db.collection('users').updateOne({ _id: userId }, { $set: userWithoutObjectId })
     const data = JSON.parse(JSON.stringify(response)); // Remove ObjectID (not serializable)
     return data;
 }
