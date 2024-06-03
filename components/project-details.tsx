@@ -6,7 +6,7 @@ import Img from "next/image";
 import { updateProject } from "@/lib/data/project";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
-import ProfileCard from "@/components/ui/profilcard";
+import ProfileCard from "@/components/profilcard";
 
 interface ProjectDetailsProps {
 	project: Project;

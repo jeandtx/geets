@@ -20,7 +20,7 @@ export default function NewProject() {
 	const [participantRole, setParticipantRole] = useState<string>("");
 	const [participants, setParticipants] = useState<Participant[]>([]);
 	const { toast } = useToast();
-	const { data: session } = useSession();
+	const session = useSession();
 	const [email, setEmail] = useState<string>("");
 	const [imageUrl, setImageUrl] = useState<string>("");
 	const [imageName, setImageName] = useState<string>("Ajouter une photo");
@@ -43,13 +43,16 @@ export default function NewProject() {
 	};
 
 	useEffect(() => {
-		console.log("session", session);
-		if (session?.user?.email) {
-			setParticipants([{ name: session.user.email, role: "author" }]);
-			setEmail(session.user.email);
+		console.log(session, email);
+		if (session.data?.user?.email) {
+			setEmail(session.data.user.email);
+		}
+		if (email) {
+			setParticipants([{ name: email, role: "author" }]);
+			setEmail(email);
 			setProject({
 				...project,
-				participants: [{ name: session.user.email, role: "author" }],
+				participants: [{ name: email, role: "author" }],
 			});
 		}
 	}, [session]);
@@ -122,7 +125,7 @@ export default function NewProject() {
 				<div className="flex flex-col w-full mx-auto mt-8 bg-white p-8 rounded-lg shadow-lg">
 					<div>
 						<h1 className="text-3xl font-bold text-center mt-8">
-							New Project
+							New Project for {email}
 						</h1>
 					</div>
 					<div className="flex flex-col space-y-4 w-10/12 mx-auto mt-8 ">

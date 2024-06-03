@@ -4,8 +4,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import SessionWrapper from "./sessionwrapper";
 import { Header } from "@/components/header";
-import { UserInfoProvider } from '@/app/context/UserInfoContext'; 
-
+import { UserInfoProvider } from "@/app/context/UserInfoContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,13 +26,13 @@ export default function RootLayout({
 				<div className="flex h-screen">
 					<SessionWrapper>
 						<UserInfoProvider>
-						<div className="columns-1 w-1/5 ">
-							<Header className="px-4" />
-						</div>
+							<div className="columns-1 w-1/5 ">
+								<Header className="px-4" />
+							</div>
 
-						<div className="flex flex-col w-4/5 overflow-x-hidden max-w-lg min-w-full">
-							{children}
-						</div>
+							<div className="flex flex-col w-4/5 overflow-x-hidden max-w-lg min-w-full">
+								{children}
+							</div>
 						</UserInfoProvider>
 					</SessionWrapper>
 					<Toaster />

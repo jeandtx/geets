@@ -6,6 +6,7 @@ import { getProjects } from "@/lib/data/project";
 import { getPosts } from "@/lib/data/post";
 import type { Project } from "@/types/tables";
 import { ProjectCard } from "@/components/project";
+import UpdateProfil from "./updateprofil";
 
 function SignOut() {
 	return (
@@ -47,72 +48,8 @@ export default async function ProfilPage({
 
 	return (
 		<div className="flex flex-col items-center w-full space-y-5 text-black py-5">
-			<h1 className="text-3xl font-bold">{user.email}</h1>
-			{user ? (
-				<table>
-					<thead>
-						<tr>
-							<th>Field</th>
-							<th>Value</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>Pseudo:</td>
-							<td>{user.pseudo}</td>
-						</tr>
-						<tr>
-							<td>Email:</td>
-							<td>{user.email}</td>
-						</tr>
-						<tr>
-							<td>Name:</td>
-							<td>{user.first_name}</td>
-						</tr>
-						<tr>
-							<td>LastName:</td>
-							<td>{user.lastName}</td>
-						</tr>
-						<tr>
-							<td>Age:</td>
-							<td>
-								{user.birth_date?.toLocaleDateString() ??
-									"No data"}
-							</td>
-						</tr>
-						<tr>
-							<td>Localisation:</td>
-							<td>{user.localisation}</td>
-						</tr>
-						<tr>
-							<td>Gender:</td>
-							<td>{user.gender}</td>
-						</tr>
-						<tr>
-							<td>Experience:</td>
-							<td>{user.experience}</td>
-						</tr>
-						<tr>
-							<td>Available:</td>
-							<td>{user.available ? "Yes" : "No"}</td>
-						</tr>
-						<tr>
-							<td>Mobile:</td>
-							<td>{user.mobile}</td>
-						</tr>
-						<tr>
-							<td>Allow Emails:</td>
-							<td>{user.allowEmails ? "Yes" : "No"}</td>
-						</tr>
-						<tr>
-							<td>Account Creation:</td>
-							<td>{user.created?.toLocaleDateString()}</td>
-						</tr>
-					</tbody>
-				</table>
-			) : (
-				<div>User not found :(</div>
-			)}
+			<h1 className="text-3xl font-bold">{user?.email}</h1>
+			{user ? <UpdateProfil user={user} /> : <div>User not found 😔</div>}
 			<h2 className="text-2xl font-bold">My Posts</h2>
 			{userPosts.length > 0 ? (
 				<div className="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full px-10">
