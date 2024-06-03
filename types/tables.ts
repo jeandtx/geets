@@ -1,24 +1,17 @@
-// export interface Comment {
-//     _id: string;
-//     post: string;
-//     content: string;
-//     created: Date;
-// }
-
-// export interface Like{
-//     _id: string;
-//     post: string;
-//     user: string;
-//     created: Date;
-// }
-
 export interface Post {
     _id: string;
-    project: string;
-    title: string;
-    content?: string;
+    project: {
+        _id: string;
+        title: string;
+    };
+    content: string;
     time: Date;
-    author: string;
+    author: {
+        _id: string;
+        pseudo: string;
+        email: string;
+        media: string;
+    };
     media?: string;
     labels?: string[];
 }
@@ -29,34 +22,35 @@ export interface User {
     password: string;
     pseudo?: string;
     projectIds?: string[];
-    labels?: string[]; //copy dtx code (texte entry) ??
-    profil_picture?: string;
-    name?: string;
-    last_name?: string;
-    birth_date?: Date; //date picker !!!!!!!!!!!!!!!!!!
-    location?: string;
-    sexe?: string; //selectbox f or m or jsp
-    experience?: number; //slider (0 to 10) !!!!!!!!!!!!!!!!!!!!
-    chercheARejoindreUnProjet?: boolean; //yes or no !!!!!!!!!!!!!!!!
-    mobile?: string; //+33 ...(enter only 10 numbers)
-    createdAt?: Date;
+    labels?: string[];
+    media?: string;
+    first_name?: string;
+    lastName?: string;
+    birth_date: Date;
+    localisation?: string;
+    gender?: string;
+    experience?: string;
+    available?: boolean;
+    mobile?: string;
+    allowEmails?: boolean;
+    created?: Date;
 }
 
-// export interface Participate{
-//     _id: string;
-//     project: string;
-//     user: string;
-//     created: Date;
-// }
+export interface Participant {
+    name: string;
+    role: string;
+}
 
 export interface Project {
     _id: string;
-    author: string;
     title: string;
     created?: Date;
     themes?: string[];
     description?: string;
     media?: string;
     labels?: string[];
-    participants?: string[];
+    participants?: {
+        name: string;
+        role: string;
+    }[];
 }

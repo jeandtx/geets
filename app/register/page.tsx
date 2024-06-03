@@ -11,8 +11,8 @@ export default function Login() {
 		let password = formData.get("password") as string;
 		let user = await getUser(email);
 
-		if (user && user.length > 0) {
-			return "User already exists"; // TODO: Handle errors with useFormStatus
+		if (user) {
+			return "User already exists";
 		} else {
 			await createUser(email, password);
 			redirect("/login");
@@ -20,7 +20,7 @@ export default function Login() {
 	}
 
 	return (
-		<div className="flex h-screen w-screen items-center justify-center bg-gray-50">
+		<div className="flex h-full w-full items-center justify-center bg-gray-50">
 			<div className="z-10 w-full max-w-md overflow-hidden rounded-2xl border border-gray-100 shadow-xl">
 				<div className="flex flex-col items-center justify-center space-y-3 border-b border-gray-200 bg-white px-4 py-6 pt-8 text-center sm:px-16">
 					<h3 className="text-xl font-semibold">Sign Up</h3>

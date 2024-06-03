@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 export default async function TestingPage() {
 	return (
 		<div className="p-2 ">
-			<div className="p-4 rounded-2xl bg-postbg">
+			<div className="p-4 rounded-2xl bg-white">
 				<InputPost />
 			</div>
 		</div>

@@ -3,7 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import SessionWrapper from "./sessionwrapper";
-import { Sidebar } from "@/components/sidebar";
+import { Header } from "@/components/header";
+import { UserInfoProvider } from "@/app/context/UserInfoContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,11 +20,20 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<body className={inter.className}>
-				<div className="flex  w-full h-screen overflow-hidden">
+			<body
+				className={`bg-stone-100 ${inter.className} flex justify-center`}
+			>
+				<div className="flex h-screen">
 					<SessionWrapper>
-						<Sidebar className="w-1/5 bg-gray-200" />
-						<div className="lg:w-4/5 w-full">{children}</div>
+						<UserInfoProvider>
+							<div className="columns-1 w-1/5 ">
+								<Header className="px-4" />
+							</div>
+
+							<div className="flex flex-col w-4/5 overflow-x-hidden max-w-lg min-w-full">
+								{children}
+							</div>
+						</UserInfoProvider>
 					</SessionWrapper>
 					<Toaster />
 				</div>

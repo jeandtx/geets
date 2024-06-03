@@ -9,64 +9,42 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-
-interface Project {
-	_id: string;
-	name: string;
-	owner: string;
-}
+import { Lightbulb } from "lucide-react";
+import { Project } from "@/types/tables";
+import { getProjects } from "@/lib/data/project";
 
 interface SelectProjectProps {
-	onSelectProject: (projectId: string) => void;
-	selectedProject: string | null;
-	user?: string;
+	onSelectProject: (project: Project) => void;
+	selectedProject: Project | null;
+	user: string;
 }
 
 export default function SelectProject({
 	onSelectProject,
 	selectedProject,
 	user,
-}: SelectProjectProps) {
+}: Readonly<SelectProjectProps>) {
 	const [modalOpen, setModalOpen] = useState<boolean>(false);
 	const trigger = useRef<HTMLButtonElement>(null);
 	const modal = useRef<HTMLDivElement>(null);
 	const [projects, setProjects] = useState<Project[]>([]);
+	// const [projects, setProjects] = useState<Project[] | null>(null);
 
 	useEffect(() => {
-		console.log("useEffect for fetching projects triggered. user:", user);
-
 		const fetchProjects = async () => {
-			if (!user) {
-				console.log("No user, skipping fetch.");
-				return;
-			}
-
-			try {
-				const res = await fetch("/api/" + user + "/projects");
-				console.log("Fetch response:", res);
-
-				if (res.ok && res.body) {
-					const reader = res.body.getReader();
-					const result = await reader.read();
-					const decoder = new TextDecoder("utf-8");
-					const text = decoder.decode(result.value);
-					const projects = JSON.parse(text);
-					console.log("Parsed projects:", projects);
-					setProjects(projects.response);
-				} else {
-					console.log("Fetch response not OK or body is null.");
-				}
-			} catch (error) {
-				console.error("Error fetching projects:", error);
-			}
+			const projects = await getProjects({
+				participants: {
+					$elemMatch: {
+						name: user,
+						role: "author",
+					},
+				},
+			});
+			const data: Project[] = JSON.parse(JSON.stringify(projects));
+			setProjects(data);
 		};
 
-		if (!projects.length) {
-			console.log("Projects state is null or undefined. Fetching projects...");
-			fetchProjects();
-		} else {
-			console.log("Projects already fetched:", projects);
-		}
+		fetchProjects();
 	}, [user]);
 
 	useEffect(() => {
@@ -75,11 +53,10 @@ export default function SelectProject({
 			if (
 				!modalOpen ||
 				modal.current.contains(target as Node) ||
-				(trigger.current && trigger.current.contains(target as Node))
+				trigger?.current?.contains(target as Node)
 			)
 				return;
 			setModalOpen(false);
-			console.log("Modal is closing because of click outside.");
 		};
 
 		document.addEventListener("click", clickHandler);
@@ -87,9 +64,8 @@ export default function SelectProject({
 	}, [modalOpen]);
 
 	useEffect(() => {
-		const keyHandler = ({ keyCode }: KeyboardEvent) => {
-			if (!modalOpen || keyCode !== 27) return;
-			console.log("Modal is closing because of key press:", keyCode);
+		const keyHandler = ({ key }: KeyboardEvent) => {
+			if (!modalOpen || key !== "Escape") return;
 			setModalOpen(false);
 		};
 
@@ -97,18 +73,15 @@ export default function SelectProject({
 		return () => document.removeEventListener("keydown", keyHandler);
 	}, [modalOpen]);
 
-	const handleSelectItem = (itemName: string) => {
-		console.log("Selected item name:", itemName);
+	const handleSelectItem = (itemName: Project) => {
 		onSelectProject(itemName);
 		setModalOpen(false);
 	};
 
 	const handleAddProject = () => {
 		if (!user) {
-			console.log('User not logged in. Redirecting to "/login"');
 			redirect("/login");
 		} else {
-			console.log("Add new project.");
 			setModalOpen(false);
 		}
 	};
@@ -119,10 +92,14 @@ export default function SelectProject({
 				type="button"
 				ref={trigger}
 				onClick={() => setModalOpen(true)}
-				className="inline-flex items-center justify-center rounded-md bg-primary px-6 py-3 text-base font-medium text-white"
+				className="overflow-hidden inline-flex items-center justify-center rounded-md px-6 py-3 text-base font-medium text-gray-500"
 				style={{ height: "40px" }}
 			>
-				{selectedProject || "Ajouter un projet"}
+				{" "}
+				<Lightbulb className="h-6 w-6 text-yellow-500 mr-2" />
+				{selectedProject
+					? projects.find((p) => p._id === selectedProject._id)?.title
+					: "Ajouter un projet"}
 			</button>
 
 			<div
@@ -151,14 +128,14 @@ export default function SelectProject({
 									<CarouselItem
 										key={project._id}
 										onClick={() =>
-											handleSelectItem(project.name)
+											handleSelectItem(project)
 										}
 										className="basis-1/3 cursor-pointer "
 									>
 										<Card>
 											<CardContent className="flex items-center justify-center p-6 overflow-hidden">
 												<span className="text-xl font-semibold">
-													{project.name}
+													{project.title}
 												</span>
 											</CardContent>
 										</Card>
@@ -178,8 +155,7 @@ export default function SelectProject({
 													</span>
 												) : (
 													<span className="text-xl font-semibold">
-														Connecte toi pour
-														ajouter un projet
+														Connecte toi
 													</span>
 												)}
 											</CardContent>

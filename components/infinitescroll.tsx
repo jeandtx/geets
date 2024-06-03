@@ -3,9 +3,8 @@
 import { useInView } from "react-intersection-observer";
 import { cn } from "@/lib/utils";
 
-import SideProjectCard from "@/components/project_card";
+import PostCard from "@/components/postcard";
 import React from "react";
-import { Post } from "@/types/tables";
 
 interface InfiniteScrollProps {
 	/**
@@ -18,7 +17,7 @@ interface InfiniteScrollProps {
 	 * @param params Optional parameters for the fetch function.
 	 * @returns The result of the fetch function.
 	 */
-	fetchFunction: (params?: any) => any;
+	fetchFunction: (page: number) => Promise<any>;
 }
 
 export default function InfiniteScroll({
@@ -28,30 +27,27 @@ export default function InfiniteScroll({
 	const { ref, inView } = useInView({
 		threshold: 0,
 	});
-	const [posts, setPosts] = React.useState<Post[]>([]);
+	const [posts, setPosts] = React.useState<any>([]);
+	const [page, setPage] = React.useState(1);
 
 	React.useEffect(() => {
-		if (inView) {
-			if (inView) {
-				fetchFunction()
-					.then((data: any) => {
-						setPosts((prev: any) => [...prev, ...data]);
-					})
-					.catch((error: any) => {
-						console.error(error);
-					});
-			}
-		}
+		if (!inView) return;
+		const fetchPosts = async () => {
+			const newPosts = await fetchFunction(page);
+			setPage((prevPage: number) => prevPage + 1);
+			setPosts((prevPosts: any) => [...prevPosts, ...newPosts]);
+		};
+		fetchPosts();
 	}, [inView]);
 
 	return (
 		<div
-			className={cn("flex flex-col items-center", className)}
-			style={{ height: "100%", width: "60vw", overflowY: "scroll" }}
+			className={cn("flex flex-col w-full items-center", className)}
+			style={{ height: "100%" }}
 		>
 			<ul className="space-y-4">
 				{posts.map((post: any) => (
-					<SideProjectCard key={post._id} post={post} />
+					<PostCard key={post._id} post={post} />
 				))}
 			</ul>
 			<div ref={ref}>Loading...</div>

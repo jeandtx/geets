@@ -6,19 +6,32 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Textarea } from "./ui/textarea";
 import { useToast } from "./ui/use-toast";
 import SelectProject from "./select-project";
+import { CldUploadWidget } from "next-cloudinary";
+import { Post, Project } from "../types/tables";
+import { Image, Send } from "lucide-react";
+import { useUserInfo } from "@/app/context/UserInfoContext"; // Assurez-vous de modifier le chemin d'importation
+import { createPost } from "@/lib/data/post";
 
 export interface InputPostProps {
 	className?: string;
 }
 
-export function InputPost({ className }: InputPostProps) {
-	const { data: session, status } = useSession();
+export function InputPost({ className }: Readonly<InputPostProps>) {
+	const { data: session } = useSession();
 	const [description, setDescription] = useState("");
 	const [isExpanded, setIsExpanded] = useState(false);
 	const formRef = useRef<HTMLFormElement>(null);
-	const [textareaHeight, setTextareaHeight] = useState("min-h-[40px]"); // Gère la hauteur de Textarea
-	const [selectedProject, setSelectedProject] = useState<string | null>(null);
+	const [textareaHeight, setTextareaHeight] = useState("min-h-[40px]");
+	const [selectedProject, setSelectedProject] = useState<Project | null>(
+		null
+	);
+	const [imageUrl, setImageUrl] = useState<string | null>(null);
+	const [imageName, setImageName] = useState<string>("Ajouter une photo");
 	const { toast } = useToast();
+	const { userInfo, status } = useUserInfo();
+
+	const DEFAULT_USER_IMAGE =
+		"https://res.cloudinary.com/dekbkndn8/image/upload/v1715719366/samples/balloons.jpg";
 
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
@@ -69,17 +82,27 @@ export function InputPost({ className }: InputPostProps) {
 			return;
 		}
 
-		await fetch("api/posts", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
+		const userMedia = userInfo?.media || DEFAULT_USER_IMAGE;
+
+		const post: Post = {
+			_id: "",
+			project: {
+				_id: selectedProject._id,
+				title: selectedProject.title,
 			},
-			body: JSON.stringify({
-				description,
-				selectedProject,
-				user: session.user.email,
-			}),
-		})
+			content: description,
+			time: new Date(),
+			author: {
+				_id: "",
+				pseudo: session.user.name ?? "",
+				email: session.user.email,
+				media: userMedia,
+			},
+			media: imageUrl ?? undefined,
+			labels: [],
+		};
+
+		await createPost(post)
 			.then(() => {
 				toast({
 					title: "Post submitted successfully",
@@ -87,6 +110,10 @@ export function InputPost({ className }: InputPostProps) {
 				});
 				setDescription("");
 				setSelectedProject(null);
+				setImageUrl(null);
+				setImageName("Ajouter une photo");
+				setIsExpanded(false);
+				setTextareaHeight("min-h-[40px]");
 			})
 			.catch((error) => {
 				toast({
@@ -97,48 +124,102 @@ export function InputPost({ className }: InputPostProps) {
 			});
 	};
 
+	const handleSelectProject = (project: Project | null) => {
+		if (!session) {
+			toast({
+				variant: "destructive",
+				title: "Not authenticated",
+				description: "Please log in to select a project.",
+			});
+			return;
+		}
+		setSelectedProject(project);
+	};
+
 	return (
-		<>
-			<div className={className}>
-				<form
-					ref={formRef}
-					onSubmit={handleSubmit}
-					className="flex flex-col gap-5"
-				>
-					<div className="flex gap-2">
-						<Avatar>
-							<AvatarImage src="https://github.com/shadcn.png" />
-							<AvatarFallback>CN</AvatarFallback>
-						</Avatar>
-						<Textarea
-							onFocus={handleTitleFocus}
-							onBlur={() => setIsExpanded(false)}
-							onChange={(e) => setDescription(e.target.value)}
-							value={description}
-							height={textareaHeight}
-							style={{
-								minHeight: textareaHeight,
-								transition: "min-height 0.3s ease-in-out",
-							}}
-							id="title"
-							placeholder="Raconte nous ton projet !"
-							className="text-black text-inter  placeholder-gray-400 font-normal flex h-5 w-full border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300 hover:border-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0"
+		<div className={className}>
+			<form
+				ref={formRef}
+				onSubmit={handleSubmit}
+				className="flex flex-col gap-5 p-6 rounded-xl border border-slate-200 bg-white"
+			>
+				<div className="flex gap-2">
+					<Avatar>
+						<AvatarImage
+							src={userInfo?.media || DEFAULT_USER_IMAGE}
 						/>
-					</div>
+						<AvatarFallback>CN</AvatarFallback>
+					</Avatar>
+					<Textarea
+						onFocus={handleTitleFocus}
+						onBlur={() => {
+							setIsExpanded(false);
+							setTextareaHeight("min-h-[40px]");
+						}}
+						onChange={(e) => setDescription(e.target.value)}
+						value={description}
+						height={textareaHeight}
+						style={{
+							minHeight: textareaHeight,
+							transition: "min-height 0.3s ease-in-out",
+							WebkitBorderRadius: "5px",
+							MozBorderRadius: "5px",
+							borderRadius: "15px",
+							resize: "none",
+							overflow: "hidden",
+						}}
+						id="title"
+						placeholder="Parle nous ton projet !"
+						className="resize-none text-base font-medium text-gray-500 placeholder-gray-400  flex h-5 w-full border border-input bg-background px-3 py-2  focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300 hover:border-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0"
+					/>
+				</div>
 
-					<div className="flex justify-end">
-						<div className="flex gap-3">
-							<SelectProject
-								onSelectProject={setSelectedProject}
-								selectedProject={selectedProject}
-								user={session?.user?.email || ""}
-							/>
-
-							<Button type="submit">Envoyer</Button>
-						</div>
-					</div>
-				</form>
-			</div>
-		</>
+				<div className="flex justify-between items-center w-full">
+					<SelectProject
+						onSelectProject={handleSelectProject}
+						selectedProject={selectedProject}
+						user={session?.user?.email ?? ""}
+					/>
+					<CldUploadWidget
+						uploadPreset="onrkam98"
+						onSuccess={(result) => {
+							setImageUrl((result as any).info.secure_url);
+							setImageName(
+								(result as any).info.original_filename
+							);
+						}}
+					>
+						{({ open }) => {
+							return (
+								<button
+									className="overflow-hidden inline-flex items-center justify-center rounded-md px-6 py-3 text-base font-medium text-gray-500"
+									style={{
+										height: "40px",
+										maxWidth: "200px",
+										whiteSpace: "nowrap",
+										textOverflow: "ellipsis",
+										overflow: "hidden",
+									}}
+									type="button"
+									onClick={() => open()}
+								>
+									<div className="flex items-center justify">
+										<Image className="h-6 w-6 text-blue-500 mr-2" />
+										{imageName}
+									</div>
+								</button>
+							);
+						}}
+					</CldUploadWidget>
+					<Button
+						className="overflow-hidden inline-flex items-center bg-transparent hover:none hover:bg-transparent justify-center rounded-md px-6 py-3 text-base font-medium text-gray-500"
+						type="submit"
+					>
+						<Send className="h-6 w-6 text-green-500 mr-2" />
+						Envoyer
+					</Button>
+				</div>
+			</form>
+		</div>
 	);
 }
