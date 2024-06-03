@@ -6,6 +6,7 @@ import { getProjects } from "@/lib/data/project";
 import { getPosts } from "@/lib/data/post";
 import type { Project } from "@/types/tables";
 import { ProjectCard } from "@/components/project";
+import UpdateProfil from "./updateprofil";
 
 function SignOut() {
 	return (
@@ -51,7 +52,7 @@ export default async function ProfilPage({
 			{user ? (
 				<table>
 					<div className="border-2 border-red-500 w-1/2">
-						{/* <UpdateProfil user={user} /> */}
+						<UpdateProfil user={user} />
 					</div>
 					{/* <thead>
 						<tr>
@@ -114,7 +115,7 @@ export default async function ProfilPage({
 					</tbody> */}
 				</table>
 			) : (
-				<div>User not found :(</div>
+				<div>User not found 😔</div>
 			)}
 			<h2 className="text-2xl font-bold">My Posts</h2>
 			{userPosts.length > 0 ? (

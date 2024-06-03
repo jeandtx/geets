@@ -4,74 +4,78 @@ import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { updateUser } from "@/lib/actions";
+import { updateUser } from "@/lib/data/user";
 
-import * as React from "react"
-import { format } from "date-fns"
-import { Calendar as CalendarIcon } from "lucide-react"
-import { Calendar } from "@/components/ui/calendar"
+import * as React from "react";
+import { format } from "date-fns";
+import { Calendar as CalendarIcon } from "lucide-react";
+import { Calendar } from "@/components/ui/calendar";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from "@/components/ui/popover";
 import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-  } from "@/components/ui/select"
-  import { Slider } from "@/components/ui/slider"
+} from "@/components/ui/select";
+import { Slider } from "@/components/ui/slider";
 
-import { Switch } from "@/components/ui/switch"
-import { Label } from "@/components/ui/label"
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 
 interface DatePickerDemoProps {
 	className?: string;
 	value: Date | undefined;
 	onChange: (date: Date | undefined) => void;
-  }
-  
-  export function DatePickerDemo({ className, value, onChange }: DatePickerDemoProps) {
+}
+
+export function DatePickerDemo({
+	className,
+	value,
+	onChange,
+}: DatePickerDemoProps) {
 	const normalizeDate = (date: Date | undefined): Date | undefined => {
-	  if (!date) return undefined;
-	  const offset = date.getTimezoneOffset();
-	  const normalizedDate = new Date(date.getTime() - offset * 60 * 1000);
-	  return new Date(normalizedDate.toISOString().split('T')[0]);
+		if (!date) return undefined;
+		const offset = date.getTimezoneOffset();
+		const normalizedDate = new Date(date.getTime() - offset * 60 * 1000);
+		return new Date(normalizedDate.toISOString().split("T")[0]);
 	};
-  
+
 	const handleSelect = (date: Date | undefined) => {
-	  const normalizedDate = normalizeDate(date);
-	  onChange(normalizedDate);
+		const normalizedDate = normalizeDate(date);
+		onChange(normalizedDate);
 	};
-  
+
 	return (
-	  <Popover>
-		<PopoverTrigger asChild>
-		  <Button
-			variant={"outline"}
-			className={cn(
-			  "w-[280px] justify-start text-left font-normal",
-			  !value && "text-muted-foreground",
-			  className
-			)}
-		  >
-			<CalendarIcon className="mr-2 h-4 w-4" />
-			{value ? format(value, "PPP") : <span>Pick a date</span>}
-		  </Button>
-		</PopoverTrigger>
-		<PopoverContent className="w-auto p-0">
-		  <Calendar
-			mode="single"
-			selected={value}
-			onSelect={handleSelect}
-			initialFocus
-		  />
-		</PopoverContent>
-	  </Popover>
+		<Popover>
+			<PopoverTrigger asChild>
+				<Button
+					variant={"outline"}
+					className={cn(
+						"w-[280px] justify-start text-left font-normal",
+						!value && "text-muted-foreground",
+						className
+					)}
+				>
+					<CalendarIcon className="mr-2 h-4 w-4" />
+					{value ? format(value, "PPP") : <span>Pick a date</span>}
+				</Button>
+			</PopoverTrigger>
+			<PopoverContent className="w-auto p-0">
+				<Calendar
+					mode="single"
+					selected={value}
+					onSelect={handleSelect}
+					initialFocus
+				/>
+			</PopoverContent>
+		</Popover>
 	);
-  }
+}
 
 interface UpdateProfilProps {
 	className?: string;
@@ -83,188 +87,227 @@ export default function UpdateProfil({ className, user }: UpdateProfilProps) {
 		...user,
 	});
 
-
 	const handleSubmit = (e: any) => {
 		e.preventDefault();
 		console.log("user : ", userEdited);
 		updateUser(userEdited);
-	  };
-  
+	};
+
 	return (
-	  <div className={cn("flex justify-center items-center", className)}>
-		<div className="flex flex-col space-y-5">
-		  <h1 className="text-3xl font-bold">My Profile</h1>
-		  Pseudo :<Input
-			className={
-			  onEdit
-				? "bg-green-200"
-				: "bg-transparent border-none text-black text-inter  placeholder-gray-400 font-normal flex h-5 w-full border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300 hover:border-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0 "
-			}
-			readOnly={!onEdit}
-			type="text"
-			name="pseudo"
-			value={userEdited.pseudo}
-			onChange={(e) =>
-			  setUserEdited({ ...userEdited, pseudo: e.target.value })
-			}
-		  />
-		  Email :<Input
-			className={
-			  onEdit
-				? "bg-green-200"
-				: "bg-transparent border-none text-black text-inter  placeholder-gray-400 font-normal flex h-5 w-full border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300 hover:border-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0 "
-			}
-			readOnly={!onEdit}
-			type="text"
-			name="email"
-			value={userEdited.email}
-			onChange={(e) =>
-			  setUserEdited({ ...userEdited, email: e.target.value })
-			}
-		  />
-		  First name :<Input
-			className={
-			  onEdit
-				? "bg-green-200"
-				: "bg-transparent border-none text-black text-inter  placeholder-gray-400 font-normal flex h-5 w-full border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300 hover:border-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0 "
-			}
-			readOnly={!onEdit}
-			type="text"
-			name="name"
-			value={userEdited.name}
-			onChange={(e) =>
-			  setUserEdited({ ...userEdited, name: e.target.value })
-			}
-		  />
-		  Last name :<Input
-			className={
-			  onEdit
-				? "bg-green-200"
-				: "bg-transparent border-none text-black text-inter  placeholder-gray-400 font-normal flex h-5 w-full border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300 hover:border-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0 "
-			}
-			readOnly={!onEdit}
-			type="text"
-			name="last_name"
-			value={userEdited.last_name}
-			onChange={(e) =>
-			  setUserEdited({ ...userEdited, last_name: e.target.value })
-			}
-		  />
-		
-		Birth date:
-        {onEdit ? (
-          <DatePickerDemo
-            className="bg-green-200"
-            value={userEdited.birth_date}
-            onChange={(date) =>
-              setUserEdited({ ...userEdited, birth_date: date ?? undefined })
-            }
-          />
-        ) : (
-          <div>{userEdited.birth_date ? format(userEdited.birth_date, "PPP") : ""}</div>
-        )}
-
-		Gender : 
-		{onEdit ? (
-			<Select
-				value={userEdited.sexe ?? ""}
-				aria-labelledby="sexe-select"
-				
-				onValueChange={(value) => setUserEdited({ ...userEdited, sexe: value ?? "Rather not say" }) }
-				>
-				<SelectTrigger className="w-[180px]">
-					<SelectValue placeholder="Sexe" />
-				</SelectTrigger>
-				<SelectContent>
-					<SelectItem value="Male">Male</SelectItem>
-					<SelectItem value="Female">Female</SelectItem>
-					<SelectItem value="Rather not say">Rather not say</SelectItem>
-				</SelectContent>
-				</Select>
-			) : (
-			<div><Select
-			value={userEdited.sexe ?? "Rather not say"}
-			aria-labelledby="sexe-select"
-			disabled={!onEdit}
-			>
-			<SelectTrigger className="w-[180px]">
-				<SelectValue placeholder="Rather not say" />
-			</SelectTrigger>
-			<SelectContent>
-				<SelectItem value="Male">Male</SelectItem>
-				<SelectItem value="Female">Female</SelectItem>
-				<SelectItem value="Rather not say">Rather not say</SelectItem>
-			</SelectContent>
-			</Select></div>
-			)
-		}
-
-		  Location :<Input
-			className={
-			  onEdit
-				? "bg-green-200"
-				: "bg-transparent border-none text-black text-inter  placeholder-gray-400 font-normal flex h-5 w-full border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300 hover:border-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0 "
-			}
-			readOnly={!onEdit}
-			type="text"
-			name="location"
-			value={userEdited.location}
-			onChange={(e) =>
-			  setUserEdited({ ...userEdited, location: e.target.value })
-			}
-		  />
-		  
-		  
-		  Experience :
-		  {onEdit ? (
-				<>
+		<div className={cn("flex justify-center items-center", className)}>
+			<div className="flex flex-col space-y-5">
+				<h1 className="text-3xl font-bold">My Profile</h1>
+				Pseudo :
+				<Input
+					className={
+						onEdit
+							? "bg-green-200"
+							: "bg-transparent border-none text-black text-inter  placeholder-gray-400 font-normal flex h-5 w-full border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300 hover:border-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0 "
+					}
+					readOnly={!onEdit}
+					type="text"
+					name="pseudo"
+					value={userEdited.pseudo}
+					onChange={(e) =>
+						setUserEdited({ ...userEdited, pseudo: e.target.value })
+					}
+				/>
+				Email :
+				<Input
+					className={
+						onEdit
+							? "bg-green-200"
+							: "bg-transparent border-none text-black text-inter  placeholder-gray-400 font-normal flex h-5 w-full border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300 hover:border-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0 "
+					}
+					readOnly={!onEdit}
+					type="text"
+					name="email"
+					value={userEdited.email}
+					onChange={(e) =>
+						setUserEdited({ ...userEdited, email: e.target.value })
+					}
+				/>
+				First name :
+				<Input
+					className={
+						onEdit
+							? "bg-green-200"
+							: "bg-transparent border-none text-black text-inter  placeholder-gray-400 font-normal flex h-5 w-full border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300 hover:border-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0 "
+					}
+					readOnly={!onEdit}
+					type="text"
+					name="name"
+					value={userEdited.first_name}
+					onChange={(e) =>
+						setUserEdited({
+							...userEdited,
+							first_name: e.target.value,
+						})
+					}
+				/>
+				Last name :
+				<Input
+					className={
+						onEdit
+							? "bg-green-200"
+							: "bg-transparent border-none text-black text-inter  placeholder-gray-400 font-normal flex h-5 w-full border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300 hover:border-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0 "
+					}
+					readOnly={!onEdit}
+					type="text"
+					name="last_name"
+					value={userEdited.lastName}
+					onChange={(e) =>
+						setUserEdited({
+							...userEdited,
+							lastName: e.target.value,
+						})
+					}
+				/>
+				Birth date:
+				{onEdit ? (
+					<DatePickerDemo
+						className="bg-green-200"
+						value={userEdited.birth_date}
+						onChange={(date) =>
+							setUserEdited({
+								...userEdited,
+								birth_date: date ?? new Date(),
+							})
+						}
+					/>
+				) : (
+					<div>
+						{userEdited.birth_date
+							? format(userEdited.birth_date, "PPP")
+							: ""}
+					</div>
+				)}
+				Gender :
+				{onEdit ? (
+					<Select
+						value={userEdited.gender ?? ""}
+						aria-labelledby="sexe-select"
+						onValueChange={(value) =>
+							setUserEdited({
+								...userEdited,
+								gender: value ?? "Rather not say",
+							})
+						}
+					>
+						<SelectTrigger className="w-[180px]">
+							<SelectValue placeholder="Sexe" />
+						</SelectTrigger>
+						<SelectContent>
+							<SelectItem value="Male">Male</SelectItem>
+							<SelectItem value="Female">Female</SelectItem>
+							<SelectItem value="Rather not say">
+								Rather not say
+							</SelectItem>
+						</SelectContent>
+					</Select>
+				) : (
+					<div>
+						<Select
+							value={userEdited.gender ?? "Rather not say"}
+							aria-labelledby="sexe-select"
+							disabled={!onEdit}
+						>
+							<SelectTrigger className="w-[180px]">
+								<SelectValue placeholder="Rather not say" />
+							</SelectTrigger>
+							<SelectContent>
+								<SelectItem value="Male">Male</SelectItem>
+								<SelectItem value="Female">Female</SelectItem>
+								<SelectItem value="Rather not say">
+									Rather not say
+								</SelectItem>
+							</SelectContent>
+						</Select>
+					</div>
+				)}
+				Location :
+				<Input
+					className={
+						onEdit
+							? "bg-green-200"
+							: "bg-transparent border-none text-black text-inter  placeholder-gray-400 font-normal flex h-5 w-full border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300 hover:border-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0 "
+					}
+					readOnly={!onEdit}
+					type="text"
+					name="location"
+					value={userEdited.localisation}
+					onChange={(e) =>
+						setUserEdited({
+							...userEdited,
+							localisation: e.target.value,
+						})
+					}
+				/>
+				Experience :
+				{onEdit ? (
+					<>
+						<Slider
+							max={10}
+							step={1}
+							value={[parseInt(userEdited.experience ?? "0")]}
+							onValueChange={(newValue) =>
+								setUserEdited({
+									...userEdited,
+									experience: newValue[0].toString(),
+								})
+							}
+						/>
+					</>
+				) : (
 					<Slider
-					max={10}
-					step={1}
-		            value={[userEdited.experience ?? 0]}
-		            onValueChange={(newValue) => setUserEdited({ ...userEdited, experience: newValue[0] })}
-		          	/>
-				</>
-			) : (
-			<Slider
-				max={10}
-				step={1}
-				value={[userEdited.experience ?? 0]}
-				disabled={!onEdit}
-			/>
-		)}
-
-			Available : 
-			{onEdit ? (
-				<>
-					<div className="flex items-center space-x-2">
-						<Switch 
-							id="join-projects"
-							checked={userEdited.chercheARejoindreUnProjet} 
-							onCheckedChange={() => setUserEdited({ ...userEdited, chercheARejoindreUnProjet: !userEdited.chercheARejoindreUnProjet })}
-						/>
-						<Label htmlFor="join-projects">I want to join other projects </Label>
-					</div>
-				</>
-			) : (
-				<>
-					<div className="flex items-center space-x-2">
-						<Switch 
-						id="join-projects" 
-						disabled={true} 
-						checked={userEdited.chercheARejoindreUnProjet} 
-						/>
-						<Label htmlFor="join-projects">I want to join other projects </Label>
-					</div>
-				</>
-			)}
-
-  			<form onSubmit={handleSubmit} className="flex flex-col gap-2">
-			<Button variant="default" onClick={() => setOnEdit(!onEdit)}>
-			  {onEdit ? "Save" : "Edit"}
-			</Button>
-		  </form>
+						max={10}
+						step={1}
+						value={[parseInt(userEdited.experience ?? "0")]}
+						disabled={!onEdit}
+					/>
+				)}
+				Available :
+				{onEdit ? (
+					<>
+						<div className="flex items-center space-x-2">
+							<Switch
+								id="join-projects"
+								checked={userEdited.available}
+								onCheckedChange={() =>
+									setUserEdited({
+										...userEdited,
+										available: !userEdited.available,
+									})
+								}
+							/>
+							<Label htmlFor="join-projects">
+								I want to join other projects{" "}
+							</Label>
+						</div>
+					</>
+				) : (
+					<>
+						<div className="flex items-center space-x-2">
+							<Switch
+								id="join-projects"
+								disabled={true}
+								checked={userEdited.available}
+							/>
+							<Label htmlFor="join-projects">
+								I want to join other projects{" "}
+							</Label>
+						</div>
+					</>
+				)}
+				<form onSubmit={handleSubmit} className="flex flex-col gap-2">
+					<Button
+						variant="default"
+						onClick={() => setOnEdit(!onEdit)}
+					>
+						{onEdit ? "Save" : "Edit"}
+					</Button>
+				</form>
+			</div>
 		</div>
-	  </div>
 	);
-  }
+}

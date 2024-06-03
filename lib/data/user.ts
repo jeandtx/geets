@@ -35,3 +35,21 @@ export async function getUserById(id: string) {
     const data: User = JSON.parse(JSON.stringify(user)) // Remove ObjectID (not serializable)
     return data
 }
+
+/** 
+ * Update a user
+ * 
+ */
+export async function updateUser(user: User) {
+    const client = await clientPromise;
+    const db = client.db('geets')
+    const userId = new ObjectId(user._id); // Ensure _id is a valid ObjectId
+    let userWithoutObjectId = {
+        ...user,
+        _id: user._id ? new ObjectId(user._id) : undefined
+    }
+    delete userWithoutObjectId._id
+    const response = db.collection('users').updateOne({ _id: userId }, { $set: user })
+    const data = JSON.parse(JSON.stringify(response)); // Remove ObjectID (not serializable)
+    return data;
+}
