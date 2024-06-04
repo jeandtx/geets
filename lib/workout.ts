@@ -1,6 +1,6 @@
 'use server'
 import clientPromise from './mongodb'
-import { User, Workout, Session,ExerciseInput } from '../types/tables'
+import { User, Workout,ExerciseInput } from '../types/tables'
 import { ObjectId } from 'mongodb';
 
 export async function createWorkout(email: string, workoutTitle: string, exerciseName: string[]): Promise<Workout> {
