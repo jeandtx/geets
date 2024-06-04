@@ -1,6 +1,7 @@
 import React from "react";
-import { getWorkout } from "@/lib/actions";
-import ExerciseNavigator from "@/components/Session/ExerciseNavigator";
+import { getWorkout } from "@/lib/workout";
+import ExerciseNavigator from "@/components/Seance/ExerciseNavigator";
+import SeanceMenu from "@/components/Seance/SeanceMenu";
 
 export default async function WorkoutPage({
   params,
@@ -24,7 +25,7 @@ export default async function WorkoutPage({
       <div className="text-3xl font-bold pt-12">{workout.workoutTitle}</div>
       <div className="py-2">{new Date(workout.date).toLocaleDateString()}</div>
       <div className="pt-10">
-        <ExerciseNavigator exercises={workout.exercises} id={workout._id} />
+        <SeanceMenu workoutId={workoutId}/>
       </div>
     </section>
   );

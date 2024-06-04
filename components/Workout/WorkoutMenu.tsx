@@ -32,10 +32,11 @@ export default function WorkoutMenu() {
         <div className="flex flex-col items-center justify-center w-full h-screen">
             <div className="text-3xl font-bold pt-24">Ma séance du jour</div>
             <div className="flex flex-col items-center pt-36 w-full h-screen gap-3">
+                <WorkoutModal title={"+"} />
                 {workouts.map((workout) => (
                     <Workout key={workout._id} title={workout.workoutTitle} workoutId={workout._id} />
                 ))}
-                <WorkoutModal title={"+"} />
+                
             </div>
         </div>
     );

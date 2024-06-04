@@ -1,6 +1,6 @@
 "use client"
 import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
-import { getAllWorkouts } from "@/lib/actions";
+import { getAllWorkouts } from "@/lib/workout";
 import { useSession } from "next-auth/react";
 
 interface WorkoutContextProps {

@@ -13,8 +13,9 @@ export interface Workout {
     date: Date;
     exercises: string[]; // Tableau de nom d'exercices
 }
-export interface Session {
+export interface Seance {
     _id: string;
+    email: string;
     workoutId: string;
     date: Date;
     exercises: {
@@ -27,6 +28,6 @@ export interface Session {
 
 
 export interface ExerciseInput {
-    sets: string;
+    reps: string;
     weight: string;
 }

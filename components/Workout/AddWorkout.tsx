@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { createWorkout } from "@/lib/actions";
+import { createWorkout } from "@/lib/workout";
 import { useSession } from 'next-auth/react';
 import { useToast } from "../ui/use-toast";
 

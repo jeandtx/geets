@@ -35,7 +35,7 @@ export function Sidebar({ className }: SidebarProps) {
                   Dash board
                 </Button>
               </Link>
-              <Link href={`/${session.data?.user?.email}`}>
+              <Link href={`/profil/${session.data?.user?.email}`}>
                 <Button variant="ghost" className="w-full justify-start">
                   <CircleUserRoundIcon className="mr-2 h-6 w-6" />
                   Profil
@@ -60,7 +60,7 @@ export function Sidebar({ className }: SidebarProps) {
             <span className="text-sm">Home</span>
           </Button>
         </Link>
-        <Link href={`/${session.data?.user?.email}`}>
+        <Link href={`/profil/${session.data?.user?.email}`}>
           <Button variant="ghost" className="h-15 w-15 flex flex-col items-center">
             <CircleUserRoundIcon className="h-12" />
             <span className="text-sm">Profile</span>
