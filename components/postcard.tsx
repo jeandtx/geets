@@ -20,7 +20,7 @@ export default function PostCard({ post }: Readonly<PostProps>) {
 		const days = Math.floor(diff / 1000 / 60 / 60 / 24);
 		const hours = Math.floor(diff / 1000 / 60 / 60);
 		const minutes = Math.floor(diff / 1000 / 60);
-		const seconds = Math.floor(diff / 1000);
+		const seconds = Math.floor(diff / 1000 / 60);
 
 		if (years > 0) return `Il y a ${years} ans`;
 		if (months > 0) return `Il y a ${months} mois`;
@@ -40,9 +40,9 @@ export default function PostCard({ post }: Readonly<PostProps>) {
 	}
 
 	return (
-		<div className="flex max-w-xl overflow-hidden rounded-xl border border-slate-200 bg-white">
+		<div className="flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white">
 			<div className="wrapper py-7">
-				<div className="header px-10 flex items-center  mb-4 space-x-4">
+				<div className="header px-10 flex items-center mb-4 space-x-4">
 					<Img
 						className="rounded-full"
 						src={
@@ -62,8 +62,6 @@ export default function PostCard({ post }: Readonly<PostProps>) {
 									: post.author?.email}
 							</p>
 						</Link>
-
-						{/* div align line  */}
 						<div className="flex items-center space-x-2">
 							<p className="text-sm text-gray-600">
 								{getTimeSincePosted(post?.time)}
@@ -88,16 +86,16 @@ export default function PostCard({ post }: Readonly<PostProps>) {
 					</p>
 					{post.media && (
 						<Img
-							className="w-full h-full object-cover rounded-xl"
+							className="w-full h-64 object-cover rounded-xl"
 							src={post.media}
-							alt="Placeholder image"
+							alt="Post media"
 							width={1280}
 							height={960}
 						/>
 					)}
 				</div>
 
-				<hr className="border-gray-300 my-5" />
+				<hr className="border-gray-300 my-5 mx-10" />
 
 				<div className="footer px-10 space-y-5">
 					<div className="icon-group flex justify-between items-center px-20">

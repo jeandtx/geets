@@ -13,8 +13,11 @@ interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export async function Sidebar({ className, email }: Readonly<SidebarProps>) {
+
+
 	return (
-		<div className={cn("", className)}>
+		<>
+		<div className={cn(" sm:block hidden", className)}>
 			<div className="px-3 py-2 rounded-xl border border-slate-200 bg-white min-w-[200px]">
 				<h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
 					Navigate
@@ -68,5 +71,7 @@ export async function Sidebar({ className, email }: Readonly<SidebarProps>) {
 				</div>
 			</div>
 		</div>
+		
+		</>  
 	);
 }

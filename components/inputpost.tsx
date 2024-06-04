@@ -141,7 +141,7 @@ export function InputPost({ className }: Readonly<InputPostProps>) {
 			<form
 				ref={formRef}
 				onSubmit={handleSubmit}
-				className="flex flex-col gap-5 p-6 rounded-xl border border-slate-200 bg-white"
+				className="flex flex-col gap-5 p-5 rounded-xl border border-slate-200 bg-white"
 			>
 				<div className="flex gap-2">
 					<Avatar>
@@ -174,7 +174,7 @@ export function InputPost({ className }: Readonly<InputPostProps>) {
 					/>
 				</div>
 
-				<div className="flex justify-between items-center w-full">
+				<div className="flex justify-between w-full">
 					<SelectProject
 						onSelectProject={handleSelectProject}
 						selectedProject={selectedProject}
@@ -192,7 +192,7 @@ export function InputPost({ className }: Readonly<InputPostProps>) {
 						{({ open }) => {
 							return (
 								<button
-									className="overflow-hidden inline-flex items-center justify-center rounded-md px-6 py-3 text-base font-medium text-gray-500"
+									className="overflow-hidden inline-flex items-center justify-center rounded-md py-3 text-base font-medium text-gray-500"
 									style={{
 										height: "40px",
 										maxWidth: "200px",
@@ -205,18 +205,18 @@ export function InputPost({ className }: Readonly<InputPostProps>) {
 								>
 									<div className="flex items-center justify">
 										<Image className="h-6 w-6 text-blue-500 mr-2" />
-										{imageName}
+										<div className="sm:block hidden">{imageName}</div>
 									</div>
 								</button>
 							);
 						}}
 					</CldUploadWidget>
 					<Button
-						className="overflow-hidden inline-flex items-center bg-transparent hover:none hover:bg-transparent justify-center rounded-md px-6 py-3 text-base font-medium text-gray-500"
+						className="overflow-hidden inline-flex items-center bg-transparent hover:none hover:bg-transparent justify-center rounded-md py-3 text-base font-medium text-gray-500"
 						type="submit"
 					>
 						<Send className="h-6 w-6 text-green-500 mr-2" />
-						Envoyer
+						<div className="sm:block hidden"> Envoyer</div>
 					</Button>
 				</div>
 			</form>

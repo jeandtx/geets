@@ -92,14 +92,17 @@ export default function SelectProject({
 				type="button"
 				ref={trigger}
 				onClick={() => setModalOpen(true)}
-				className="overflow-hidden inline-flex items-center justify-center rounded-md px-6 py-3 text-base font-medium text-gray-500"
+				className="overflow-hidden inline-flex items-center justify-center rounded-md py-3 text-base font-medium text-gray-500"
 				style={{ height: "40px" }}
 			>
 				{" "}
 				<Lightbulb className="h-6 w-6 text-yellow-500 mr-2" />
+				<div className="sm:block hidden">
 				{selectedProject
 					? projects.find((p) => p._id === selectedProject._id)?.title
 					: "Ajouter un projet"}
+					</div>
+
 			</button>
 
 			<div

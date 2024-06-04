@@ -47,7 +47,7 @@ export default async function ProfilPage({
 	});
 
 	return (
-		<div className="flex flex-col items-center w-full space-y-5 text-black py-5">
+		<div className="">
 			<h1 className="text-3xl font-bold">{user?.email}</h1>
 			{user ? <UpdateProfil user={user} /> : <div>User not found 😔</div>}
 			<h2 className="text-2xl font-bold">My Posts</h2>
@@ -58,7 +58,7 @@ export default async function ProfilPage({
 							return (
 								<div
 									key={post._id}
-									className="flex max-w-xl overflow-hidden rounded-xl border border-slate-200 bg-white"
+									className="flex overflow-hidden rounded-xl border border-slate-200 bg-white"
 								>
 									<div className="wrapper py-7">
 										<div className="header px-10 mb-4">

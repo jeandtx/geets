@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Project } from '@/types/tables';
 import { searchProjects } from '@/lib/data/project';
-import LoadingSpinner from './spinner';
+import LoadingSpinner from './ui/spinner';
 
 const SearchComponent: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -39,8 +39,8 @@ const SearchComponent: React.FC = () => {
                 type="text"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Search for projects..."
-                className="w-full max-w-2xl p-2 border rounded"
+                placeholder="Rechercher..."
+                className="w-full max-w-2xl p-2 border rounded-xl"
             />
 
             {isLoading && <div><LoadingSpinner /></div>}

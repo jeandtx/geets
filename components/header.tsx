@@ -13,9 +13,9 @@ export async function Header({ className }: HeaderProps) {
 
 	return (
 		<>
-			<NavigationMenuDemo className="top-5 left-5 z-50 md:hidden block" />
-			<div className={cn("pb-12  md:block hidden", className)}>
-				<div className="flex flex-col h-full space-y-5 py-5 items-end">
+			{/* <NavigationMenuDemo className="top-5 left-5 z-50 md:hidden block" /> */}
+			<div className={cn("pb-12 hidden sm:block ", className)}>
+				<div className=" flex flex-col h-full space-y-5 items-end">
 					<Sidebar email={email} />
 					<Projects email={email} />
 				</div>
