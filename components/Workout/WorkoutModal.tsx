@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
-import { AddWorkout } from "@/components/AddWorkout";
+import { AddWorkout } from "@/components/Workout/AddWorkout";
 import { useSession } from "next-auth/react";
 
 interface WorkoutModalProps {

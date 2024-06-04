@@ -1,9 +1,9 @@
 "use client";
 import { useState } from "react";
-import { useToast } from "./ui/use-toast";
+import { useToast } from "../ui/use-toast";
 import { Eye, EyeOff } from "lucide-react";
 
-export function SignupForm({ action, children }: { action: any; children: React.ReactNode }) {
+export function SigninForm({ action, children }: { action: any; children: React.ReactNode }) {
 	const { toast } = useToast();
 	const [showPassword, setShowPassword] = useState(false);
 
@@ -21,7 +21,7 @@ export function SignupForm({ action, children }: { action: any; children: React.
 				toast({
 					variant: "destructive",
 					title: "Uh oh! Something went wrong.",
-					description: "Please check your details and try again.",
+					description: "Please check your email and password.",
 				});
 			});
 	}
@@ -31,20 +31,6 @@ export function SignupForm({ action, children }: { action: any; children: React.
 			onSubmit={handleSubmit}
 			className="flex flex-col space-y-4 px-4 py-1 pb-20 sm:px-16"
 		>
-			<div>
-				<label htmlFor="name" className="block text-xs textcolor">
-					Nom
-				</label>
-				<input
-					id="name"
-					name="name"
-					type="text"
-					placeholder="Ton ptit nom"
-					autoComplete="name"
-					required
-					className="mt-1 block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-inputborder focus:outline-none focus:ring-black sm:text-sm"
-				/>
-			</div>
 			<div>
 				<label htmlFor="email" className="block text-xs textcolor">
 					Adresse email

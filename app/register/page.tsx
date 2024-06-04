@@ -2,7 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createUser, getUser } from "@/app/db";
 import { SubmitButton } from "@/components/ui/submit-button";
-import { SignupForm } from "@/components/SignupForm";
+import { SignupForm } from "@/components/AuthPart/SignupForm";
 export default function Login() {
 	async function register(formData: FormData) {
 		"use server";
