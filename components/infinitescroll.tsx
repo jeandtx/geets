@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 
 import PostCard from "@/components/postcard";
 import React from "react";
+import LoadingSpinner from "./ui/spinner";
 
 interface InfiniteScrollProps {
 	/**
@@ -42,7 +43,7 @@ export default function InfiniteScroll({
 
 	return (
 		<div
-			className={cn("flex flex-col w-full items-center", className)}
+			className={cn("flex flex-col w-full", className)}
 			style={{ height: "100%" }}
 		>
 			<ul className="space-y-4">
@@ -50,7 +51,9 @@ export default function InfiniteScroll({
 					<PostCard key={post._id} post={post} />
 				))}
 			</ul>
-			<div ref={ref}>Loading...</div>
+			<div className="flex justify-center items-center" style={{ height: "100px" }} ref={ref}>
+        <LoadingSpinner />
+      </div>
 		</div>
 	);
 }

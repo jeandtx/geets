@@ -21,7 +21,7 @@ export default function PostCard({ post }: Readonly<PostProps>) {
 		const days = Math.floor(diff / 1000 / 60 / 60 / 24);
 		const hours = Math.floor(diff / 1000 / 60 / 60);
 		const minutes = Math.floor(diff / 1000 / 60);
-		const seconds = Math.floor(diff / 1000);
+		const seconds = Math.floor(diff / 1000 / 60);
 
 		if (years > 0) return `Il y a ${years} ans`;
 		if (months > 0) return `Il y a ${months} mois`;
@@ -57,8 +57,8 @@ export default function PostCard({ post }: Readonly<PostProps>) {
 	}
 
 	return (
-		<div className="flex overflow-hidden rounded-xl border border-slate-200 bg-white">
-			<div className="wrapper pt-5 pb-3 px-7 w-full">
+		<div className="flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white">
+			<div className="wrapper pt-5 pb-3 px-7">
 				<div className="header flex items-center  mb-4 space-x-4">
 					<Img
 						className="rounded-full"
@@ -79,8 +79,6 @@ export default function PostCard({ post }: Readonly<PostProps>) {
 									: post.author?.email}
 							</p>
 						</Link>
-
-						{/* div align line  */}
 						<div className="flex items-center space-x-2">
 							<p className="text-sm text-gray-600">
 								{getTimeSincePosted(post?.time)}
@@ -105,9 +103,9 @@ export default function PostCard({ post }: Readonly<PostProps>) {
 					</p>
 					{post.media && (
 						<Img
-							className="w-full h-full object-cover rounded-xl"
+							className="w-full h-64 object-cover rounded-xl"
 							src={post.media}
-							alt="Placeholder image"
+							alt="Post media"
 							width={1280}
 							height={960}
 						/>
@@ -124,7 +122,7 @@ export default function PostCard({ post }: Readonly<PostProps>) {
 							onClick={handleLikePost}
 						>
 							<ThumbsUp className="text-gray-600" />
-							<span className="text-gray-600 font-semibold">
+							<span className="hidden sm:block text-gray-600 font-semibold">
 								J&apos;aime
 							</span>
 						</Button>
@@ -134,7 +132,7 @@ export default function PostCard({ post }: Readonly<PostProps>) {
 							onClick={handleCommentPost}
 						>
 							<MessageSquare className="text-gray-600" />
-							<span className="text-gray-600 font-semibold">
+							<span className="hidden sm:block text-gray-600 font-semibold">
 								Commenter
 							</span>
 						</Button>
@@ -143,7 +141,7 @@ export default function PostCard({ post }: Readonly<PostProps>) {
 							href={`${post.author?.email}/${post.project?._id}`}
 						>
 							<Rocket className="text-gray-600" />
-							<span className="text-gray-600 font-semibold">
+							<span className=" hidden sm:block text-gray-600 font-semibold">
 								Visiter
 							</span>
 						</Link>
