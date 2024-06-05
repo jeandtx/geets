@@ -113,7 +113,7 @@ export default function ProjectDetails({
 							<div className="text-xl font-medium text-black">
 								Description
 							</div>
-							<div className="text-s text-zinc-600">
+							<div className="text-s text-zinc-600 flex flex-wrap overflow-hidden">
 								{project.description}
 							</div>
 						</div>
