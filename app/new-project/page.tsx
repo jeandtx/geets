@@ -91,6 +91,7 @@ export default function NewProject() {
 					title: "Success!",
 					description:
 						"Your form has been submitted with " + project.title,
+					variant: "success",
 				});
 			})
 			.catch(() => {

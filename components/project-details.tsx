@@ -47,7 +47,7 @@ export default function ProjectDetails({
 			toast({
 				title: "Joined successfully",
 				description: `You have successfully joined the project.`,
-				variant: "default",
+				variant: "success",
 			});
 		} else {
 			toast({

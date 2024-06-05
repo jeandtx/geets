@@ -35,8 +35,7 @@ export default function SelectProject({
 			const projects = await getProjects({
 				participants: {
 					$elemMatch: {
-						name: user,
-						role: "author",
+						name: user
 					},
 				},
 			});

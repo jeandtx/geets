@@ -16,6 +16,7 @@ export function Form({
 				toast({
 					title: "Success!",
 					description: "Your form has been submitted.",
+					variant: "success",
 				});
 			})
 			.catch(() => {

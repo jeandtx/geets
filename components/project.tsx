@@ -21,6 +21,7 @@ export function ProjectCard({
 		toast({
 			title: "Success!",
 			description: "Your project has been deleted.",
+			variant: "success",
 		});
 	};
 	const author = project.participants?.find((p) => p.role === "author")?.name;

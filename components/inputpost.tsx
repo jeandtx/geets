@@ -105,6 +105,7 @@ export function InputPost({ className }: Readonly<InputPostProps>) {
 		await createPost(post)
 			.then(() => {
 				toast({
+					variant: "success",
 					title: "Post submitted successfully",
 					description: "Your post has been successfully submitted.",
 				});
