@@ -1,4 +1,4 @@
-import { auth, signOut } from "@/app/auth";
+import { signOut } from "@/app/auth";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { getUser } from "@/lib/data/user";
@@ -113,7 +113,7 @@ export default async function ProfilPage({
 								: null;
 
 							const authorInfo = await getUser(
-								author?.name || ""
+								author?.name ?? ""
 							);
 							return (
 								<div

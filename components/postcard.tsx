@@ -3,6 +3,7 @@ import Img from "next/image";
 import { MessageSquare, Rocket, ThumbsUp } from "lucide-react";
 import { Post } from "@/types/tables";
 import Link from "next/link";
+import { Button } from "./ui/button";
 
 interface PostProps {
 	post: Post;
@@ -31,18 +32,34 @@ export default function PostCard({ post }: Readonly<PostProps>) {
 		return "Il y a un certain temps";
 	}
 
-	function handleLikePost() {
-		console.log("Like post");
+	function handleLikePost(e: React.MouseEvent<HTMLElement, MouseEvent>) {
+		const target = e.currentTarget as HTMLElement; // Use currentTarget to refer to the element the event handler is attached to
+		const elements = target.querySelectorAll("span, svg");
+
+		elements.forEach((element) => {
+			if (element.classList.contains("text-blue-500")) {
+				element.classList.remove("text-blue-500");
+				element.classList.add("text-gray-600");
+			} else {
+				element.classList.remove(
+					"text-gray-600",
+					"text-red-500",
+					"text-green-500"
+				); // Add other text colors if needed
+				element.classList.add("text-blue-500");
+			}
+		});
 	}
 
-	function handleCommentPost() {
-		console.log("Comment post");
+	function handleCommentPost(e: React.MouseEvent<HTMLElement, MouseEvent>) {
+		// const target = e.currentTarget as HTMLElement
+		// TODO: Add comment functionality
 	}
 
 	return (
-		<div className="flex max-w-xl overflow-hidden rounded-xl border border-slate-200 bg-white">
-			<div className="wrapper py-7">
-				<div className="header px-10 flex items-center  mb-4 space-x-4">
+		<div className="flex overflow-hidden rounded-xl border border-slate-200 bg-white">
+			<div className="wrapper pt-5 pb-3 px-7 w-full">
+				<div className="header flex items-center  mb-4 space-x-4">
 					<Img
 						className="rounded-full"
 						src={
@@ -82,7 +99,7 @@ export default function PostCard({ post }: Readonly<PostProps>) {
 					</div>
 				</div>
 
-				<div className="body px-10 space-y-5">
+				<div className="body space-y-5">
 					<p className="text-gray-900 mb-0">
 						{post.content ? post.content : "Contenu du post"}
 					</p>
@@ -97,23 +114,38 @@ export default function PostCard({ post }: Readonly<PostProps>) {
 					)}
 				</div>
 
-				<hr className="border-gray-300 my-5" />
+				<hr className="border-gray-300 mt-5 mb-3" />
 
-				<div className="footer px-10 space-y-5">
-					<div className="icon-group flex justify-between items-center px-20">
-						<ThumbsUp
+				<div className="footer space-y-3">
+					<div className="icon-group flex justify-between items-center ">
+						<Button
+							variant={"outline"}
+							className="border-0 flex space-x-3 px-5 py-3 rounded-xl cursor-pointer duration-200 transition-all hover:bg-slate-100 active:transform active:scale-95 select-none"
 							onClick={handleLikePost}
-							className="cursor-pointer"
-						/>
-						<MessageSquare
+						>
+							<ThumbsUp className="text-gray-600" />
+							<span className="text-gray-600 font-semibold">
+								J&apos;aime
+							</span>
+						</Button>
+						<Button
+							variant={"outline"}
+							className="border-0 flex space-x-3 px-5 py-3 rounded-xl cursor-pointer duration-200 transition-all hover:bg-slate-100 active:transform active:scale-95 select-none"
 							onClick={handleCommentPost}
-							className="cursor-pointer"
-						/>
-
+						>
+							<MessageSquare className="text-gray-600" />
+							<span className="text-gray-600 font-semibold">
+								Commenter
+							</span>
+						</Button>
 						<Link
+							className="flex space-x-3 px-5 py-3 rounded-xl cursor-pointer duration-200 transition-all hover:bg-slate-100 active:transform active:scale-95 active:text-blue-500 select-none"
 							href={`${post.author?.email}/${post.project?._id}`}
 						>
-							<Rocket className="cursor-pointer" />
+							<Rocket className="text-gray-600" />
+							<span className="text-gray-600 font-semibold">
+								Visiter
+							</span>
 						</Link>
 					</div>
 				</div>
