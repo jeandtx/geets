@@ -1,0 +1,25 @@
+{
+    "name": "BodyScan App",
+    "short_name": "BodyScan",
+    "theme_color": "#8936FF",
+    "background_color": "#2EC6FE",
+    "orientation": "any",
+    "display": "standalone",
+    "dir": "auto",
+    "lang": "fr-FR",
+    "start_url": "https://bodyscan-2.vercel.app/",
+    "description": "L'application BodyScan pour suivre vos performances.",
+    "icons": [
+      {
+        "src": "/icons/icon-192x192.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      },
+      {
+        "src": "/icons/icon-512x512.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      }
+    ]
+  }
+  

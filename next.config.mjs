@@ -1,26 +1,41 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
-    images: {
-        remotePatterns:
-            [
-                {
-                    protocol: 'https',
-                    hostname: 'loremflickr.com',
-                    //   port: '',
-                    //   pathname: '/account123/**',
-                }, {
-                    protocol: 'https',
-                    hostname: 'images.unsplash.com',
-                }, {
-                    protocol: 'https',
-                    hostname: 'www.gravatar.com',
-                }, {
-                    protocol: 'https',
-                    hostname: 'res.cloudinary.com',
-                },
-            ],
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
 
+const withPWA = require("@ducanh2912/next-pwa").default({
+    dest: 'public',
+    cacheOnFrontEndNav: true,
+    aggressiveFrontEndNavCaching: true,
+    reloadOnOnline: true,
+    swcMinify: true,
+    disable: false,
+    workboxOptions: {
+      disableDevLogs: true
     },
-};
-
-export default nextConfig;
+  });
+  
+  const nextConfig = {
+    images: {
+      remotePatterns: [
+        {
+          protocol: 'https',
+          hostname: 'loremflickr.com',
+        },
+        {
+          protocol: 'https',
+          hostname: 'images.unsplash.com',
+        },
+        {
+          protocol: 'https',
+          hostname: 'www.gravatar.com',
+        },
+        {
+          protocol: 'https',
+          hostname: 'res.cloudinary.com',
+        },
+      ],
+    },
+  };
+  
+  export default withPWA(nextConfig);
+  
