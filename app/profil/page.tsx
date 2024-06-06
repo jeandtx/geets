@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { getUser } from "@/lib/actions";
 
+
 function SignOut() {
     return (
         <form
@@ -44,25 +45,16 @@ export default async function ProfilPage({
 
     return (
         <div className="flex h-screen">
-            <div className="flex flex-col items-center justify-center w-full h-screen">
-                <div className="text-3xl font-bold pt-24">Hey </div>
-                <h1 className="text-3xl font-bold ">Profil de {decodeEmail}</h1>
-                {user ? (
-                    <>
-                        <div>Nom: {user.pseudo}</div>
-                    </>
-                ) : (
-                    <div>Utilisateur non trouvé :(</div>
-                )}
-                <div className="text-2xl font-bold ">
-                    Vous êtes connecté en tant que {session?.user?.email}
-                </div>
-
-                <Link href={`/${session?.user?.email}`} className="text-textblue">
-                    Retour à mon profil
-                </Link>
-                <SignOut />
-            </div>
+            <div className="flex flex-col items-center justify-center w-full h-screen text-3xl font-bold gap-5">
+                    <div>
+                        Hey
+                    </div>
+                    <div> {session?.user?.email}
+                    </div>
+                    <SignOut />
+                    ça arrive bientôt la team 😉
+                     </div>
+                                
         </div>
     );
 }

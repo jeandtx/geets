@@ -16,7 +16,7 @@ export default function Login() {
 						await signIn("credentials", {
 							email: formData.get("email") as string,
 							password: formData.get("password") as string,
-							redirectTo: "/" as string,
+							redirectTo: "/home" as string,
 						});
 					}}
 				>

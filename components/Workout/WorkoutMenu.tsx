@@ -61,3 +61,4 @@ export default function WorkoutMenu() {
 
     return null; // Retourne null si aucun des cas ci-dessus n'est satisfait
 }
+    

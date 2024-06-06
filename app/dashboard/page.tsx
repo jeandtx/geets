@@ -9,6 +9,7 @@ export default async function Dashboard() {
 	return (
 		<div className="p-5">
 			<DashboardContent/>
+			ça arrive bientôt la team 😉
 		</div>
 	);
 }
