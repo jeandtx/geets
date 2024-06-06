@@ -40,12 +40,12 @@ const SeancePage: React.FC = () => {
             <h1 className="text-3xl font-bold">{`Séance du ${new Date(seance.date).toLocaleDateString()}`}</h1>
             <div className="mt-4">
                 <h2 className="text-xl font-semibold">Détails de la séance</h2>
-                {Object.entries(seance.exercises).map(([exerciseName, details]) => (
-                    <div key={exerciseName} className="mt-2">
-                        <h3 className="text-lg font-medium">{exerciseName}</h3>
-                        {details.map((detail, index) => (
+                {seance.exercises.map((exercise) => (
+                    <div key={exercise.name} className="mt-2">
+                        <h3 className="text-lg font-medium">{exercise.name}</h3>
+                        {exercise.sets.map((set, index) => (
                             <div key={index} className="ml-4">
-                                <p>{`Série ${index + 1}: ${detail.sets} répétitions, ${detail.weight} kg`}</p>
+                                <p>{`Série ${index + 1}: ${set.reps} répétitions, ${set.weight} kg`}</p>
                             </div>
                         ))}
                     </div>

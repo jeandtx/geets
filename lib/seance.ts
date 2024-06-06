@@ -2,13 +2,13 @@
 
 'use server'
 import clientPromise from './mongodb'
-import {Seance,ExerciseInput } from '../types/tables'
+import {Seance,Series,Exercise } from '../types/tables'
 import { ObjectId } from 'mongodb';
 
 
 
 
-export async function createSeance(email: string, workoutId: string, exercises: { [key: string]: ExerciseInput }): Promise<Seance | null> {
+export async function createSeance(email: string, workoutId: string, exercises: Exercise[]): Promise<Seance | null> {
   if (!workoutId || !exercises) {
     throw new Error('Missing parameter(s). Check workoutId and exercises.');
   }
@@ -17,14 +17,14 @@ export async function createSeance(email: string, workoutId: string, exercises: 
     const client = await clientPromise;
     const db = client.db('bodyscan');
 
-    // Transformer les données des exercices pour correspondre à la structure de la Session
-    const transformedExercises = Object.keys(exercises).reduce((acc, exerciseName) => {
-      acc[exerciseName] = [{
-        sets: parseInt(exercises[exerciseName].reps, 10),
-        weight: parseInt(exercises[exerciseName].weight, 10)
-      }];
-      return acc;
-    }, {} as { [key: string]: { sets: number, weight: number }[] });
+    // Transformer les données des exercices pour correspondre à la structure de la Seance
+    const transformedExercises: Exercise[] = exercises.map(exercise => ({
+      name: exercise.name,
+      sets: exercise.sets.map(set => ({
+        reps: parseInt(set.reps.toString(), 10),
+        weight: parseInt(set.weight.toString(), 10)
+      }))
+    }));
 
     // Créer la nouvelle session
     const session = {
@@ -40,6 +40,8 @@ export async function createSeance(email: string, workoutId: string, exercises: 
 
     return {
       _id: session._id.toString(),
+      email: session.email,
+      workoutId: session.workoutId.toString(),
       date: session.date,
       exercises: session.exercises
     } as Seance;
@@ -48,7 +50,6 @@ export async function createSeance(email: string, workoutId: string, exercises: 
     throw error;
   }
 }
-
 
 export async function getSeances(workoutId: string): Promise<Seance[]> {
   const client = await clientPromise;
