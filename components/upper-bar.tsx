@@ -2,9 +2,16 @@
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import InfiniteScroll from "@/components/infinitescroll";
+import { InputPost } from "@/components/inputpost";
 import { getPosts } from "@/lib/data/post";
 
 interface UpperbarProps extends React.HTMLAttributes<HTMLDivElement> {}
+
+const TabContent = ({ value, children }: { value: string, children: React.ReactNode }) => (
+	<TabsContent value={value} className="flex flex-col space-y-4">
+		{children}
+	</TabsContent>
+);
 
 export const UpperBar = ({ className }: UpperbarProps) => {
 	const [selectedTab, setSelectedTab] = useState("Feeds");
@@ -14,10 +21,10 @@ export const UpperBar = ({ className }: UpperbarProps) => {
 	};
 
 	return (
-		<div className="flex flex-col bg-gray-200 p-4">
+		<div className="flex flex-col items-center">
 			<Tabs defaultValue="feed">
 				<div
-					className="mx-auto flex flex-row justify-between items-center"
+					className="mx-auto flex flex-col md:flex-row justify-between items-center"
 					style={{ width: "30vw" }}
 				>
 					<h1 className="text-2xl font-bold">{selectedTab}</h1>
@@ -25,29 +32,36 @@ export const UpperBar = ({ className }: UpperbarProps) => {
 						<TabsTrigger
 							value="feed"
 							onClick={() => handleTabClick("Feed")}
-						>
+						> 
 							Feed
 						</TabsTrigger>
 						<TabsTrigger
-							value="recent"
-							onClick={() => handleTabClick("Recents")}
+							value="recommandation"
+							onClick={() => handleTabClick("Pour toi")}
 						>
-							Recent
+							Pour toi
 						</TabsTrigger>
 						<TabsTrigger
-							value="project"
-							onClick={() => handleTabClick("My project")}
+							value="friends"
+							onClick={() => handleTabClick("Abonnements")}
 						>
-							My project
+							Abonnements
 						</TabsTrigger>
 					</TabsList>
 				</div>
-				<div className="border" style={{ width: "60vw" }}>
-					<TabsContent value="feed">
+				<div className="w-full" style={{ width: "40vw" }}>
+					<TabContent value="feed" >
+                        <InputPost />
 						<InfiniteScroll fetchFunction={getPosts} />
-					</TabsContent>
-					<TabsContent value="recent">Recent.</TabsContent>
-					<TabsContent value="project">My project are</TabsContent>
+					</TabContent>
+					<TabContent value="recommandation">
+                        <InputPost />
+						<InfiniteScroll fetchFunction={getPosts} />
+                    </TabContent>
+					<TabContent value="friends">
+                        <InputPost />
+						<InfiniteScroll fetchFunction={getPosts} />
+                    </TabContent>
 				</div>
 			</Tabs>
 		</div>
