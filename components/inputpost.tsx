@@ -65,9 +65,7 @@ export function InputPost({ className }: Readonly<InputPostProps>) {
                     >
                         Créer un post
                     </button>
-                    <Modal visible={showModal} setVisible={setShowModal} className='w-1/2'>
-                        <CreatePost userInfo={userInfo} setVisible={setShowModal} />
-                    </Modal>
+                    <CreatePost userInfo={userInfo} visible={showModal} setVisible={setShowModal} />
                 </div>
 
                 <div className='flex flex-row items-start spacy-x-5'>
