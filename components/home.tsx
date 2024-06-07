@@ -4,6 +4,7 @@ import { InputPost } from "@/components/inputpost";
 import React from "react";
 import SearchComponent from "./searchBar";
 import { UpperBar } from "./upper-bar";
+import TopButton from "./topButton";
 export default function Home() {
 	return (
 		<div className="flex h-screen bg-gray-100 sm:w-full">
@@ -23,6 +24,7 @@ export default function Home() {
 					<div className="">Right side</div>
 				</div>
 			</div>
+			<TopButton/>
 		</div>
 	);
 }
