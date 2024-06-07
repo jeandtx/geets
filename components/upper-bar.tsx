@@ -32,7 +32,7 @@ export const UpperBar = ({ className }: UpperbarProps) => {
 						<TabsTrigger
 							value="feed"
 							onClick={() => handleTabClick("Feed")}
-						>
+						> 
 							Feed
 						</TabsTrigger>
 						<TabsTrigger
