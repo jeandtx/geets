@@ -37,15 +37,15 @@ export const UpperBar = ({ className }: UpperbarProps) => {
 						</TabsTrigger>
 						<TabsTrigger
 							value="recommandation"
-							onClick={() => handleTabClick("For You")}
+							onClick={() => handleTabClick("Pour toi")}
 						>
-							For You
+							Pour toi
 						</TabsTrigger>
 						<TabsTrigger
 							value="friends"
-							onClick={() => handleTabClick("Following")}
+							onClick={() => handleTabClick("Abonnements")}
 						>
-							Following
+							Abonnements
 						</TabsTrigger>
 					</TabsList>
 				</div>
