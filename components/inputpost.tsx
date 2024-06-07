@@ -20,7 +20,6 @@ export function InputPost({ className }: Readonly<InputPostProps>) {
 	const [selectedProject, setSelectedProject] = useState<Project | null>(
 		null
 	);
-	const [imageUrl, setImageUrl] = useState<string | null>(null);
 	const [imageName, setImageName] = useState<string>("Ajouter une photo");
 	const { toast } = useToast();
 	const { userInfo } = useUserInfo();
@@ -98,7 +97,6 @@ export function InputPost({ className }: Readonly<InputPostProps>) {
 					<CldUploadWidget
 						uploadPreset="onrkam98"
 						onSuccess={(result) => {
-							setImageUrl((result as any).info.secure_url);
 							setImageName(
 								(result as any).info.original_filename
 							);
