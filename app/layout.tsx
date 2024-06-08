@@ -36,7 +36,7 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="BodyScan" />
         <link rel="icon" href="/favicon.png" type="image/x-icon" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-980x980.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="@/public/icons/icon-980x980.png" />
         <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-980x980.png" />
         <link rel="apple-touch-icon" sizes="512x512" href="/icons/icon-980x980.png" />
       </head>
