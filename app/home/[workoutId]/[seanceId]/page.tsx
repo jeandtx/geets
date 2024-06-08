@@ -4,7 +4,8 @@ import { useParams } from 'next/navigation';
 import { getSeanceById } from '@/lib/seance';
 import { Seance } from '@/types/tables';
 import LoadingSpinner from '@/components/ui/loadingSpinner';
-
+import BackButton from '@/components/ui/backbutton';
+import { MoveLeft } from 'lucide-react';
 const SeancePage: React.FC = () => {
     const { seanceId } = useParams();
     const [seance, setSeance] = useState<Seance | null>(null);
@@ -37,6 +38,8 @@ const SeancePage: React.FC = () => {
 
     return (
         <div className="flex flex-col items-center justify-center w-full h-screen">
+                  <BackButton className="absolute top-4 left-4 p-2   hover:bg-gray-300 text-black"><MoveLeft className="h-10 w-10"/></BackButton>
+
             <h1 className="text-3xl font-bold">{`Séance du ${new Date(seance.date).toLocaleDateString()}`}</h1>
             <div className="mt-4">
                 <h2 className="text-xl font-semibold">Détails de la séance</h2>
