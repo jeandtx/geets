@@ -21,8 +21,8 @@ export async function createSeance(email: string, workoutId: string, exercises: 
     const transformedExercises: Exercise[] = exercises.map(exercise => ({
       name: exercise.name,
       sets: exercise.sets.map(set => ({
-        reps: parseInt(set.reps.toString(), 10),
-        weight: parseInt(set.weight.toString(), 10)
+        reps: set && set.reps ? parseInt(set.reps.toString(), 10) : 0,
+        weight: set && set.weight ? parseInt(set.weight.toString(), 10) : 0
       }))
     }));
 
