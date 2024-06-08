@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   description: "L'application BodyScan pour surveiller votre santé.",
   icons: {
     icon: "/icons/icon-192x192.png",
-    apple: "/icons/icon-180x180.png", // Ensure you have this size icon for Apple devices
+    apple: "/icons/icon-980x980.png", // Use the larger icon for Apple devices
   },
   manifest: "/manifest.json",
 };
@@ -36,9 +36,9 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="BodyScan" />
         <link rel="icon" href="/favicon.png" type="image/x-icon" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180x180.png" />
-        <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192x192.png" />
-        <link rel="apple-touch-icon" sizes="512x512" href="/icons/icon-512x512.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-980x980.png" />
+        <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-980x980.png" />
+        <link rel="apple-touch-icon" sizes="512x512" href="/icons/icon-980x980.png" />
       </head>
       <body className={inter.className}>
         <div className="flex w-full h-screen overflow-hidden">
