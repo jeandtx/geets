@@ -5,9 +5,10 @@ import { useSession } from "next-auth/react";
 
 interface WorkoutModalProps {
   title: string;
+  addWorkout: (workout: { _id: string; workoutTitle: string }) => void;
 }
 
-export function WorkoutModal({ title }: WorkoutModalProps) {
+export function WorkoutModal({ title, addWorkout }: WorkoutModalProps) {
   const { data: session, status } = useSession();
   const isAuthenticated = status === "authenticated";
   const [modalOpen, setModalOpen] = useState<boolean>(false);
@@ -56,7 +57,7 @@ export function WorkoutModal({ title }: WorkoutModalProps) {
       {modalOpen && (
         <div className="fixed left-0 top-0 flex h-full min-h-screen w-full items-center justify-center bg-black bg-opacity-50 px-4 py-5">
           <div ref={modal} className="bg-white p-8 rounded-md">
-            <AddWorkout closeModal={closeModal} />
+            <AddWorkout closeModal={closeModal} addWorkout={addWorkout} />
           </div>
         </div>
       )}

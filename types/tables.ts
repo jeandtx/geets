@@ -15,8 +15,8 @@ export interface Workout {
 }
 // Interface représentant une série
 export interface Series {
-    reps: number;
-    weight: number;
+    reps?: number;
+    weight?: number;
 }
 
 // Interface représentant un exercice avec un nom et un tableau de séries
