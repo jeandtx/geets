@@ -104,7 +104,7 @@ export const columns: ColumnDef<Notification>[] = [
 			return value.includes(row.getValue(id));
 		},
 		enableHiding: true,
-		enableSorting: true,
+		enableSorting: false,
 	},
 	{
 		id: "message",
