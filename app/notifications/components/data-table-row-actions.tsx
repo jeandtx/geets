@@ -17,7 +17,7 @@ import {
 	DropdownMenuSubTrigger,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { notificationSchema } from "../data/schema";
+import { Interaction } from "@/types/tables";
 
 interface DataTableRowActionsProps<TData> {
 	row: Row<TData>;
@@ -26,7 +26,7 @@ interface DataTableRowActionsProps<TData> {
 export function DataTableRowActions<TData>({
 	row,
 }: Readonly<DataTableRowActionsProps<TData>>) {
-	const task = notificationSchema.parse(row.original);
+	const task: Interaction = row.original as Interaction;
 
 	return (
 		<DropdownMenu>

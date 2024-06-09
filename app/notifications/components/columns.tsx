@@ -6,11 +6,11 @@ import { Badge } from "@/components/ui/badge";
 // import { Checkbox } from "@/components/ui/checkbox";
 import Img from "next/image";
 import { types } from "../data/data";
-import { Notification } from "../data/schema";
 import { DataTableColumnHeader } from "./data-table-column-header";
 import { DataTableRowActions } from "./data-table-row-actions";
+import { Interaction } from "@/types/tables";
 
-export const columns: ColumnDef<Notification>[] = [
+export const columns: ColumnDef<Interaction>[] = [
 	// {
 	// 	id: "select",
 	// 	header: ({ table }) => (

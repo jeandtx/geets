@@ -1,3 +1,32 @@
+export interface Interaction {
+    id: string;
+    time: string;
+    userId: string;
+    userAvatar: string;
+    type: "like" | "comment" | "follow" | "join";
+    like?: {
+        postId: string;
+        postContent: string;
+    };
+    comment?: {
+        postId: string;
+        commentId: string;
+        content: string;
+    };
+    follow?: {
+        followerId: string;
+        followerName: string;
+        followerAvatar: string;
+    };
+    join?: {
+        projectId: string;
+        projectName: string;
+        projectAvatar: string;
+        projectOwner: string;
+    };
+}
+
+
 export interface Post {
     _id: string;
     project: {
