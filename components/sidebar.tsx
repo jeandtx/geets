@@ -5,6 +5,7 @@ import {
 	BookHeart,
 	PersonStanding,
 	SquareMousePointer,
+	BellRing,
 } from "lucide-react";
 import Link from "next/link";
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -53,6 +54,15 @@ export async function Sidebar({ className, email }: Readonly<SidebarProps>) {
 						>
 							<SquareKanban className="mr-2 h-4 w-4" />
 							My Projects
+						</Button>
+					</Link>
+					<Link href={`/notifications`}>
+						<Button
+							variant="ghost"
+							className="justify-start w-full"
+						>
+							<BellRing className="mr-2 h-4 w-4" />
+							Notifications
 						</Button>
 					</Link>
 				</div>
