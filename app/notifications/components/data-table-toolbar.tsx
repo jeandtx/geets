@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronRightIcon } from "lucide-react";
+import { ListRestart } from "lucide-react";
 import { Table } from "@tanstack/react-table";
 
 import { Button } from "@/components/ui/button";
@@ -49,7 +49,7 @@ export function DataTableToolbar<TData>({
 						className="h-8 px-2 lg:px-3"
 					>
 						Reset
-						<ChevronRightIcon className="ml-2 h-4 w-4" />
+						<ListRestart className="ml-2 h-4 w-4" />
 					</Button>
 				)}
 				<Button

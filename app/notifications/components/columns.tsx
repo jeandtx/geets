@@ -3,7 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 
 import { Badge } from "@/components/ui/badge";
-import { Checkbox } from "@/components/ui/checkbox";
+// import { Checkbox } from "@/components/ui/checkbox";
 import Img from "next/image";
 import { types } from "../data/data";
 import { Notification } from "../data/schema";
@@ -89,9 +89,14 @@ export const columns: ColumnDef<Notification>[] = [
 			return (
 				<div className="flex space-x-2 align-center">
 					{type && (
-						<type.icon className="h-4 w-4 text-muted-foreground" />
+						<Badge
+							variant="outline"
+							className="flex items-center space-x-1 px-2 py-1 rounded-full text-xs bg-muted-background text-muted-foreground"
+						>
+							<type.icon className="h-4 w-4 text-muted-foreground" />
+							<div>{type.label}</div>
+						</Badge>
 					)}
-					{type && <Badge variant="outline">{type.label}</Badge>}
 				</div>
 			);
 		},

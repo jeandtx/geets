@@ -1,24 +1,29 @@
-import { CircleIcon } from "lucide-react";
+import {
+	MessageCircleHeart,
+	MessageCircleMore,
+	UserRoundPlus,
+	Handshake,
+} from "lucide-react";
 
 export const types = [
 	{
 		value: "like",
 		label: "Like",
-		icon: CircleIcon,
+		icon: MessageCircleHeart,
 	},
 	{
 		value: "comment",
 		label: "Comment",
-		icon: CircleIcon,
+		icon: MessageCircleMore,
 	},
 	{
 		value: "follow",
 		label: "Follow",
-		icon: CircleIcon,
+		icon: UserRoundPlus,
 	},
 	{
 		value: "join",
 		label: "Join",
-		icon: CircleIcon,
+		icon: Handshake,
 	},
 ];

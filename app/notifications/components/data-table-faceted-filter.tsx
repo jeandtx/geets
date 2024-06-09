@@ -1,5 +1,5 @@
 import * as React from "react";
-import { CheckIcon } from "lucide-react";
+import { SlidersHorizontal, CheckIcon } from "lucide-react";
 import { Column } from "@tanstack/react-table";
 
 import { cn } from "@/lib/utils";
@@ -47,7 +47,7 @@ export function DataTableFacetedFilter<TData, TValue>({
 					size="sm"
 					className="h-8 border-dashed"
 				>
-					<CheckIcon className="mr-2 h-4 w-4" />
+					<SlidersHorizontal className="mr-2 h-4 w-4" />
 					{title}
 					{selectedValues?.size > 0 && (
 						<>

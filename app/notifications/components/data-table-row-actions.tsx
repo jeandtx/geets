@@ -17,8 +17,6 @@ import {
 	DropdownMenuSubTrigger,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
-import { types } from "../data/data";
 import { notificationSchema } from "../data/schema";
 
 interface DataTableRowActionsProps<TData> {

@@ -1,4 +1,4 @@
-import { ArrowDownIcon, ArrowUpIcon } from "lucide-react";
+import { ArrowDownIcon, ArrowUpIcon, EyeOff } from "lucide-react";
 import { Column } from "@tanstack/react-table";
 
 import { cn } from "@/lib/utils";
@@ -21,7 +21,7 @@ export function DataTableColumnHeader<TData, TValue>({
 	column,
 	title,
 	className,
-}: DataTableColumnHeaderProps<TData, TValue>) {
+}: Readonly<DataTableColumnHeaderProps<TData, TValue>>) {
 	if (!column.getCanSort()) {
 		return <div className={cn(className)}>{title}</div>;
 	}
@@ -62,7 +62,7 @@ export function DataTableColumnHeader<TData, TValue>({
 					<DropdownMenuItem
 						onClick={() => column.toggleVisibility(false)}
 					>
-						<ArrowUpIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+						<EyeOff className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
 						Hide
 					</DropdownMenuItem>
 				</DropdownMenuContent>
