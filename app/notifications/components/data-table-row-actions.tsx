@@ -18,7 +18,7 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { labels } from "../data/data";
+import { types } from "../data/data";
 import { notificationSchema } from "../data/schema";
 
 interface DataTableRowActionsProps<TData> {
@@ -27,7 +27,7 @@ interface DataTableRowActionsProps<TData> {
 
 export function DataTableRowActions<TData>({
 	row,
-}: DataTableRowActionsProps<TData>) {
+}: Readonly<DataTableRowActionsProps<TData>>) {
 	const task = notificationSchema.parse(row.original);
 
 	return (
@@ -42,22 +42,24 @@ export function DataTableRowActions<TData>({
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent align="end" className="w-[160px]">
-				<DropdownMenuItem>Edit</DropdownMenuItem>
-				<DropdownMenuItem>Make a copy</DropdownMenuItem>
-				<DropdownMenuItem>Favorite</DropdownMenuItem>
+				<DropdownMenuItem>Mark as Read</DropdownMenuItem>
 				<DropdownMenuSeparator />
 				<DropdownMenuSub>
-					<DropdownMenuSubTrigger>Labels</DropdownMenuSubTrigger>
+					<DropdownMenuSubTrigger>See Less</DropdownMenuSubTrigger>
 					<DropdownMenuSubContent>
-						<DropdownMenuRadioGroup value={task.label}>
-							{labels.map((label) => (
-								<DropdownMenuRadioItem
-									key={label.value}
-									value={label.value}
-								>
-									{label.label}
-								</DropdownMenuRadioItem>
-							))}
+						<DropdownMenuRadioGroup value={task.type}>
+							<DropdownMenuRadioItem
+								key="task.type"
+								value="task.type"
+							>
+								Unsubscribe from {task.type} notifications
+							</DropdownMenuRadioItem>
+							<DropdownMenuRadioItem
+								key="block.user"
+								value="block.user"
+							>
+								Block user {task.userId}
+							</DropdownMenuRadioItem>
 						</DropdownMenuRadioGroup>
 					</DropdownMenuSubContent>
 				</DropdownMenuSub>

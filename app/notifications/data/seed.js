@@ -10,6 +10,7 @@ var generateNotification = function () {
         id: faker_1.faker.string.uuid(),
         time: faker_1.faker.date.recent().toISOString(),
         userId: faker_1.faker.string.uuid(),
+        userAvatar: faker_1.faker.image.avatar(),
         type: type,
     };
     switch (type) {

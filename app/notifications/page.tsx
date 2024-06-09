@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 async function getNotifications() {
 	const data = await fs.readFile(
-		path.join(process.cwd(), "/app/notifications/data/tasks.json")
+		path.join(process.cwd(), "/app/notifications/data/notifications.json")
 	);
 
 	const notifications = JSON.parse(data.toString());

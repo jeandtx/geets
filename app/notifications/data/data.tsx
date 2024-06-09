@@ -1,67 +1,24 @@
-import {
-	ArrowDownIcon,
-	ArrowRightIcon,
-	ArrowUpIcon,
-	CircleIcon,
-} from "lucide-react";
+import { CircleIcon } from "lucide-react";
 
-export const labels = [
+export const types = [
 	{
-		value: "bug",
-		label: "Bug",
-	},
-	{
-		value: "feature",
-		label: "Feature",
-	},
-	{
-		value: "documentation",
-		label: "Documentation",
-	},
-];
-
-export const statuses = [
-	{
-		value: "backlog",
-		label: "Backlog",
+		value: "like",
+		label: "Like",
 		icon: CircleIcon,
 	},
 	{
-		value: "todo",
-		label: "Todo",
+		value: "comment",
+		label: "Comment",
 		icon: CircleIcon,
 	},
 	{
-		value: "in progress",
-		label: "In Progress",
+		value: "follow",
+		label: "Follow",
 		icon: CircleIcon,
 	},
 	{
-		value: "done",
-		label: "Done",
+		value: "join",
+		label: "Join",
 		icon: CircleIcon,
-	},
-	{
-		value: "canceled",
-		label: "Canceled",
-		icon: CircleIcon,
-	},
-];
-
-export const priorities = [
-	{
-		label: "Low",
-		value: "low",
-		icon: ArrowDownIcon,
-	},
-	{
-		label: "Medium",
-		value: "medium",
-		icon: ArrowRightIcon,
-	},
-	{
-		label: "High",
-		value: "high",
-		icon: ArrowUpIcon,
 	},
 ];

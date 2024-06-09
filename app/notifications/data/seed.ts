@@ -7,6 +7,7 @@ interface Notification {
   id: string;
   time: string;
   userId: string;
+  userAvatar: string;
   type: "like" | "comment" | "follow" | "join";
   like?: {
     postId: string;
@@ -38,6 +39,7 @@ const generateNotification = (): Notification => {
     id: faker.string.uuid(),
     time: faker.date.recent().toISOString(),
     userId: faker.string.uuid(),
+    userAvatar: faker.image.avatar(),
     type: type as Notification['type'],
   };
 
