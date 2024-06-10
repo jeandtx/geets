@@ -98,14 +98,17 @@ export function DataTable<TData, TValue>({
 					</TableHeader>
 					<TableBody>
 						{table.getRowModel().rows?.length ? (
-							table.getRowModel().rows.map((row) => (
+							table.getRowModel().rows.map((row: any) => (
 								<TableRow
 									key={row.id}
 									data-state={
 										row.getIsSelected() && "selected"
 									}
+									className={
+										row.original.read ? "" : "bg-blue-200"
+									}
 								>
-									{row.getVisibleCells().map((cell) => (
+									{row.getVisibleCells().map((cell: any) => (
 										<TableCell key={cell.id}>
 											{flexRender(
 												cell.column.columnDef.cell,
@@ -128,7 +131,7 @@ export function DataTable<TData, TValue>({
 					</TableBody>
 				</Table>
 			</div>
-			<DataTablePagination table={table} />
+			{/* <DataTablePagination table={table} /> */}
 		</div>
 	);
 }

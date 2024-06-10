@@ -1,4 +1,5 @@
 export interface Interaction {
+    _id: string;
     id: string;
     time: string;
     userId: string;
@@ -24,6 +25,7 @@ export interface Interaction {
         projectAvatar: string;
         projectOwner: string;
     };
+    read: boolean;
 }
 
 

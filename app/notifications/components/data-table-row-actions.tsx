@@ -18,6 +18,7 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Interaction } from "@/types/tables";
+import { updateInteraction } from "@/lib/data/interactions";
 
 interface DataTableRowActionsProps<TData> {
 	row: Row<TData>;
@@ -40,7 +41,17 @@ export function DataTableRowActions<TData>({
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent align="end" className="w-[160px]">
-				<DropdownMenuItem>Mark as Read</DropdownMenuItem>
+				<DropdownMenuItem
+					onClick={() => {
+						updateInteraction({
+							...task,
+							read: true,
+						});
+						task.read = true;
+					}}
+				>
+					Mark as Read
+				</DropdownMenuItem>
 				<DropdownMenuSeparator />
 				<DropdownMenuSub>
 					<DropdownMenuSubTrigger>See Less</DropdownMenuSubTrigger>
