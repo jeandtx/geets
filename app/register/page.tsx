@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Form } from "@/components/form";
 import { redirect } from "next/navigation";
 import { createUser, getUser } from "@/app/db";
+import { signIn } from "@/app/auth";
 import { SubmitButton } from "@/components/ui/submit-button";
 
 export default function Login() {
@@ -15,7 +16,14 @@ export default function Login() {
 			return "User already exists";
 		} else {
 			await createUser(email, password);
-			redirect("/login");
+			console.log("User created");
+			// login the user
+			await signIn("credentials", {
+				redirectTo: "/fill-information",
+				email: email,
+				password: password,
+			});
+			
 		}
 	}
 

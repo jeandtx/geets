@@ -47,7 +47,7 @@ export default async function ProfilPage({
 
 	return (
 		<div className="flex flex-col items-center w-full space-y-5 text-black py-5">
-			<h1 className="text-3xl font-bold">{user.email}</h1>
+			<h1 className="text-3xl font-bold">{user?.email}</h1>
 			{user ? (
 				<table>
 					<thead>
@@ -71,18 +71,18 @@ export default async function ProfilPage({
 						</tr>
 						<tr>
 							<td>LastName:</td>
-							<td>{user.lastName}</td>
+							<td>{user.last_name}</td>
 						</tr>
 						<tr>
 							<td>Age:</td>
 							<td>
-								{user.birth_date?.toLocaleDateString() ??
+								{user.birthday ??
 									"No data"}
 							</td>
 						</tr>
 						<tr>
 							<td>Localisation:</td>
-							<td>{user.localisation}</td>
+							<td>{user.location}</td>
 						</tr>
 						<tr>
 							<td>Gender:</td>
@@ -106,7 +106,7 @@ export default async function ProfilPage({
 						</tr>
 						<tr>
 							<td>Account Creation:</td>
-							<td>{user.created?.toLocaleDateString()}</td>
+							<td>{user.createdAt}</td>
 						</tr>
 					</tbody>
 				</table>
