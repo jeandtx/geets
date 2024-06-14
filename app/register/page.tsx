@@ -2,36 +2,43 @@ import Link from "next/link";
 import { Form } from "@/components/form";
 import { redirect } from "next/navigation";
 import { createUser, getUser } from "@/app/db";
+import { signIn } from "@/app/auth";
 import { SubmitButton } from "@/components/ui/submit-button";
 import { generateVerificationToken } from "@/lib/crypto";
 import { sendEmail } from "@/lib/mailer";
 
 export default function Login() {
     async function register(formData: FormData) {
-		"use server";
-		console.log("Registering user")
+        "use server";
+        console.log("Registering user")
         let email = formData.get("email") as string;
         let password = formData.get("password") as string;
         let user = await getUser(email);
-		console.log("User: ", user)
+        console.log("User: ", user)
 
         if (user) {
-			console.log("User already exists")
+            console.log("User already exists")
             return "User already exists";
         } else {
             const verificationToken = generateVerificationToken();
             const verificationTokenExpires = new Date();
-            verificationTokenExpires.setHours(verificationTokenExpires.getHours() + 1); // 1 heure d'expiration
+            verificationTokenExpires.setHours(verificationTokenExpires.getHours() + 1); // 1 hour expiration
 
             const result = await createUser(email, password, verificationToken, verificationTokenExpires);
+            console.log("User created");
 
             await sendEmail({
-				email,
-				emailType: 'verify',
-				userId: result.insertedId
-			});
+                email,
+                emailType: 'verify',
+                userId: result.insertedId
+            });
 
-            redirect("/login");
+            // Automatically sign in the user after successful registration
+            await signIn("credentials", {
+                redirectTo: "/fill-information",
+                email: email,
+                password: password,
+            });
         }
     }
 
