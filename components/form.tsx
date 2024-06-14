@@ -14,18 +14,18 @@ export function Form({
 
 	function handleSubmit(e: any) {
 		action(e)
-			.then(() => {
-				toast({
-					title: "Success!",
-					description: "Your form has been submitted.",
-					variant: "success",
-				});
-			})
 			.catch(() => {
 				toast({
 					variant: "destructive",
 					title: "Uh oh! Something went wrong.",
 					description: "Title, hook and themes are required.",
+				});
+			})
+			.finally(() => {
+				toast({
+					title: "Success!",
+					description: "Your form has been submitted.",
+					variant: "success",
 				});
 			});
 	}
