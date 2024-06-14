@@ -36,34 +36,21 @@ export async function getUserById(id: string) {
     return data
 }
 
-/**
- * Update user information in the database
- * @param {string} email - The email of the user to update.
- * @param {User} user - The user to update. {
-  firstName: 'tristan',
-  lastName: 'duong',
-  phoneNumber: '5',
-  pseudo: 'tr',
-  age: 3,
-  location: 'paris',
-  gender: 'hamster',
-  experience: 2,
-  available: false,
-  mobile: '3',
-  allowEmails: false
-
-}
-    * @returns {Promise<User>} A promise that resolves to the updated user.
+/** 
+ * Update a user
+ * @param {User} user - The user to update.
+ * @returns {Promise<any>} A promise that resolves to the response.
  */
-export async function updateUser(email: string, user: Partial<User>) {
-    const client = await clientPromise
+export async function updateUser(user: Partial<User>): Promise<any> {
+    const client = await clientPromise;
     const db = client.db('geets')
-    const updatedUser = await db.collection('users').updateOne({
-        email
-    }, {
-        $set: user
-    })
-    console.log('updatedUser', updatedUser)
-    return 
+    const userId = new ObjectId(user._id); // Ensure _id is a valid ObjectId
+    let userWithoutObjectId = {
+        ...user,
+        _id: user._id ? new ObjectId(user._id) : undefined
+    }
+    delete userWithoutObjectId._id
+    const response = db.collection('users').updateOne({ _id: userId }, { $set: userWithoutObjectId })
+    const data = JSON.parse(JSON.stringify(response)); // Remove ObjectID (not serializable)
+    return data;
 }
-    

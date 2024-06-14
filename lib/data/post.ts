@@ -15,7 +15,7 @@ export async function createPost(post: Post) {
     const client = await clientPromise
     const db = client.db('geets')
     if (!post.media) {
-        post.media = "https://res.cloudinary.com/dekbkndn8/image/upload/v1715719366/samples/balloons.jpg"
+        post.media = ""
     }
     const result = await db.collection('posts').insertOne({ ...post, _id: new ObjectId() })
     const data = JSON.parse(JSON.stringify(result)) // Remove ObjectID (not serializable)

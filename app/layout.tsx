@@ -4,8 +4,8 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import SessionWrapper from "./sessionwrapper";
 import { Header } from "@/components/header";
-import { UserInfoProvider } from '@/app/context/UserInfoContext'; 
-
+import { UserInfoProvider } from "@/app/context/UserInfoContext";
+import Navbar from "@/components/mobileNavbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,19 +21,19 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<body
-				className={`bg-stone-100 ${inter.className} flex justify-center`}
-			>
-				<div className="flex h-screen">
+			<body className={`bg-stone-100 ${inter.className} h-screen `}>
+				<div className="flex h-full overflow-x-hidden w-full sm:mt-4 flex-col sm:flex-row">
 					<SessionWrapper>
 						<UserInfoProvider>
-						<div className="columns-1 w-1/5 ">
-							<Header className="px-4" />
-						</div>
-
-						<div className="flex flex-col w-4/5 overflow-x-hidden max-w-lg min-w-full">
+							<div className="sm:w-1/6 w-0"></div>
+							
+							<div className="sm:w-1/6">
+							<Header className="px-4 mb-4" />
+							</div>
+							<div className="w-full sm:w-3/6">
 							{children}
-						</div>
+							</div>
+							<div className="w-0 sm:w-1/6"><Navbar/></div>
 						</UserInfoProvider>
 					</SessionWrapper>
 					<Toaster />

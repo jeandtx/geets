@@ -5,11 +5,11 @@ export function Form({
 	action,
 	children,
 	fillInformationForm = false,
-}: {
+}: Readonly<{
 	action: any;
 	children: React.ReactNode;
 	fillInformationForm?: boolean;
-}) {
+}>) {
 	const { toast } = useToast();
 
 	function handleSubmit(e: any) {
@@ -18,6 +18,7 @@ export function Form({
 				toast({
 					title: "Success!",
 					description: "Your form has been submitted.",
+					variant: "success",
 				});
 			})
 			.catch(() => {
@@ -28,6 +29,7 @@ export function Form({
 				});
 			});
 	}
+
 	return (
 		<form
 			action={handleSubmit}
@@ -37,7 +39,10 @@ export function Form({
 			{!fillInformationForm ? (
 				<div>
 					<div>
-						<label htmlFor="email" className="block text-xs textcolor">
+						<label
+							htmlFor="email"
+							className="block text-xs textcolor"
+						>
 							Email Address
 						</label>
 						<input
@@ -51,7 +56,10 @@ export function Form({
 						/>
 					</div>
 					<div>
-						<label htmlFor="password" className="block text-xs textcolor">
+						<label
+							htmlFor="password"
+							className="block text-xs textcolor"
+						>
 							Your Password
 						</label>
 						<input
@@ -62,21 +70,14 @@ export function Form({
 							className="mt-1 block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-inputborder focus:outline-none focus:ring-black sm:text-sm"
 						/>
 					</div>
-				</div>) : (
+				</div>
+			) : (
 				<div>
-					{/* make fields firstName: formData.get("firstName") as string,
-			lastName: formData.get("lastName") as string,
-			phoneNumber: formData.get("phoneNumber") as string,
-			pseudo: formData.get("pseudo") as string,
-			age: parseInt(formData.get("age") as string),
-			location: formData.get("location") as string,
-			gender: formData.get("gender") as string,
-			
-			available: formData.get("available") === "on",
-			mobile: formData.get("mobile") as string,
-			allowEmails: formData.get("allowEmails") === "on", */}
 					<div>
-						<label htmlFor="firstName" className="block text-xs textcolor">
+						<label
+							htmlFor="firstName"
+							className="block text-xs textcolor"
+						>
 							First Name
 						</label>
 						<input
@@ -88,7 +89,10 @@ export function Form({
 						/>
 					</div>
 					<div>
-						<label htmlFor="lastName" className="block text-xs textcolor">
+						<label
+							htmlFor="lastName"
+							className="block text-xs textcolor"
+						>
 							Last Name
 						</label>
 						<input
@@ -100,19 +104,10 @@ export function Form({
 						/>
 					</div>
 					<div>
-						<label htmlFor="phoneNumber" className="block text-xs textcolor">
-							Phone Number
-						</label>
-						<input
-							id="phoneNumber"
-							name="phoneNumber"
-							type="tel"
-							required
-							className="mt-1 block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-inputborder focus:outline-none focus:ring-black sm:text-sm"
-						/>
-					</div>
-					<div>
-						<label htmlFor="pseudo" className="block text-xs textcolor">
+						<label
+							htmlFor="pseudo"
+							className="block text-xs textcolor"
+						>
 							Pseudo
 						</label>
 						<input
@@ -125,7 +120,10 @@ export function Form({
 					</div>
 					{/* birthday div */}
 					<div>
-						<label htmlFor="birthday" className="block text-xs textcolor">
+						<label
+							htmlFor="birthday"
+							className="block text-xs textcolor"
+						>
 							Birthday
 						</label>
 						<input
@@ -137,8 +135,11 @@ export function Form({
 						/>
 					</div>
 
-					<div>
-						<label htmlFor="age" className="block text-xs textcolor">
+					{/* <div>
+						<label
+							htmlFor="age"
+							className="block text-xs textcolor"
+						>
 							Age
 						</label>
 						<input
@@ -148,9 +149,12 @@ export function Form({
 							required
 							className="mt-1 block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-inputborder focus:outline-none focus:ring-black sm:text-sm"
 						/>
-					</div>
+					</div> */}
 					<div>
-						<label htmlFor="location" className="block text-xs textcolor">
+						<label
+							htmlFor="location"
+							className="block text-xs textcolor"
+						>
 							Location
 						</label>
 						<input
@@ -162,7 +166,10 @@ export function Form({
 						/>
 					</div>
 					<div>
-						<label htmlFor="gender" className="block text-xs textcolor">
+						<label
+							htmlFor="gender"
+							className="block text-xs textcolor"
+						>
 							Gender
 						</label>
 						{/* can only choose male or female */}
@@ -172,26 +179,22 @@ export function Form({
 							required
 							className="mt-1 block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-inputborder focus:outline-none focus:ring-black sm:text-sm"
 						>
-							<option value="">--Please choose an option--</option>
+							<option value="">
+								--Please choose an option--
+							</option>
 							<option value="female">Female</option>
 							<option value="male">Male</option>
-							<option value="hamster">Want to be original by not saying his gender</option>
-
-
-
-
+							<option value="hamster">
+								Want to be original by not saying his gender
+							</option>
 						</select>
-
-
-
-
-
-
-
 					</div>
-					
+
 					<div>
-						<label htmlFor="experience" className="block text-xs textcolor">
+						<label
+							htmlFor="experience"
+							className="block text-xs textcolor"
+						>
 							Experience
 						</label>
 						<input
@@ -203,7 +206,10 @@ export function Form({
 						/>
 					</div>
 					<div>
-						<label htmlFor="available" className="block text-xs textcolor">
+						<label
+							htmlFor="available"
+							className="block text-xs textcolor"
+						>
 							Available
 						</label>
 						{/* can only choose male or female */}
@@ -213,26 +219,20 @@ export function Form({
 							required
 							className="mt-1 block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-inputborder focus:outline-none focus:ring-black sm:text-sm"
 						>
-							<option value="">--Please choose an option--</option>
+							<option value="">
+								--Please choose an option--
+							</option>
 							<option value="yes">Yes</option>
 							<option value="no">No</option>
 							<option value="maybe">Maybe</option>
-
-
-
-
 						</select>
-
-
-
-
-
-
-
 					</div>
 
 					<div>
-						<label htmlFor="mobile" className="block text-xs textcolor">
+						<label
+							htmlFor="mobile"
+							className="block text-xs textcolor"
+						>
 							Mobile
 						</label>
 						<input
@@ -244,7 +244,10 @@ export function Form({
 						/>
 					</div>
 					<div>
-						<label htmlFor="allowEmails" className="block text-xs textcolor">
+						<label
+							htmlFor="allowEmails"
+							className="block text-xs textcolor"
+						>
 							Allow Emails
 						</label>
 						{/* can only choose male or female */}
@@ -254,29 +257,15 @@ export function Form({
 							required
 							className="mt-1 block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-inputborder focus:outline-none focus:ring-black sm:text-sm"
 						>
-							<option value="">--Please choose an option--</option>
+							<option value="">
+								--Please choose an option--
+							</option>
 							<option value="yes">Yes</option>
 							<option value="no">No</option>
-							
-
-
-
-
 						</select>
-
-
-
-
-
-
-
 					</div>
-
-
-
-
-
-				</div>)}
+				</div>
+			)}
 
 			{children}
 		</form>

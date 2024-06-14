@@ -10,7 +10,8 @@ import { useToast } from "@/components/ui/use-toast";
 import { createProject } from "@/lib/data/project";
 import { useSession } from "next-auth/react";
 import { CldUploadWidget } from "next-cloudinary";
-
+import { useUserInfo } from "@/app/context/UserInfoContext";
+import LoadingSpinner from '@/components/ui/spinner';
 export default function NewProject() {
 	const [label, setLabel] = useState<string>("");
 	const [labels, setLabels] = useState<string[]>([]);
@@ -20,10 +21,10 @@ export default function NewProject() {
 	const [participantRole, setParticipantRole] = useState<string>("");
 	const [participants, setParticipants] = useState<Participant[]>([]);
 	const { toast } = useToast();
-	const { data: session } = useSession();
-	const [email, setEmail] = useState<string>("");
+	const session = useSession();
 	const [imageUrl, setImageUrl] = useState<string>("");
 	const [imageName, setImageName] = useState<string>("Ajouter une photo");
+	const { userInfo, status } = useUserInfo();
 
 	const [project, setProject] = useState<Project>({
 		_id: "Generated",
@@ -41,15 +42,16 @@ export default function NewProject() {
 			[e.target.name]: e.target.value,
 		});
 	};
+	console.log("user info", userInfo);
 
 	useEffect(() => {
-		console.log("session", session);
-		if (session?.user?.email) {
-			setParticipants([{ name: session.user.email, role: "author" }]);
-			setEmail(session.user.email);
+		if (userInfo) {
+			console.log("User Info", userInfo);
+			setParticipants([{ name: userInfo.email, role: "author" }]);
+			console.log("Participants", participants);
 			setProject({
 				...project,
-				participants: [{ name: session.user.email, role: "author" }],
+				participants: [{ name: userInfo.email, role: "author" }],
 			});
 		}
 	}, [session]);
@@ -66,7 +68,7 @@ export default function NewProject() {
 
 	const handleSubmit = (e: any) => {
 		e.preventDefault();
-		if (email === "") {
+		if (userInfo?.email === "") {
 			toast({
 				variant: "destructive",
 				title: "Uh oh! Something went wrong.",
@@ -89,6 +91,7 @@ export default function NewProject() {
 					title: "Success!",
 					description:
 						"Your form has been submitted with " + project.title,
+					variant: "success",
 				});
 			})
 			.catch(() => {
@@ -114,15 +117,15 @@ export default function NewProject() {
 
 	return (
 		<>
-			{email === "" ? (
-				<div className="flex flex-col w-full mx-auto mt-8 bg-white p-8 rounded-lg shadow-lg">
-					Loading
+			{userInfo === null ? (
+				<div className="flex flex-col w-full mx-auto bg-white p-8 rounded-lg shadow-lg">
+					<LoadingSpinner/>
 				</div>
 			) : (
-				<div className="flex flex-col w-full mx-auto mt-8 bg-white p-8 rounded-lg shadow-lg">
+				<div className="flex flex-col w-full mx-auto bg-white p-8 rounded-lg shadow-lg">
 					<div>
 						<h1 className="text-3xl font-bold text-center mt-8">
-							New Project
+							New Project for {userInfo?.email}
 						</h1>
 					</div>
 					<div className="flex flex-col space-y-4 w-10/12 mx-auto mt-8 ">

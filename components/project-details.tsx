@@ -6,7 +6,7 @@ import Img from "next/image";
 import { updateProject } from "@/lib/data/project";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
-import ProfileCard from "@/components/ui/profilcard";
+import ProfileCard from "@/components/profilcard";
 
 interface ProjectDetailsProps {
 	project: Project;
@@ -47,7 +47,7 @@ export default function ProjectDetails({
 			toast({
 				title: "Joined successfully",
 				description: `You have successfully joined the project.`,
-				variant: "default",
+				variant: "success",
 			});
 		} else {
 			toast({
@@ -113,7 +113,7 @@ export default function ProjectDetails({
 							<div className="text-xl font-medium text-black">
 								Description
 							</div>
-							<div className="text-s text-zinc-600">
+							<div className="text-s text-zinc-600 flex flex-wrap overflow-hidden">
 								{project.description}
 							</div>
 						</div>
