@@ -38,9 +38,10 @@ export async function getUserById(id: string) {
 
 /** 
  * Update a user
- * 
+ * @param {User} user - The user to update.
+ * @returns {Promise<any>} A promise that resolves to the response.
  */
-export async function updateUser(user: User) {
+export async function updateUser(user: Partial<User>): Promise<any> {
     const client = await clientPromise;
     const db = client.db('geets')
     const userId = new ObjectId(user._id); // Ensure _id is a valid ObjectId
