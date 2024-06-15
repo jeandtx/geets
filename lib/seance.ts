@@ -90,3 +90,16 @@ export async function getSeanceById(id:string): Promise<Seance | null> {
     exercises: seance.exercises,
   } : null;
 }
+
+export async function getSeancebyDay(email: string, date: Date): Promise<Seance[]> {
+  const client = await clientPromise;
+  const db = client.db('bodyscan');
+  const seances = await db.collection('seances').find({ email, date }).toArray();
+  return seances.map(seance => ({
+    _id: seance._id.toString(),
+    email: seance.email,
+    workoutId: seance.workoutId.toString(),
+    date: seance.date,
+    exercises: seance.exercises,
+  }));
+}
