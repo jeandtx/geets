@@ -130,7 +130,7 @@ const ExerciseNavigator2: React.FC<ExerciseNavigatorProps> = ({ exercises, id })
                   {sets[index]?.map((set) => (
                     <div key={set.id} className="space-y-2">
                       <div>
-                        <Label htmlFor={`sets-${set.id}`} className="block text-sm font-medium">
+                        <Label htmlFor={`sets-${set.id}`} className="block text-base font-medium">
                           Répétitions
                         </Label>
                         <Input
@@ -139,11 +139,11 @@ const ExerciseNavigator2: React.FC<ExerciseNavigatorProps> = ({ exercises, id })
                           value={set.reps}
                           onChange={(e) => updateSet(index, set.id, 'reps', e.target.value)}
                           placeholder="Entrez le nombre de répétitions"
-                          className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 dark:border-gray-700 dark:bg-gray-950 dark:text-gray-200 dark:focus:border-gray-600 dark:focus:ring-gray-600"
+                          className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-base shadow-sm focus:border-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 dark:border-gray-700 dark:bg-gray-950 dark:text-gray-200 dark:focus:border-gray-600 dark:focus:ring-gray-600"
                         />
                       </div>
                       <div>
-                        <Label htmlFor={`weight-${set.id}`} className="block text-sm font-medium">
+                        <Label htmlFor={`weight-${set.id}`} className="block text-base font-medium">
                           Poids
                         </Label>
                         <Input
@@ -152,7 +152,7 @@ const ExerciseNavigator2: React.FC<ExerciseNavigatorProps> = ({ exercises, id })
                           value={set.weight}
                           onChange={(e) => updateSet(index, set.id, 'weight', e.target.value)}
                           placeholder="Entrez le poids"
-                          className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 dark:border-gray-700 dark:bg-gray-950 dark:text-gray-200 dark:focus:border-gray-600 dark:focus:ring-gray-600"
+                          className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-base shadow-sm focus:border-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 dark:border-gray-700 dark:bg-gray-950 dark:text-gray-200 dark:focus:border-gray-600 dark:focus:ring-gray-600"
                         />
                       </div>
                     </div>
@@ -160,7 +160,7 @@ const ExerciseNavigator2: React.FC<ExerciseNavigatorProps> = ({ exercises, id })
                   <div className="flex justify-between">
                     <Button
                       type="button"
-                      className="flex items-center justify-center rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 dark:bg-gray-50 dark:text-gray-900 dark:hover:bg-gray-200 dark:focus:ring-gray-600 dark:focus:ring-offset-gray-950"
+                      className="flex items-center justify-center rounded-md bg-gray-900 px-4 py-2 text-base font-medium text-white transition-colors hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 dark:bg-gray-50 dark:text-gray-900 dark:hover:bg-gray-200 dark:focus:ring-gray-600 dark:focus:ring-offset-gray-950"
                       onClick={() => addSet(index)}
                     >
                       <Plus className="mr-2 h-5 w-5" />
@@ -169,7 +169,7 @@ const ExerciseNavigator2: React.FC<ExerciseNavigatorProps> = ({ exercises, id })
                     {sets[index] && sets[index].length > 1 && (
                       <Button
                         type="button"
-                        className="flex items-center justify-center rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 dark:focus:ring-red-600 dark:focus:ring-offset-gray-950"
+                        className="flex items-center justify-center rounded-md bg-red-600 px-4 py-2 text-base font-medium text-white transition-colors hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 dark:focus:ring-red-600 dark:focus:ring-offset-gray-950"
                         onClick={() => removeLastSet(index)}
                       >
                         <Trash className="mr-2 h-5 w-5" />
