@@ -39,8 +39,8 @@ export default function RootLayout({
         <link rel="apple-touch-icon" sizes="180x180" href="@/public/icons/icon-980x980.png" />
         <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-980x980.png" />
         <link rel="apple-touch-icon" sizes="512x512" href="/icons/icon-980x980.png" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-      </head>
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+        </head>
       <body className={inter.className}>
         <div className="flex w-full h-screen overflow-hidden">
           <SessionWrapper>
