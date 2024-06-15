@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer';
 import { genSaltSync, hashSync } from 'bcrypt-ts';
-import { findByIdAndUpdate } from './data/user';
+import { updateUser } from './data/user';
 import { ObjectId } from 'mongodb';
 
 export const sendEmail = async ({ email, emailType, userId }: any) => {
@@ -10,18 +10,20 @@ export const sendEmail = async ({ email, emailType, userId }: any) => {
         console.log("Generated hashedToken:", hashedToken);
 
         // Convert userId to ObjectId if it's not already one
-        const userObjectId = new ObjectId(userId);
+        // const userObjectId = new ObjectId(userId);
 
         if (emailType === 'verify') {
             console.log("Updating user for verification...");
-            await findByIdAndUpdate(userObjectId.toString(), {
+            await updateUser({
+                _id: userId,
                 verificationToken: hashedToken,
                 verificationTokenExpires: new Date(Date.now() + 3600000) // 1 hour expiration
             });
             console.log("User updated with verification token");
         } else if (emailType === 'reset') {
             console.log("Updating user for password reset...");
-            await findByIdAndUpdate(userObjectId.toString(), {
+            await updateUser({
+                _id: userId,
                 resetToken: hashedToken,
                 resetTokenExpires: new Date(Date.now() + 3600000) // 1 hour expiration
             });
@@ -40,8 +42,6 @@ export const sendEmail = async ({ email, emailType, userId }: any) => {
         });
 
         console.log("Nodemailer transport created");
-
-       
 
         const mailOptions = {
             from: 'contact.app.laruche@gmail.com',

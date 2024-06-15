@@ -56,39 +56,7 @@ export async function updateUser(user: Partial<User>): Promise<any> {
     return data;
 }
 
-/**
- * Finds a user by ID and updates the specified fields.
- * @param {string} id - The ID of the user to update.
- * @param {Partial<User>} updateFields - The fields to update for the user.
- * @returns {Promise<User>} A promise that resolves to the updated user.
- */
-export async function findByIdAndUpdate(id: string, updateFields: Partial<User>) {
-    const client = await clientPromise;
-    const db = client.db('geets');
-    const userId = new ObjectId(id); // Ensure id is a valid ObjectId
 
-    // Ensure _id is not part of the fields to update
-    if (updateFields._id) {
-        delete updateFields._id;
-    }
-
-    // Perform the update operation
-    const response = await db.collection('users').findOneAndUpdate(
-        { _id: userId },
-        { $set: updateFields },
-        { returnDocument: 'after' } // Return the updated document
-    );
-
-    console.log('response', response);
-
-    // Handle the case where no user was found
-    if (!response) {
-        throw new Error(`User with id ${id} not found`);
-    }
-
-    const updatedUser: User = JSON.parse(JSON.stringify(response)); // Remove ObjectID (not serializable)
-    return updatedUser;
-}
 
 export async function findOne(query: any) {
     const client = await clientPromise;
