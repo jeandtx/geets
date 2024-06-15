@@ -14,22 +14,22 @@ export interface Workout {
     exercises: string[]; // Tableau de nom d'exercices
 }
 // Interface représentant une série
-export interface Series {
-    reps?: number;
-    weight?: number;
-}
 
-// Interface représentant un exercice avec un nom et un tableau de séries
-export interface Exercise {
-    name: string;
-    sets: Series[];
-}
 
-// Interface représentant une séance avec un tableau d'exercices
+type Set = {
+    reps: string;
+    weight: string;
+  };
+
+
 export interface Seance {
     _id: string;
     email: string;
     workoutId: string;
     date: Date;
-    exercises: Exercise[];
+    exercises: {
+        name: string;
+        sets: Set[];
+    }[];
+    
 }

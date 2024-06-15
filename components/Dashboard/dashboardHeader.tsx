@@ -7,7 +7,6 @@ import { DropdownMenuCheckboxes } from "./dropDownButton";
 import Tonnage from "./tonnage";
 import { useSession } from "next-auth/react";
 import { Seance } from "@/types/tables";
-import { getSeancebyDay } from "@/lib/seance";
 
 interface DashboardProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -19,15 +18,8 @@ export function DashboardHeader({ className }: DashboardProps) {
     const { data: session } = useSession();
     const datetodisplay = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
 
-    useEffect(() => {
-        const fetchSeances = async () => {
-            if (session?.user?.email && date) {
-                const fetchedSeances = await getSeancebyDay(session.user.email, date);
-                setSeances(fetchedSeances);
-            }
-        };
-        fetchSeances();
-    }, [session, date]);
+    
+
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
