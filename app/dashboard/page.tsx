@@ -1,15 +1,15 @@
-import { Metadata } from "next";
-import { DashboardContent } from "@/components/Dashboard/dashboardContent";
 
+import { Metadata } from "next";
+import { DashboardHeader } from "@/components/Dashboard/dashboardHeader";
+import Tonnage from "@/components/Dashboard/tonnage";
 export const metadata: Metadata = {
-	title: "Dashboard",
+    title: "Dashboard",
 };
 
 export default async function Dashboard() {
-	return (
-		<div className="p-5">
-			<DashboardContent/>
-			ça arrive bientôt la team 😉
-		</div>
-	);
+    return (
+        <div className="">
+            <DashboardHeader />
+        </div>
+    );
 }
