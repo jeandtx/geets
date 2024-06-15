@@ -47,23 +47,23 @@ export function Sidebar({ className }: SidebarProps) {
       </div>
 
       {/* Navbar mobile */}
-      <div className="fixed bottom-0 left-0 right-0 bg-gray-200 shadow-md md:hidden flex justify-around py-2 rounded-tl-3xl rounded-tr-3xl">   
+      <div className="fixed bottom-0 left-0 right-0 bg-gray-200 md:hidden flex justify-around py-2 ">   
            <Link href={"/dashboard"}>
           <Button variant="ghost" className="h-15 w-15 flex flex-col items-center">
             <Zap className="h-12 " />
-            <span className="text-sm">Dashboard</span>
+            
           </Button>
         </Link>
         <Link href={"/"}>
           <Button variant="ghost" className="h-15 w-15 flex flex-col items-center">
             <Home className="h-12" />
-            <span className="text-sm">Home</span>
+            
           </Button>
         </Link>
         <Link href={`/profil`}>
           <Button variant="ghost" className="h-15 w-15 flex flex-col items-center">
             <CircleUserRoundIcon className="h-12" />
-            <span className="text-sm">Profile</span>
+            
           </Button>
         </Link>
       </div>
