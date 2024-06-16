@@ -4,6 +4,21 @@ import clientPromise from '@/lib/mongodb'
 import { ObjectId } from 'mongodb';
 
 
+/**
+ * Create a new interaction
+ * @param {Interaction} interaction - The interaction data
+ * @returns {Promise<any>} a validated promise
+ * @throws {Error} If the interaction cannot be created
+ */
+export async function createInteraction(interaction: Interaction): Promise<any> {
+    const client = await clientPromise;
+    const db = client.db('geets');
+    interaction._id = new ObjectId().toString()
+    const data = JSON.parse(JSON.stringify(interaction)); // Remove ObjectID (not serializable)
+    const result = await db.collection('interactions').insertOne(data);
+    return result;
+}
+
 
 /**
  * Retrieve all interactions

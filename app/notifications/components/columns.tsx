@@ -9,8 +9,8 @@ import { types } from "../data/data";
 import { DataTableColumnHeader } from "./data-table-column-header";
 import { DataTableRowActions } from "./data-table-row-actions";
 import { Interaction } from "@/types/tables";
-import { Button } from "@/components/ui/button";
 import Read from "./read";
+import HandleInvitation from "./handleInvitation";
 
 export const columns: ColumnDef<Interaction>[] = [
 	// {
@@ -145,18 +145,7 @@ export const columns: ColumnDef<Interaction>[] = [
 					</div>
 				);
 			} else {
-				return (
-					<div className="text-sm text-muted-foreground flex space-x-16">
-						<div>
-							<b>{row.original.userId}</b> has requested to join
-							your project <b>{row.original.join?.projectName}</b>
-						</div>
-						<div className="flex flex-col space-x-2 align-center">
-							<Button variant={"outline"}>Accept</Button>
-							<Button variant={"destructive"}>Decline</Button>
-						</div>
-					</div>
-				);
+				return <HandleInvitation row={row} />;
 			}
 		},
 		enableHiding: false,

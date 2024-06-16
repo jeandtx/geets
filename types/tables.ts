@@ -22,10 +22,12 @@ export interface Interaction {
     join?: {
         projectId: string;
         projectName: string;
-        projectAvatar: string;
+        projectAvatar?: string;
         projectOwner: string;
+        status?: "pending" | "accepted" | "rejected";
     };
-    read: boolean;
+    read?: boolean;
+    to: string;
 }
 
 
