@@ -13,9 +13,11 @@ import { ObjectId } from 'mongodb';
 export async function createInteraction(interaction: Interaction): Promise<any> {
     const client = await clientPromise;
     const db = client.db('geets');
-    interaction._id = new ObjectId().toString()
     const data = JSON.parse(JSON.stringify(interaction)); // Remove ObjectID (not serializable)
-    const result = await db.collection('interactions').insertOne(data);
+    const result = await db.collection('interactions').insertOne({
+        ...data,
+        _id: new ObjectId()
+    });
     return result;
 }
 

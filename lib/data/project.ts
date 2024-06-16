@@ -27,7 +27,7 @@ export async function createProject(project: Project) {
         throw new Error('Missing field(s) in project. Check title: ' + project.title + ', description: ' + project.description + ', participants: ' + project.participants);
     }
 
-    const result = await db.collection('projects').insertOne({ ...project, _id: new ObjectId() });
+    const result = await db.collection('projects').insertOne({ ...project, _id: new ObjectId(), time: new Date() });
     const data = JSON.parse(JSON.stringify(result)); // Remove ObjectID (not serializable)
     return data;
 }
@@ -127,7 +127,7 @@ export async function deleteProject(projectId: string) {
 export async function searchProjects(searchTerm: string): Promise<Project[]> {
     const client = await clientPromise;
     const db = client.db('geets');
-    
+
     const searchResults = await db.collection('projects').aggregate([
         {
             $search: {

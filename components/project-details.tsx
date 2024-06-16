@@ -39,8 +39,6 @@ export default function ProjectDetails({
 		};
 
 		const result = await createInteraction({
-			_id: "none",
-			id: "none",
 			time: new Date().toString(),
 			userId: newParticipant.name,
 			userAvatar:
