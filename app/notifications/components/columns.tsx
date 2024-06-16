@@ -149,8 +149,7 @@ export const columns: ColumnDef<Interaction>[] = [
 					<div className="text-sm text-muted-foreground flex space-x-16">
 						<div>
 							<b>{row.original.userId}</b> has requested to join
-							your project
-							<b>{row.original.join?.projectName}</b>
+							your project <b>{row.original.join?.projectName}</b>
 						</div>
 						<div className="flex flex-col space-x-2 align-center">
 							<Button variant={"outline"}>Accept</Button>
