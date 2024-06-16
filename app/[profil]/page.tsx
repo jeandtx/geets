@@ -15,7 +15,7 @@ function SignOut() {
 				await signOut();
 			}}
 		>
-			<Button variant={"outline"} type="submit">
+			<Button variant={"outline"} type="submit" className="mt-6">
 				Sign out
 			</Button>
 		</form>
@@ -46,177 +46,203 @@ export default async function ProfilPage({
 	});
 
 	return (
-		<div className="">
-			<h1 className="text-3xl font-bold">{user.email}</h1>
-			<Link href={`/${decodeEmail}/edit`}>
-				<Button variant={"default"}>Edit My Profile</Button>
-			</Link>
-			{user ? (
-				<table>
-					<thead>
-						<tr>
-							<th>Field</th>
-							<th>Value</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>Pseudo:</td>
-							<td>{user.pseudo}</td>
-						</tr>
-						<tr>
-							<td>Email:</td>
-							<td>{user.email}</td>
-						</tr>
-						<tr>
-							<td>Name:</td>
-							<td>{user.first_name}</td>
-						</tr>
-						<tr>
-							<td>LastName:</td>
-							<td>{user.lastName}</td>
-						</tr>
-						<tr>
-							<td>Age:</td>
-							<td>
-								{user.birth_date?.toLocaleString() ?? "No data"}
-							</td>
-						</tr>
-						<tr>
-							<td>Localisation:</td>
-							<td>{user.localisation}</td>
-						</tr>
-						<tr>
-							<td>Gender:</td>
-							<td>{user.gender}</td>
-						</tr>
-						<tr>
-							<td>Experience:</td>
-							<td>{user.experience}</td>
-						</tr>
-						<tr>
-							<td>Available:</td>
-							<td>{user.available ? "Yes" : "No"}</td>
-						</tr>
-						<tr>
-							<td>Mobile:</td>
-							<td>{user.mobile}</td>
-						</tr>
-						<tr>
-							<td>Allow Emails:</td>
-							<td>{user.allowEmails ? "Yes" : "No"}</td>
-						</tr>
-						<tr>
-							<td>Account Creation:</td>
-							<td>{user.created?.toLocaleDateString()}</td>
-						</tr>
-					</tbody>
-				</table>
-			) : (
-				<div>User not found 😔</div>
-			)}
-
-			<h2 className="text-2xl font-bold">My Posts</h2>
-			{userPosts.length > 0 ? (
-				<div className="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full px-10">
-					{await Promise.all(
-						userPosts.map(async (post) => {
-							return (
-								<div
-									key={post._id}
-									className="flex overflow-hidden rounded-xl border border-slate-200 bg-white"
-								>
-									<div className="wrapper py-7">
-										<div className="header px-10 mb-4">
-											<div>
-												<p className="text-sm text-gray-600">
+		<div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+			<div className="max-w-4xl mx-auto">
+				<div className="bg-white shadow-lg rounded-lg p-8 space-y-6">
+					<div className="flex flex-col items-center">
+						<h1 className="text-3xl font-extrabold text-gray-900">
+							{user?.email}
+						</h1>
+						<Link href={`/${decodeEmail}/edit`}>
+							<Button variant={"default"}>Edit My Profile</Button>
+						</Link>
+						{user ? (
+							<table className="min-w-full divide-y divide-gray-200 mt-6">
+								<thead>
+									<tr>
+										<th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+											Field
+										</th>
+										<th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+											Value
+										</th>
+									</tr>
+								</thead>
+								<tbody className="bg-white divide-y divide-gray-200">
+									{[
+										{ label: "Pseudo", value: user.pseudo },
+										{ label: "Email", value: user.email },
+										{
+											label: "Name",
+											value: user.first_name,
+										},
+										{
+											label: "Last Name",
+											value: user.lastName,
+										},
+										{
+											label: "Age",
+											value: user.birth_date
+												? new Date().getFullYear() -
+												  new Date(
+														user.birth_date
+												  ).getFullYear()
+												: "Unknown",
+										},
+										{
+											label: "Location",
+											value: user.localisation,
+										},
+										{ label: "Gender", value: user.gender },
+										{
+											label: "Experience",
+											value: user.experience,
+										},
+										{
+											label: "Available",
+											value: user.available
+												? "Yes"
+												: "No",
+										},
+										{ label: "Mobile", value: user.mobile },
+										{
+											label: "Allow Emails",
+											value: user.allowEmails
+												? "Yes"
+												: "No",
+										},
+										{
+											label: "Account Creation",
+											value: user.created,
+										},
+									].map(({ label, value }) => (
+										<tr key={label}>
+											<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+												{label}:
+											</td>
+											<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+												{value?.toLocaleString()}
+											</td>
+										</tr>
+									))}
+								</tbody>
+							</table>
+						) : (
+							<div className="mt-6 text-center text-gray-500">
+								User not found :(
+							</div>
+						)}
+					</div>
+					<div className="space-y-8">
+						<section>
+							<h2 className="text-2xl font-semibold text-gray-900">
+								My Posts
+							</h2>
+							{userPosts.length > 0 ? (
+								<div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+									{userPosts.map((post) => (
+										<div
+											key={post._id}
+											className="bg-white rounded-lg shadow-lg overflow-hidden"
+										>
+											<div className="p-6">
+												<div className="text-sm text-gray-600 mb-2">
 													{post.project?.title
 														? post.project.title
 														: "Nom de projet"}{" "}
 													•{" "}
-													{post.project?._id
-														? post.project._id
-														: "ID de projet"}
+													{post.project?._id ||
+														"ID de projet"}
+												</div>
+												<p className="text-gray-900">
+													{post.content}
 												</p>
 											</div>
 										</div>
-										<div className="body px-10 space-y-5">
-											<p className="text-gray-900 mb-0">
-												{post.content}
-											</p>
-										</div>
-									</div>
+									))}
 								</div>
-							);
-						})
-					)}
-				</div>
-			) : (
-				<div>No posts found</div>
-			)}
-			<h2 className="text-2xl font-bold">My Projects</h2>
-			{Array.isArray(userProjects) && userProjects.length > 0 ? (
-				<div className="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full px-10">
-					{userProjects.map((project) => (
-						<ProjectCard key={project._id} project={project} />
-					))}
-				</div>
-			) : (
-				<div>No projects found</div>
-			)}
-			<h2 className="text-2xl font-bold">
-				Projects {decodeEmail} is participating in
-			</h2>
-			{participatingProjects.length > 0 ? (
-				<div className="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full px-10">
-					{await Promise.all(
-						participatingProjects.map(async (project: Project) => {
-							const author = project.participants
-								? project.participants.find(
-										(participant) =>
-											participant.role === "author"
-								  )
-								: null;
-
-							const authorInfo = await getUser(
-								author?.name ?? ""
-							);
-							return (
-								<div
-									key={project._id.toString()}
-									className="flex max-w-xl overflow-hidden rounded-xl border border-slate-200 bg-white"
-								>
-									<div className="wrapper py-7">
-										<div className="header px-10 mb-4">
-											<div>
-												<Link
-													href={`/${author?.name}/${project._id}`}
+							) : (
+								<div className="mt-6 text-center text-gray-500">
+									No posts found
+								</div>
+							)}
+						</section>
+						<section>
+							<h2 className="text-2xl font-semibold text-gray-900">
+								My Projects
+							</h2>
+							{Array.isArray(userProjects) &&
+							userProjects.length > 0 ? (
+								<div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+									{userProjects.map((project) => (
+										<ProjectCard
+											key={project._id}
+											project={project}
+										/>
+									))}
+								</div>
+							) : (
+								<div className="mt-6 text-center text-gray-500">
+									No projects found
+								</div>
+							)}
+						</section>
+						<section>
+							<h2 className="text-2xl font-semibold text-gray-900">
+								Projects {decodeEmail} is participating in
+							</h2>
+							{participatingProjects.length > 0 ? (
+								<div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+									{participatingProjects.map(
+										async (project: Project) => {
+											const author =
+												project.participants?.find(
+													(participant) =>
+														participant.role ===
+														"author"
+												);
+											const authorInfo = await getUser(
+												author?.name ?? ""
+											);
+											return (
+												<div
+													key={project._id.toString()}
+													className="bg-white rounded-lg shadow-lg overflow-hidden"
 												>
-													<p className="text-lg text-gray-900 font-bold">
-														{project.title}
-													</p>
-												</Link>
-												<p className="text-sm text-gray-600">
-													{project.description}
-												</p>
-												<p className="text-sm text-gray-600">
-													Author:{" "}
-													{authorInfo
-														? authorInfo.email
-														: "Unknown"}
-												</p>
-											</div>
-										</div>
-									</div>
+													<div className="p-6">
+														<Link
+															href={`/${author?.name}/${project._id}`}
+															className="text-lg font-bold text-blue-600 hover:underline"
+														>
+															{project.title}
+														</Link>
+														<p className="text-sm text-gray-600 mt-2">
+															{
+																project.description
+															}
+														</p>
+														<p className="text-sm text-gray-600 mt-2">
+															Author:{" "}
+															{authorInfo
+																? authorInfo.email
+																: "Unknown"}
+														</p>
+													</div>
+												</div>
+											);
+										}
+									)}
 								</div>
-							);
-						})
-					)}
+							) : (
+								<div className="mt-6 text-center text-gray-500">
+									No participating projects found
+								</div>
+							)}
+						</section>
+					</div>
+					<SignOut />
 				</div>
-			) : (
-				<div>No participating projects found</div>
-			)}
-			<SignOut />
+			</div>
 		</div>
 	);
 }

@@ -34,7 +34,13 @@ export interface User {
     mobile?: string;
     allowEmails?: boolean;
     created?: Date;
+    emailVerified?: boolean; 
+    verificationToken?: string; 
+    verificationTokenExpires?: Date; 
+    resetToken?: string;
+    resetTokenExpires?: Date;
 }
+
 
 export interface Participant {
     name: string;
