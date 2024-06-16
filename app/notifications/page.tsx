@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { columns } from "./components/columns";
 import { DataTable } from "./components/data-table";
 import { getInteractions } from "@/lib/data/interactions";
+import { auth } from "../auth";
 
 export const metadata: Metadata = {
 	title: "Notifications",
@@ -9,7 +10,11 @@ export const metadata: Metadata = {
 };
 
 export default async function NotificationsPage() {
-	const notifications = await getInteractions();
+	const session = await auth();
+	const email = session?.user?.email;
+	const notifications = await getInteractions({
+		to: email,
+	});
 
 	return (
 		<div className="hidden h-full flex-1 flex-col space-y-8 p-8 md:flex">

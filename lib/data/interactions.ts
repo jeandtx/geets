@@ -11,7 +11,7 @@ import { ObjectId } from 'mongodb';
  * @returns {Promise<Interaction[]>} The interactions
  * @throws {Error} If the interactions cannot be retrieved
  */
-export async function getInteractions(page = 1): Promise<Interaction[]> {
+export async function getInteractions(query: Partial<Interaction> | any, page = 1): Promise<Interaction[]> {
     const client = await clientPromise;
     const db = client.db('geets');
     const interactionsPerPage = 10;
@@ -19,7 +19,9 @@ export async function getInteractions(page = 1): Promise<Interaction[]> {
     if (offset < 0) {
         throw new Error('Invalid page number');
     }
-    const interactions = await db.collection('interactions').find().sort({ time: -1 }).skip(offset).limit(interactionsPerPage).toArray();
+    const interactions = await db.collection('interactions').find(
+        query
+    ).sort({ time: -1 }).skip(offset).limit(interactionsPerPage).toArray();
     const data: Interaction[] = JSON.parse(JSON.stringify(interactions)); // Remove ObjectID (not serializable)
     return data;
 }

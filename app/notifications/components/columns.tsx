@@ -9,6 +9,9 @@ import { types } from "../data/data";
 import { DataTableColumnHeader } from "./data-table-column-header";
 import { DataTableRowActions } from "./data-table-row-actions";
 import { Interaction } from "@/types/tables";
+import { Button } from "@/components/ui/button";
+import { MessageSquareDot, MessageSquareOff } from "lucide-react";
+import { updateInteraction } from "@/lib/data/interactions";
 
 export const columns: ColumnDef<Interaction>[] = [
 	// {
@@ -37,6 +40,44 @@ export const columns: ColumnDef<Interaction>[] = [
 	// 	enableSorting: false,
 	// 	enableHiding: false,
 	// },
+	{
+		accessorKey: "read",
+		header: ({ column }) => (
+			<DataTableColumnHeader column={column} title="Read" />
+		),
+		cell: ({ row }) => (
+			<div className="w-[80px] text-sm text-muted-foreground overflow-hidden">
+				<Button
+					variant={"ghost"}
+					onClick={() => {
+						updateInteraction({
+							...row.original,
+							read: !row.original.read,
+						});
+						row.original.read = !row.original.read;
+					}}
+				>
+					{row.original.read ? (
+						<Badge
+							variant="info"
+							className="items-center space-x-1 px-2 py-1 rounded-full text-xs bg-muted-background text-muted-foreground"
+						>
+							<MessageSquareOff className="h-4 w-4 text-muted-foreground" />
+						</Badge>
+					) : (
+						<Badge
+							variant="info"
+							className="items-center space-x-1 px-2 py-1 rounded-full text-xs"
+						>
+							<MessageSquareDot className="h-4 w-4 text-muted-foreground" />
+						</Badge>
+					)}
+				</Button>
+			</div>
+		),
+		enableSorting: false,
+		enableHiding: true,
+	},
 	{
 		accessorKey: "time",
 		header: ({ column }) => (
@@ -135,9 +176,16 @@ export const columns: ColumnDef<Interaction>[] = [
 				);
 			} else {
 				return (
-					<div className="text-sm text-muted-foreground">
-						{row.original.userId} has requested to join your project
-						{row.original.join?.projectName}
+					<div className="text-sm text-muted-foreground flex space-x-16">
+						<div>
+							<b>{row.original.userId}</b> has requested to join
+							your project
+							<b>{row.original.join?.projectName}</b>
+						</div>
+						<div className="flex flex-col space-x-2 align-center">
+							<Button variant={"outline"}>Accept</Button>
+							<Button variant={"destructive"}>Decline</Button>
+						</div>
 					</div>
 				);
 			}
