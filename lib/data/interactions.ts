@@ -16,6 +16,7 @@ export async function createInteraction(interaction: Interaction): Promise<any> 
     const data = JSON.parse(JSON.stringify(interaction)); // Remove ObjectID (not serializable)
     const result = await db.collection('interactions').insertOne({
         ...data,
+        time: new Date(),
         _id: new ObjectId()
     });
     return result;

@@ -1,6 +1,5 @@
 export interface Interaction {
     _id: string;
-    id: string;
     time: string;
     userId: string;
     userAvatar: string;
@@ -67,9 +66,9 @@ export interface User {
     mobile?: string;
     allowEmails?: boolean;
     created?: Date;
-    emailVerified?: boolean; 
-    verificationToken?: string; 
-    verificationTokenExpires?: Date; 
+    emailVerified?: boolean;
+    verificationToken?: string;
+    verificationTokenExpires?: Date;
     resetToken?: string;
     resetTokenExpires?: Date;
 }
