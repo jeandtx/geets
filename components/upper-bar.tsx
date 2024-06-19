@@ -14,7 +14,7 @@ const TabContent = ({ value, children }: { value: string, children: React.ReactN
 );
 
 export const UpperBar = ({ className }: UpperbarProps) => {
-	const [selectedTab, setSelectedTab] = useState("Feeds");
+	const [selectedTab, setSelectedTab] = useState("Feed");
 
 	const handleTabClick = (tabName: string) => {
 		setSelectedTab(tabName);
