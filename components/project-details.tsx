@@ -1,12 +1,12 @@
 "use client";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
-import { Post, Project, Participant } from "@/types/tables";
+import { Post, Project, Participant, Interaction } from "@/types/tables";
 import Img from "next/image";
-import { updateProject } from "@/lib/data/project";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import ProfileCard from "@/components/profilcard";
+import { createInteraction } from "@/lib/data/interactions";
 
 interface ProjectDetailsProps {
 	project: Project;
@@ -38,15 +38,33 @@ export default function ProjectDetails({
 			role: "participant",
 		};
 
-		const result = await updateProject({
-			...project,
-			participants: [...participants, newParticipant],
-		});
+		const result = await createInteraction({
+			time: new Date().toString(),
+			userId: newParticipant.name,
+			userAvatar:
+				"https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/279.jpg",
+			type: "join",
+			join: {
+				projectId: project._id,
+				projectName: project.title,
+				projectAvatar: project.media,
+				projectOwner:
+					participants.find((p) => p.role === "author")?.name ?? "",
+			},
+			to: participants.find((p) => p.role === "author")?.name ?? "",
+			read: false,
+		} as Interaction);
 		if (result) {
-			setParticipants([...participants, newParticipant]);
+			setParticipants([
+				...participants,
+				{
+					name: newParticipantEmail,
+					role: "Pending",
+				},
+			]);
 			toast({
-				title: "Joined successfully",
-				description: `You have successfully joined the project.`,
+				title: "Request sent",
+				description: `You have successfully asked to join the project.`,
 				variant: "success",
 			});
 		} else {
@@ -57,7 +75,6 @@ export default function ProjectDetails({
 			});
 			console.error("Failed to update participants.");
 		}
-		console.log("project media is", project.media);
 	};
 
 	return (
@@ -152,9 +169,7 @@ export default function ProjectDetails({
 										>
 											<div>Content: {post.content}</div>
 											<div>
-												Time:{" "}
-												{/* {post.time.toLocaleString()} */}
-												{/* // TODO: resolve time hydration warning */}
+												Time: {post.time.toString()}
 											</div>
 											<div>
 												Author: {post.author?.email}

@@ -2,10 +2,10 @@ import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 import {
 	SquareKanban,
-	FlaskConical,
 	BookHeart,
 	PersonStanding,
 	SquareMousePointer,
+	BellRing,
 } from "lucide-react";
 import Link from "next/link";
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -13,10 +13,7 @@ interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export async function Sidebar({ className, email }: Readonly<SidebarProps>) {
-
-
 	return (
-		<>
 		<div className={cn(" sm:block hidden", className)}>
 			<div className="px-3 py-2 rounded-xl border border-slate-200 bg-white min-w-[200px]">
 				<h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
@@ -30,15 +27,6 @@ export async function Sidebar({ className, email }: Readonly<SidebarProps>) {
 						>
 							<BookHeart className="mr-2 h-4 w-4" />
 							For You
-						</Button>
-					</Link>
-					<Link href={"/testing"}>
-						<Button
-							variant="ghost"
-							className="justify-start w-full"
-						>
-							<FlaskConical className="mr-2 h-4 w-4" />
-							Testing Page
 						</Button>
 					</Link>
 					<Link href={`/${email}`}>
@@ -68,10 +56,17 @@ export async function Sidebar({ className, email }: Readonly<SidebarProps>) {
 							My Projects
 						</Button>
 					</Link>
+					<Link href={`/notifications`}>
+						<Button
+							variant="ghost"
+							className="justify-start w-full"
+						>
+							<BellRing className="mr-2 h-4 w-4" />
+							Notifications
+						</Button>
+					</Link>
 				</div>
 			</div>
 		</div>
-		
-		</>  
 	);
 }

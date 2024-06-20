@@ -8,10 +8,10 @@ import { Project, Participant } from "@/types/tables";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 import { createProject } from "@/lib/data/project";
-import { useSession } from "next-auth/react";
 import { CldUploadWidget } from "next-cloudinary";
 import { useUserInfo } from "@/app/context/UserInfoContext";
-import LoadingSpinner from '@/components/ui/spinner';
+import LoadingSpinner from "@/components/ui/spinner";
+
 export default function NewProject() {
 	const [label, setLabel] = useState<string>("");
 	const [labels, setLabels] = useState<string[]>([]);
@@ -21,10 +21,9 @@ export default function NewProject() {
 	const [participantRole, setParticipantRole] = useState<string>("");
 	const [participants, setParticipants] = useState<Participant[]>([]);
 	const { toast } = useToast();
-	const session = useSession();
 	const [imageUrl, setImageUrl] = useState<string>("");
 	const [imageName, setImageName] = useState<string>("Ajouter une photo");
-	const { userInfo, status } = useUserInfo();
+	const { userInfo } = useUserInfo();
 
 	const [project, setProject] = useState<Project>({
 		_id: "Generated",
@@ -42,19 +41,16 @@ export default function NewProject() {
 			[e.target.name]: e.target.value,
 		});
 	};
-	console.log("user info", userInfo);
 
 	useEffect(() => {
 		if (userInfo) {
-			console.log("User Info", userInfo);
 			setParticipants([{ name: userInfo.email, role: "author" }]);
-			console.log("Participants", participants);
 			setProject({
 				...project,
 				participants: [{ name: userInfo.email, role: "author" }],
 			});
 		}
-	}, [session]);
+	}, [userInfo]);
 
 	useEffect(() => {
 		setProject({
@@ -68,7 +64,7 @@ export default function NewProject() {
 
 	const handleSubmit = (e: any) => {
 		e.preventDefault();
-		if (userInfo?.email === "") {
+		if (!userInfo) {
 			toast({
 				variant: "destructive",
 				title: "Uh oh! Something went wrong.",
@@ -80,8 +76,8 @@ export default function NewProject() {
 			setProject({
 				...project,
 				participants: participants.map((p) => ({
-					name: p.name,
-					role: p.role,
+					name: userInfo.email,
+					role: "author",
 				})),
 			});
 		}
@@ -119,7 +115,7 @@ export default function NewProject() {
 		<>
 			{userInfo === null ? (
 				<div className="flex flex-col w-full mx-auto bg-white p-8 rounded-lg shadow-lg">
-					<LoadingSpinner/>
+					<LoadingSpinner />
 				</div>
 			) : (
 				<div className="flex flex-col w-full mx-auto bg-white p-8 rounded-lg shadow-lg">
