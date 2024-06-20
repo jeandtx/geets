@@ -28,12 +28,14 @@ export default function SettingsPage({
     const { toast } = useToast();
     const [project, setProject] = useState<Project | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [initialTitle, setInitialTitle] = useState("");
 
     useEffect(() => {
         const fetchData = async () => {
             setIsLoading(true);
             const fetchedProject = await getProject(projectId);
             setProject(fetchedProject);
+            setInitialTitle(fetchedProject.title);
             setThemes(fetchedProject.themes || []);
             setLabels(fetchedProject.labels || []);
             setImageUrl(fetchedProject.media || "");
@@ -126,7 +128,7 @@ export default function SettingsPage({
                 <div className="flex flex-col w-full mx-auto bg-white p-8 rounded-lg shadow-lg">
                     <div>
                         <h1 className="text-3xl font-bold text-center mt-8">
-                            Update {project?.title || "Project"}
+                            Update {initialTitle || "Project"}
                         </h1>
                     </div>
                     <div className="flex flex-col space-y-4 w-10/12 mx-auto mt-8 ">
