@@ -166,26 +166,6 @@ export default async function ProfilPage({
 						</section>
 						<section>
 							<h2 className="text-2xl font-semibold text-gray-900">
-								My Projects
-							</h2>
-							{Array.isArray(userProjects) &&
-							userProjects.length > 0 ? (
-								<div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-									{userProjects.map((project) => (
-										<ProjectCard
-											key={project._id}
-											project={project}
-										/>
-									))}
-								</div>
-							) : (
-								<div className="mt-6 text-center text-gray-500">
-									No projects found
-								</div>
-							)}
-						</section>
-						<section>
-							<h2 className="text-2xl font-semibold text-gray-900">
 								Projects {decodeEmail} is participating in
 							</h2>
 							{participatingProjects.length > 0 ? (
