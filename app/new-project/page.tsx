@@ -11,41 +11,35 @@ import { useSession } from "next-auth/react";
 import { CldUploadWidget } from "next-cloudinary";
 import { useUserInfo } from "@/app/context/UserInfoContext";
 import LoadingSpinner from "@/components/ui/spinner";
-import { useLocalStorage } from "@uidotdev/usehooks";
+import { useLocalStorage, useIsClient } from "@uidotdev/usehooks";
 
 export default function NewProject() {
-    const [title, setTitle] = useLocalStorage<string>("title", "");
+    const isClient = useIsClient();
+
+    const [title, setTitle] = useState<string>("");
     const [label, setLabel] = useState<string>("");
-    const [labels, setLabels] = useLocalStorage<string[]>("labels", []);
+    const [labels, setLabels] = useState<string[]>([]);
     const [theme, setTheme] = useState<string>("");
-    const [themes, setThemes] = useLocalStorage<string[]>("themes", []);
-    const [description, setDescription] = useLocalStorage<string>("description", "");
+    const [themes, setThemes] = useState<string[]>([]);
+    const [description, setDescription] = useState<string>("");
     const [participantName, setParticipantName] = useState<string>("");
     const [participantRole, setParticipantRole] = useState<string>("");
-    const [participants, setParticipants] = useLocalStorage<Participant[]>("participants", []);
+    const [participants, setParticipants] = useState<Participant[]>([]);
     const { toast } = useToast();
     const session = useSession();
-    const [imageUrl, setImageUrl] = useLocalStorage<string>("imageUrl", "");
+    const [imageUrl, setImageUrl] = useState<string>("");
     const [imageName, setImageName] = useState<string>("Ajouter une photo");
     const { userInfo, status } = useUserInfo();
 
     const [project, setProject] = useState<Project>({
         _id: "Generated",
-        title: title,
-        themes: themes,
-        description: description,
-        media: imageUrl,
-        labels: labels,
-        participants: participants,
+        title: "",
+        themes: [],
+        description: "",
+        media: "",
+        labels: [],
+        participants: [],
     });
-
-    const handleChange = (e: any) => {
-        const { name, value } = e.target;
-        setProject((prev) => ({ ...prev, [name]: value }));
-
-        if (name === "title") setTitle(value);
-        if (name === "description") setDescription(value);
-    };
 
     useEffect(() => {
         if (userInfo) {
@@ -66,6 +60,14 @@ export default function NewProject() {
             participants: participants,
         }));
     }, [themes, labels, imageUrl, participants]);
+
+    const handleChange = (e: any) => {
+        const { name, value } = e.target;
+        setProject((prev) => ({ ...prev, [name]: value }));
+
+        if (name === "title") setTitle(value);
+        if (name === "description") setDescription(value);
+    };
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
@@ -112,6 +114,40 @@ export default function NewProject() {
             setParticipantRole("");
         }
     };
+
+    // Use localStorage only if it's on the client side
+    useEffect(() => {
+        if (isClient) {
+            const savedTitle = localStorage.getItem("title");
+            const savedLabels = localStorage.getItem("labels");
+            const savedThemes = localStorage.getItem("themes");
+            const savedDescription = localStorage.getItem("description");
+            const savedParticipants = localStorage.getItem("participants");
+            const savedImageUrl = localStorage.getItem("imageUrl");
+
+            if (savedTitle) setTitle(JSON.parse(savedTitle));
+            if (savedLabels) setLabels(JSON.parse(savedLabels));
+            if (savedThemes) setThemes(JSON.parse(savedThemes));
+            if (savedDescription) setDescription(JSON.parse(savedDescription));
+            if (savedParticipants) setParticipants(JSON.parse(savedParticipants));
+            if (savedImageUrl) setImageUrl(JSON.parse(savedImageUrl));
+        }
+    }, [isClient]);
+
+    useEffect(() => {
+        if (isClient) {
+            localStorage.setItem("title", JSON.stringify(title));
+            localStorage.setItem("labels", JSON.stringify(labels));
+            localStorage.setItem("themes", JSON.stringify(themes));
+            localStorage.setItem("description", JSON.stringify(description));
+            localStorage.setItem("participants", JSON.stringify(participants));
+            localStorage.setItem("imageUrl", JSON.stringify(imageUrl));
+        }
+    }, [title, labels, themes, description, participants, imageUrl, isClient]);
+
+    if (!isClient) {
+        return null;
+    }
 
     return (
         <>
@@ -248,9 +284,7 @@ export default function NewProject() {
                                     <Badge
                                         key={participant.name}
                                         onClick={() => {
-                                            setParticipants((prev) =>
-                                                prev.filter((p) => p.name !== participant.name)
-                                            );
+                                            setParticipants((prev) => prev.filter((p) => p.name !== participant.name));
                                         }}
                                     >
                                         {participant.name} ({participant.role})
