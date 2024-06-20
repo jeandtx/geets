@@ -11,7 +11,7 @@ import { useSession } from "next-auth/react";
 import { CldUploadWidget } from "next-cloudinary";
 import { useUserInfo } from "@/app/context/UserInfoContext";
 import LoadingSpinner from "@/components/ui/spinner";
-import { useLocalStorage, useIsClient } from "@uidotdev/usehooks";
+import { useIsClient } from "@uidotdev/usehooks";
 
 export default function NewProject() {
     const isClient = useIsClient();
@@ -159,7 +159,7 @@ export default function NewProject() {
                 <div className="flex flex-col w-full mx-auto bg-white p-8 rounded-lg shadow-lg">
                     <div>
                         <h1 className="text-3xl font-bold text-center mt-8">
-                            New Project for {userInfo?.email}
+                            Mon nouveau Projet ! 🚀
                         </h1>
                     </div>
                     <div className="flex flex-col space-y-4 w-10/12 mx-auto mt-8 ">
@@ -168,7 +168,7 @@ export default function NewProject() {
                             name="title"
                             onChange={handleChange}
                             value={title}
-                            placeholder="Title"
+                            placeholder="Titre"
                             required
                         />
                         <form
@@ -266,16 +266,16 @@ export default function NewProject() {
                                 name="participantName"
                                 onChange={(e) => setParticipantName(e.target.value)}
                                 value={participantName}
-                                placeholder="Participant Mail"
+                                placeholder="Mail Participant"
                             />
                             <Input
                                 type="text"
                                 name="participantRole"
                                 onChange={(e) => setParticipantRole(e.target.value)}
                                 value={participantRole}
-                                placeholder="Participant Role"
+                                placeholder="Role Participant"
                             />
-                            <Button onClick={handleAddParticipant}>Add</Button>
+                            <Button onClick={handleAddParticipant}>Ajouter</Button>
                         </div>
                         <div className="flex flex-wrap gap-2 mt-2">
                             {participants
@@ -293,7 +293,7 @@ export default function NewProject() {
                         </div>
 
                         <form onSubmit={handleSubmit} className="flex flex-col gap-2">
-                            <Button type="submit">Submit</Button>
+                            <Button type="submit">Enregistrer</Button>
                         </form>
                     </div>
                 </div>
