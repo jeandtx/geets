@@ -20,7 +20,7 @@ export default function SettingsPage({
     const [labels, setLabels] = useState<string[]>([]);
     const [theme, setTheme] = useState<string>("");
     const [themes, setThemes] = useState<string[]>([]);
-    const [participantName, setParticipantName] = useState<string>("");
+    const [participantMail, setparticipantMail] = useState<string>("");
     const [participantRole, setParticipantRole] = useState<string>("");
     const [participants, setParticipants] = useState<Participant[]>([]);
     const [imageUrl, setImageUrl] = useState<string>("");
@@ -104,12 +104,12 @@ export default function SettingsPage({
     };
 
     const handleAddParticipant = () => {
-        if (participantName && participantRole) {
+        if (participantMail && participantRole) {
             setParticipants((prev) => [
                 ...prev,
-                { name: participantName, role: participantRole },
+                { name: participantMail, role: participantRole },
             ]);
-            setParticipantName("");
+            setparticipantMail("");
             setParticipantRole("");
         }
     };
@@ -220,10 +220,10 @@ export default function SettingsPage({
                         <div className="flex space-x-2">
                             <Input
                                 type="text"
-                                name="participantName"
-                                onChange={(e) => setParticipantName(e.target.value)}
-                                value={participantName}
-                                placeholder="Participant Name"
+                                name="participantMail"
+                                onChange={(e) => setparticipantMail(e.target.value)}
+                                value={participantMail}
+                                placeholder="Participant Mail"
                             />
                             <Input
                                 type="text"

@@ -242,7 +242,7 @@ export default function NewProject() {
 									setParticipantName(e.target.value);
 								}}
 								value={participantName}
-								placeholder="Participant Name"
+								placeholder="Participant Mail"
 							/>
 							<Input
 								type="text"
