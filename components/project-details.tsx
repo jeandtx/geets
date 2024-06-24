@@ -7,6 +7,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import ProfileCard from "@/components/profilcard";
 import { createInteraction } from "@/lib/data/interactions";
+import PostCard from "./postcard";
 
 interface ProjectDetailsProps {
 	project: Project;
@@ -163,29 +164,7 @@ export default function ProjectDetails({
 							<div className="flex flex-wrap m-0 p-0 list-none">
 								{posts.length > 0 ? (
 									posts.map((post) => (
-										<div
-											key={post._id}
-											className="w-[300px] bg-black-400 rounded-lg shadow-md m-2 p-2 text-center"
-										>
-											<div>Content: {post.content}</div>
-											<div>
-												Time: {post.time.toString()}
-											</div>
-											<div>
-												Author: {post.author?.email}
-											</div>
-											{post.media && (
-												<div>
-													Media:{" "}
-													<Img
-														src={post.media}
-														alt="post media"
-														width={200}
-														height={200}
-													/>
-												</div>
-											)}
-										</div>
+										<div className='w-2/3'><PostCard key={post._id} post={post} /></div>
 									))
 								) : (
 									<div>No posts found for this project.</div>
