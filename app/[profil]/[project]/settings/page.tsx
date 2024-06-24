@@ -128,7 +128,7 @@ export default function SettingsPage({
                 <div className="flex flex-col w-full mx-auto bg-white p-8 rounded-lg shadow-lg">
                     <div>
                         <h1 className="text-3xl font-bold text-center mt-8">
-                            Update {initialTitle || "Project"}
+                            Modifier {initialTitle || "Project"}
                         </h1>
                     </div>
                     <div className="flex flex-col space-y-4 w-10/12 mx-auto mt-8 ">
