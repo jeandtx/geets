@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
@@ -11,16 +10,23 @@ import { createProject } from "@/lib/data/project";
 import { CldUploadWidget } from "next-cloudinary";
 import { useUserInfo } from "@/app/context/UserInfoContext";
 import LoadingSpinner from "@/components/ui/spinner";
+import { useIsClient } from "@uidotdev/usehooks";
+import { useSession } from "next-auth/react";
 
 export default function NewProject() {
+	const isClient = useIsClient();
+
+	const [title, setTitle] = useState<string>("");
 	const [label, setLabel] = useState<string>("");
 	const [labels, setLabels] = useState<string[]>([]);
 	const [theme, setTheme] = useState<string>("");
 	const [themes, setThemes] = useState<string[]>([]);
+	const [description, setDescription] = useState<string>("");
 	const [participantName, setParticipantName] = useState<string>("");
 	const [participantRole, setParticipantRole] = useState<string>("");
 	const [participants, setParticipants] = useState<Participant[]>([]);
 	const { toast } = useToast();
+	const session = useSession();
 	const [imageUrl, setImageUrl] = useState<string>("");
 	const [imageName, setImageName] = useState<string>("Ajouter une photo");
 	const { userInfo } = useUserInfo();
@@ -35,36 +41,37 @@ export default function NewProject() {
 		participants: [],
 	});
 
-	const handleChange = (e: any) => {
-		setProject({
-			...project,
-			[e.target.name]: e.target.value,
-		});
-	};
-
 	useEffect(() => {
 		if (userInfo) {
 			setParticipants([{ name: userInfo.email, role: "author" }]);
-			setProject({
-				...project,
+			setProject((prev) => ({
+				...prev,
 				participants: [{ name: userInfo.email, role: "author" }],
-			});
+			}));
 		}
-	}, [userInfo]);
+	}, [session, userInfo]);
 
 	useEffect(() => {
-		setProject({
-			...project,
+		setProject((prev) => ({
+			...prev,
 			themes: themes,
 			labels: labels,
 			media: imageUrl,
 			participants: participants,
-		});
+		}));
 	}, [themes, labels, imageUrl, participants]);
+
+	const handleChange = (e: any) => {
+		const { name, value } = e.target;
+		setProject((prev) => ({ ...prev, [name]: value }));
+
+		if (name === "title") setTitle(value);
+		if (name === "description") setDescription(value);
+	};
 
 	const handleSubmit = (e: any) => {
 		e.preventDefault();
-		if (!userInfo) {
+		if (userInfo?.email === "") {
 			toast({
 				variant: "destructive",
 				title: "Uh oh! Something went wrong.",
@@ -73,13 +80,13 @@ export default function NewProject() {
 			});
 			return;
 		} else {
-			setProject({
-				...project,
+			setProject((prev) => ({
+				...prev,
 				participants: participants.map((p) => ({
-					name: userInfo.email,
-					role: "author",
+					name: p.name,
+					role: p.role,
 				})),
-			});
+			}));
 		}
 		createProject(project)
 			.then(() => {
@@ -111,6 +118,41 @@ export default function NewProject() {
 		}
 	};
 
+	// Use localStorage only if it's on the client side
+	useEffect(() => {
+		if (isClient) {
+			const savedTitle = localStorage.getItem("title");
+			const savedLabels = localStorage.getItem("labels");
+			const savedThemes = localStorage.getItem("themes");
+			const savedDescription = localStorage.getItem("description");
+			const savedParticipants = localStorage.getItem("participants");
+			const savedImageUrl = localStorage.getItem("imageUrl");
+
+			if (savedTitle) setTitle(JSON.parse(savedTitle));
+			if (savedLabels) setLabels(JSON.parse(savedLabels));
+			if (savedThemes) setThemes(JSON.parse(savedThemes));
+			if (savedDescription) setDescription(JSON.parse(savedDescription));
+			if (savedParticipants)
+				setParticipants(JSON.parse(savedParticipants));
+			if (savedImageUrl) setImageUrl(JSON.parse(savedImageUrl));
+		}
+	}, [isClient]);
+
+	useEffect(() => {
+		if (isClient) {
+			localStorage.setItem("title", JSON.stringify(title));
+			localStorage.setItem("labels", JSON.stringify(labels));
+			localStorage.setItem("themes", JSON.stringify(themes));
+			localStorage.setItem("description", JSON.stringify(description));
+			localStorage.setItem("participants", JSON.stringify(participants));
+			localStorage.setItem("imageUrl", JSON.stringify(imageUrl));
+		}
+	}, [title, labels, themes, description, participants, imageUrl, isClient]);
+
+	if (!isClient) {
+		return null;
+	}
+
 	return (
 		<>
 			{userInfo === null ? (
@@ -121,7 +163,7 @@ export default function NewProject() {
 				<div className="flex flex-col w-full mx-auto bg-white p-8 rounded-lg shadow-lg">
 					<div>
 						<h1 className="text-3xl font-bold text-center mt-8">
-							New Project for {userInfo?.email}
+							Mon nouveau Projet ! 🚀
 						</h1>
 					</div>
 					<div className="flex flex-col space-y-4 w-10/12 mx-auto mt-8 ">
@@ -129,7 +171,8 @@ export default function NewProject() {
 							type="text"
 							name="title"
 							onChange={handleChange}
-							placeholder="Title"
+							value={title}
+							placeholder="Titre"
 							required
 						/>
 						<form
@@ -142,9 +185,7 @@ export default function NewProject() {
 							<Input
 								type="text"
 								name="themes"
-								onChange={(e) => {
-									setTheme(e.target.value);
-								}}
+								onChange={(e) => setTheme(e.target.value)}
 								value={theme}
 								placeholder="Themes"
 							/>
@@ -166,6 +207,7 @@ export default function NewProject() {
 						<Textarea
 							name="description"
 							onChange={handleChange}
+							value={description}
 							placeholder="Description"
 						/>
 
@@ -208,9 +250,7 @@ export default function NewProject() {
 							<Input
 								type="text"
 								name="labels"
-								onChange={(e) => {
-									setLabel(e.target.value);
-								}}
+								onChange={(e) => setLabel(e.target.value)}
 								value={label}
 								placeholder="Labels"
 							/>
@@ -234,22 +274,24 @@ export default function NewProject() {
 							<Input
 								type="text"
 								name="participantName"
-								onChange={(e) => {
-									setParticipantName(e.target.value);
-								}}
+								onChange={(e) =>
+									setParticipantName(e.target.value)
+								}
 								value={participantName}
-								placeholder="Participant Name"
+								placeholder="Mail Participant"
 							/>
 							<Input
 								type="text"
 								name="participantRole"
-								onChange={(e) => {
-									setParticipantRole(e.target.value);
-								}}
+								onChange={(e) =>
+									setParticipantRole(e.target.value)
+								}
 								value={participantRole}
-								placeholder="Participant Role"
+								placeholder="Role Participant"
 							/>
-							<Button onClick={handleAddParticipant}>Add</Button>
+							<Button onClick={handleAddParticipant}>
+								Ajouter
+							</Button>
 						</div>
 						<div className="flex flex-wrap gap-2 mt-2">
 							{participants
@@ -276,7 +318,7 @@ export default function NewProject() {
 							onSubmit={handleSubmit}
 							className="flex flex-col gap-2"
 						>
-							<Button type="submit">Submit</Button>
+							<Button type="submit">Enregistrer</Button>
 						</form>
 					</div>
 				</div>

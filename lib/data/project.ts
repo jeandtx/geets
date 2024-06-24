@@ -78,7 +78,7 @@ export async function getProject(projectId: string) {
  * Update a project in the database.
  * @param {Project} project - The project to update.
  * @returns {Promise<any>} A promise that resolves to the updated project.
- * @throws {Error} If the project have a missing field.
+ * @throws {Error} If the project has a missing field.
  */
 export async function updateProject(project: Project) {
     const client = await clientPromise;
@@ -89,16 +89,26 @@ export async function updateProject(project: Project) {
     }
 
     const projectId = new ObjectId(project._id); // Ensure _id is a valid ObjectId
-    let projectWithoutObjectId = {
-        ...project,
-        _id: project._id ? new ObjectId(project._id) : undefined
+
+    // Build the update object dynamically based on the field that are already not null
+    const updateFields: Partial<Project> = {};
+    if (project.title !== undefined) updateFields.title = project.title;
+    if (project.themes !== undefined) updateFields.themes = project.themes;
+    if (project.description !== undefined) updateFields.description = project.description;
+    if (project.media !== undefined) updateFields.media = project.media;
+    if (project.labels !== undefined) updateFields.labels = project.labels;
+
+    // If there are no fields to update, throw an error
+    if (Object.keys(updateFields).length === 0) {
+        throw new Error('No fields to update.');
     }
-    delete projectWithoutObjectId._id
-    const result = await db.collection('projects').updateOne({ _id: projectId }, { $set: projectWithoutObjectId });
+
+    const result = await db.collection('projects').updateOne({ _id: projectId }, { $set: updateFields });
 
     const data = JSON.parse(JSON.stringify(result)); // Remove ObjectID (not serializable)
     return data;
 }
+
 
 /**
  * Delete a project from the database.
