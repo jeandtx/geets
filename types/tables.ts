@@ -1,3 +1,35 @@
+export interface Interaction {
+    _id: string;
+    time: string;
+    userId: string;
+    userAvatar: string;
+    type: "like" | "comment" | "follow" | "join";
+    like?: {
+        postId: string;
+        postContent: string;
+    };
+    comment?: {
+        postId: string;
+        commentId: string;
+        content: string;
+    };
+    follow?: {
+        followerId: string;
+        followerName: string;
+        followerAvatar: string;
+    };
+    join?: {
+        projectId: string;
+        projectName: string;
+        projectAvatar?: string;
+        projectOwner: string;
+        status?: "pending" | "accepted" | "rejected";
+    };
+    read?: boolean;
+    to: string;
+}
+
+
 export interface Post {
     _id: string;
     project: {
@@ -34,9 +66,9 @@ export interface User {
     mobile?: string;
     allowEmails?: boolean;
     created?: Date;
-    emailVerified?: boolean; 
-    verificationToken?: string; 
-    verificationTokenExpires?: Date; 
+    emailVerified?: boolean;
+    verificationToken?: string;
+    verificationTokenExpires?: Date;
     resetToken?: string;
     resetTokenExpires?: Date;
 }
