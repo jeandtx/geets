@@ -30,6 +30,7 @@ export async function createPost(post: Post) {
  */
 export async function getPosts(page: number = 1, query: any | Partial<Post> = {}): Promise<Post[]> {
     const client = await clientPromise
+    console.log("query:", query)
     const db = client.db('geets')
     let postsPerPage = 10
     let offset = (page - 1) * postsPerPage
@@ -39,6 +40,7 @@ export async function getPosts(page: number = 1, query: any | Partial<Post> = {}
     }
     const posts = await db.collection('posts').find(query).sort({ time: -1 }).skip(offset).limit(postsPerPage).toArray()
     const data: Post[] = JSON.parse(JSON.stringify(posts)) // Remove ObjectID (not serializable)
-
+    console.log('Posts:', data)
     return data
 }
+

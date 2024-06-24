@@ -16,7 +16,7 @@ export default function ProjectPage({
     const projectId = params.project;
     const profileId = params.profil;
     const [project, setProject] = useState<Project | null>(null);
-    const [posts] = useState<Post[]>([]);
+    const [posts, setPosts] = useState<Post[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const { data: session } = useSession();
 
@@ -24,7 +24,9 @@ export default function ProjectPage({
         const fetchData = async () => {
             setIsLoading(true);
             const fetchedProject = await getProject(projectId);
+            const fetchedPosts = await getPosts(1, { "project._id": projectId });
             setProject(fetchedProject);
+            setPosts(fetchedPosts);
             setIsLoading(false);
         };
         fetchData();
