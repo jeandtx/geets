@@ -5,10 +5,14 @@ import { SubmitButton } from '@/components/ui/submit-button'
 
 export default function Login() {
     return (
-        <div className='flex h-full w-full items-center justify-center mt-5'>
-            <div className='z-10 w-full max-w-md overflow-hidden rounded-2xl border border-gray-100 shadow-xl'>
-                <div className='flex flex-col space-y-1 bg-white px-4 py-6 pt-8 sm:px-16 '>
+        <div className='flex h-full w-full items-center justify-center'>
+            <div className='z-10 w-full max-w-md overflow-hidden rounded-2xl border border-gray-100 shadow-xl bg-white'>
+                <div className='flex flex-col items-center justify-center space-y-3 px-4 py-6 pt-8 text-center sm:px-16'>
                     <h3 className='text-xl font-semibold'>Se connecter</h3>
+                    <div className='text-sm text-gray-500'>
+                        Connectez-vous à notre plateforme et participez à des
+                        projets
+                    </div>
                 </div>
                 <Form
                     action={async (formData: FormData) => {
@@ -28,14 +32,14 @@ export default function Login() {
                     >
                         Se connecter
                     </SubmitButton>
-                    <div className='flex flex-row justify-center space-x-4'>
-                        <div className='text-center text-sm text-plaintext'>
-                            Mot de passe oublié ?{' '}
-                        </div>
-                        <div className='text-center text-sm text-plaintext'>
-                            {'Pas de compte ?'}
-                            <Link href='/register' className='text-textblue'>
-                                S&apos;inscrire
+                    <div className='flex flex-row justify-center space-x-2'>
+                        <div className='text-center text-xs text-gray-500'>
+                            {'Pas de compte ? '}
+                            <Link
+                                href='/register'
+                                className='font-semibold text-textblue'
+                            >
+                                Inscrivez-vous
                             </Link>
                         </div>
                     </div>

@@ -36,7 +36,7 @@ export function Form({
             className='flex flex-col space-y-4 px-4 py-1 pb-20 sm:px-16'
         >
             {!fillInformationForm ? (
-                <div>
+                <div className='space-y-2'>
                     <div>
                         <label
                             htmlFor='email'
@@ -71,7 +71,7 @@ export function Form({
                     </div>
                 </div>
             ) : (
-                <div>
+                <div className='space-y-2'>
                     <div>
                         <label
                             htmlFor='firstName'
