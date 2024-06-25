@@ -126,24 +126,36 @@ export async function deleteProject(projectId: string) {
  * @returns {Promise<Project[]>} A promise that resolves to the matched projects.
  */
 export async function searchProjects(searchTerm: string): Promise<Project[]> {
+    
+
     const client = await clientPromise;
+    
+
     const db = client.db('geets');
+    
 
-    const searchResults = await db.collection('projects').aggregate([
-        {
-            $search: {
-                index: 'autocompleteIndex',
-                autocomplete: {
-                    query: searchTerm,
-                    path: 'title',
-                    tokenOrder: 'any'
+    try {
+        const searchResults = await db.collection('projects').aggregate([
+            {
+                $search: {
+                    index: 'autocompleteIndex',
+                    autocomplete: {
+                        query: searchTerm,
+                        path: 'title',
+                        tokenOrder: 'any'
+                    }
                 }
+            },
+            {
+                $limit: 10
             }
-        },
-        {
-            $limit: 10
-        }
-    ]).toArray();
+        ]).toArray();
 
-    return JSON.parse(JSON.stringify(searchResults)); // Remove ObjectID (not serializable)
+        console.log("Search results obtained:", searchResults);
+
+        return JSON.parse(JSON.stringify(searchResults)); // Remove ObjectID (not serializable)
+    } catch (error) {
+        console.error("Error during aggregation:", error);
+        throw error;
+    }
 }
