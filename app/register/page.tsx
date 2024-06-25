@@ -48,21 +48,29 @@ export default function Login() {
     }
 
     return (
-        <div className='flex h-full w-full items-center justify-center bg-gray-50'>
-            <div className='z-10 w-full max-w-md overflow-hidden rounded-2xl border border-gray-100 shadow-xl'>
-                <div className='flex flex-col items-center justify-center space-y-3 border-b border-gray-200 bg-white px-4 py-6 pt-8 text-center sm:px-16'>
+        <div className='flex h-full w-full items-center justify-center'>
+            <div className='z-10 w-full max-w-md overflow-hidden rounded-2xl border border-gray-100 shadow-xl bg-white'>
+                <div className='flex flex-col items-center justify-center space-y-3 px-4 py-6 pt-8 text-center sm:px-16'>
                     <h3 className='text-xl font-semibold'>S&apos;inscire</h3>
                     <div className='text-sm text-gray-500'>
-                        Créer un compte avec votre email et mot de passe
+                        Rejoignez notre plateforme et découvrez de nouveaux
+                        projets
                     </div>
                 </div>
                 <Form action={register}>
-                    <SubmitButton>S&apos;inscire</SubmitButton>
-                    <div className='text-center text-sm text-gray-600'>
+                    <SubmitButton
+                        style={{
+                            backgroundColor: 'rgb(58, 93, 240)',
+                            color: 'white',
+                        }}
+                    >
+                        S&apos;inscire
+                    </SubmitButton>
+                    <div className='text-center text-xs text-gray-500'>
                         {'Vous avez déjà un compte ? '}
                         <Link
                             href='/fill-information'
-                            className='font-semibold text-gray-800'
+                            className='font-semibold text-textblue'
                         >
                             Connectez-vous
                         </Link>
