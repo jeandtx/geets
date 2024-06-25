@@ -46,6 +46,7 @@ export interface Post {
     };
     media?: string;
     labels?: string[];
+    score?: number;
 }
 
 export interface User {
