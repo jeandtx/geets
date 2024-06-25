@@ -128,7 +128,7 @@ export default function PostCard({ post }: Readonly<PostProps>) {
 					</p>
 					{post.media && (
 						<Img
-							className="w-full h-64 object-cover rounded-xl"
+							className="w-full object-cover rounded-xl"
 							src={post.media}
 							alt="Post media"
 							width={1280}
