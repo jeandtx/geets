@@ -80,6 +80,7 @@ export default function CreatePost({
 			},
 			media: imageUrl ?? undefined,
 			labels: [],
+			score:1,
 		};
 
 		await createPost(post)
