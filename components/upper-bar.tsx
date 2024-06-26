@@ -30,7 +30,7 @@ export const UpperBar = ({ className }: UpperbarProps) => {
         <div className='flex flex-col items-center'>
             <Tabs defaultValue='feed'>
                 <div className='mx-auto flex flex-col md:flex-row justify-between items-center'>
-                    <TabsList className='py-5'>
+                    <TabsList className='py-5 space-x-3'>
                         <TabsTrigger
                             value='feed'
                             onClick={() => handleTabClick('Feed')}
