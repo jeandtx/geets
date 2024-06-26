@@ -23,11 +23,7 @@ export async function createInteraction(interaction: Interaction): Promise<any> 
             _id: new ObjectId()
         });
 
-        if (interaction.like?.postId) {
-            await updateScore(interaction.like.postId, interaction.type);
-        } else {
-            console.error('No postId found for interaction:', interaction);
-        }
+        
         
         return result;
     } catch (error) {
@@ -35,10 +31,47 @@ export async function createInteraction(interaction: Interaction): Promise<any> 
         throw new Error('Failed to create interaction');
     }
 }
+export async function likePost(postId: string, userId: string, userMedia: string, postContent:string, postAuthor:string): Promise<any> {
+    try{
+        console.log("first let see if the post isn't already liked by the user");
+        const client = await clientPromise;
+        const db = client.db('geets');
+        const interaction = await db.collection('interactions').findOne({ "like.postId": postId, userId: userId });
+        if (interaction) {
+            const result = await db.collection('interactions').deleteOne({ "like.postId": postId, userId: userId });
+            /// update the score
+            const result2 = await updateScore(postId, "unlike");
+            return result && result2;
+            
+        }
+        else {
+            const result = await createInteraction({
+                userId: userId,
+                userAvatar: userMedia,
+                type: "like",
+                like: {
+                    postId: postId,
+                    postContent: postContent,
+                },
+                read: false,
+                to: postAuthor,
+            
+            } as Interaction);
+            /// update the score
+            const result2 = await updateScore(postId, "like");
+            return result && result2;
+           
+        }
+
+    }
+    catch (error) {
+        console.error('Error in likePost:', error);
+        throw new Error('Failed to like post');
+    }
+}
 
 export async function updateScore(postId: string, typeInteraction: string): Promise<any> {
     try {
-        console.log("scoring the post:", postId);
 
         if (!ObjectId.isValid(postId)) {
             throw new Error('Invalid postId');
@@ -55,9 +88,12 @@ export async function updateScore(postId: string, typeInteraction: string): Prom
         let score = post.score || 1;
         if (typeInteraction === "like") {
             score *= 10;
+        } else if (typeInteraction === "unlike") {
+            score /= 10;
         } else if (typeInteraction === "comment") {
             score *= 20;
         }
+        
 
         const result = await db.collection('posts').updateOne(
             { _id: new ObjectId(postId) },

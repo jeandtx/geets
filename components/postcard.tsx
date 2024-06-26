@@ -1,12 +1,12 @@
-import React from 'react'
-import Img from 'next/image'
-import { MessageSquare, Rocket, ThumbsUp } from 'lucide-react'
-import { Interaction, Post } from '@/types/tables'
-import Link from 'next/link'
-import { Button } from './ui/button'
-import { createInteraction } from '@/lib/data/interactions'
-import { useUserInfo } from '@/app/context/UserInfoContext'
-
+import React from "react";
+import Img from "next/image";
+import { MessageSquare, Rocket, ThumbsUp } from "lucide-react";
+import { Interaction, Post } from "@/types/tables";
+import Link from "next/link";
+import { Button } from "./ui/button";
+import { createInteraction } from "@/lib/data/interactions";
+import { useUserInfo } from "@/app/context/UserInfoContext";
+import { likePost } from "@/lib/data/interactions";
 interface PostProps {
     post: Post
 }
@@ -39,32 +39,22 @@ export default function PostCard({ post }: Readonly<PostProps>) {
         const target = e.currentTarget as HTMLElement // Use currentTarget to refer to the element the event handler is attached to
         const elements = target.querySelectorAll('span, svg')
 
-        elements.forEach((element) => {
-            if (element.classList.contains('text-blue-500')) {
-                element.classList.remove('text-blue-500')
-                element.classList.add('text-gray-600')
-            } else {
-                element.classList.remove(
-                    'text-gray-600',
-                    'text-red-500',
-                    'text-green-500'
-                )
-                element.classList.add('text-blue-500')
-            }
-        })
+		elements.forEach((element) => {
+			if (element.classList.contains("text-blue-500")) {
+				element.classList.remove("text-blue-500");
+				element.classList.add("text-gray-600");
+			} else {
+				element.classList.remove(
+					"text-gray-600",
+					"text-red-500",
+					"text-green-500"
+				);
+				element.classList.add("text-blue-500");
+			}
+		});
+		likePost(post._id, userInfo?.email as string, userInfo?.media as string, post.content, post.author?.email) as Promise<void>;
 
-        createInteraction({
-            userId: userInfo?.email,
-            userAvatar: userInfo?.media,
-            type: 'like',
-            like: {
-                postId: post._id,
-                postContent: post.content,
-            },
-            read: false,
-            to: post.author?.email,
-        } as Interaction)
-    }
+	}
 
     function handleCommentPost(e: React.MouseEvent<HTMLElement, MouseEvent>) {
         createInteraction({
