@@ -9,6 +9,7 @@ import {
 	SquareMousePointer,
 } from "lucide-react";
 import { useUserInfo } from "@/app/context/UserInfoContext";
+import { InputPost } from "./inputpost";
 export function Navbar() {
 	const { userInfo } = useUserInfo();
 
@@ -36,6 +37,9 @@ export function Navbar() {
 							</span>
 						</Button>
 					</Link>
+					<div className="relative">
+						<InputPost />
+					</div>
 					<Link href={`/${userInfo?.email}`}>
 						<Button
 							variant="ghost"

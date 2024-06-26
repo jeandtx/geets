@@ -66,7 +66,7 @@ export function InputPost({ className }: Readonly<InputPostProps>) {
         <div className={className}>
             <div className='flex flex-col gap-5 p-5 rounded-xl custom-border bg-white'>
                 <div className='flex gap-2'>
-                    <Img
+                    <div className='hidden sm:block'><Img
                         className='rounded-full'
                         src={userInfo?.media || DEFAULT_USER_IMAGE}
                         alt='Placeholder image'
@@ -74,11 +74,13 @@ export function InputPost({ className }: Readonly<InputPostProps>) {
                         height={48}
                         style={{ height: '3.5rem', width: '3.5rem' }}
                     />
+                    </div>
                     <button
                         onClick={handleOpenModal}
-                        className='bg-stone-50 w-full px-5 py-4 rounded-full text-left text-gray-600 font-semibold text-sm border duration-300 animation-all hover:bg-stone-100'
+                        className='sm:bg-stone-50 sm:w-full sm:px-5 sm:py-4 rounded-full text-left sm:text-gray-600 font-semibold text-sm sm:border duration-300 animation-all hover:bg-stone-100'
                     >
-                        Créer un poste
+                        <span className='hidden sm:block'>Créer un poste</span>
+                        <span className='sm:hidden'>+</span>
                     </button>
                     <CreatePost
                         userInfo={userInfo}
@@ -87,7 +89,7 @@ export function InputPost({ className }: Readonly<InputPostProps>) {
                     />
                 </div>
 
-                <div className='flex flex-row items-start spacy-x-5'>
+                <div className='hidden sm:block flex-row items-start spacy-x-5'>
                     <SelectProject
                         onSelectProject={handleSelectProject}
                         selectedProject={selectedProject}

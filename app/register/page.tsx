@@ -30,7 +30,6 @@ export default function Login() {
                 verificationToken,
                 verificationTokenExpires
             )
-            console.log('User created')
 
             await sendEmail({
                 email,

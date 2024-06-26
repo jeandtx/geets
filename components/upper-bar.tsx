@@ -51,17 +51,23 @@ export const UpperBar = ({ className }: UpperbarProps) => {
                         </TabsTrigger>
                     </TabsList>
                 </div>
-                <div className='w-full' style={{ width: '40vw' }}>
+                <div className='w-full'>
                     <TabContent value='feed'>
+                        <div className='hidden sm:block'>
                         <InputPost />
+                        </div>
                         <InfiniteScroll fetchFunction={getPosts} />
                     </TabContent>
                     <TabContent value='recommandation'>
+                    <div className='hidden sm:block'>
                         <InputPost />
+                        </div>
                         <InfiniteScroll fetchFunction={getPosts} />
                     </TabContent>
                     <TabContent value='friends'>
+                    <div className='hidden sm:block'>
                         <InputPost />
+                        </div>
                         <InfiniteScroll fetchFunction={getPosts} />
                     </TabContent>
                 </div>

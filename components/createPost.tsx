@@ -116,7 +116,7 @@ export default function CreatePost({
     }
 
     return (
-        <Modal visible={visible} setVisible={setVisible} className='w-1/2'>
+        <Modal visible={visible} setVisible={setVisible} className='sm:w-1/2'>
             <div className='flex flex-col space-y-4 p-5'>
                 <div className='header flex flex-row items-center space-x-5'>
                     <Img
