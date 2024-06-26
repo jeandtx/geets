@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Button } from "./ui/button";
 import { createInteraction } from "@/lib/data/interactions";
 import { useUserInfo } from "@/app/context/UserInfoContext";
-
+import { likePost } from "@/lib/data/interactions";
 interface PostProps {
 	post: Post;
 }
@@ -52,18 +52,19 @@ export default function PostCard({ post }: Readonly<PostProps>) {
 				element.classList.add("text-blue-500");
 			}
 		});
+		likePost(post._id, userInfo?.email as string, userInfo?.media as string, post.content, post.author?.email) as Promise<void>;
 
-		createInteraction({
-			userId: userInfo?.email,
-			userAvatar: userInfo?.media,
-			type: "like",
-			like: {
-				postId: post._id,
-				postContent: post.content,
-			},
-			read: false,
-			to: post.author?.email,
-		} as Interaction);
+		// createInteraction({
+		// 	userId: userInfo?.email,
+		// 	userAvatar: userInfo?.media,
+		// 	type: "like",
+		// 	like: {
+		// 		postId: post._id,
+		// 		postContent: post.content,
+		// 	},
+		// 	read: false,
+		// 	to: post.author?.email,
+		// } as Interaction);
 	}
 
 	function handleCommentPost(e: React.MouseEvent<HTMLElement, MouseEvent>) {
