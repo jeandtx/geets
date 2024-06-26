@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { getProjects } from '@/lib/data/project'
 import { useEffect, useState } from 'react'
 import { Project } from '@/types/tables'
+import { SlidingTextButton } from './slidingTextButton'
 
 interface ProjectsProps extends React.HTMLAttributes<HTMLDivElement> {
     email: string
@@ -34,28 +35,36 @@ export function Projects({ className, email }: Readonly<ProjectsProps>) {
 
     return (
         <div className={cn('', className)}>
-            <div className='px-3 py-2 rounded-xl custom-border bg-white min-w-[200px]'>
+            <div className='px-3 py-2 rounded-xl custom-border bg-white w-[200px]'>
                 <h2 className='mb-2 px-4 text-lg font-semibold tracking-tight'>
                     Mes projets
                 </h2>
-                <ScrollArea className='h-[300px] px-1'>
-                    <div className='flex flex-col space-y-1'>
-                        {projects?.map((project) => (
-                            <Link
-                                key={`${project._id}`}
-                                href={`/${email}/${project._id}`}
+                <div className='flex flex-col space-y-1 w-full truncate px-3'>
+                    <Link key={`098765`} href={`/098765/098765`}>
+                        <SlidingTextButton
+                            text={
+                                'This is the long text that will slide when hovered over. This is the long text that will slide when hovered over.'
+                            }
+                        />
+                    </Link>
+                    <Link key={'098768'} href={`/098765/098765`}>
+                        <SlidingTextButton text={'Short text.'} />
+                    </Link>
+                    {projects?.map((project) => (
+                        <Link
+                            key={`${project._id}`}
+                            href={`/${email}/${project._id}`}
+                        >
+                            <Button
+                                variant='ghost'
+                                className='w-full justify-start font-normal'
                             >
-                                <Button
-                                    variant='ghost'
-                                    className='w-full justify-start font-normal'
-                                >
-                                    <SquareKanban className='mr-2 h-4 w-4' />
-                                    {project.title}
-                                </Button>
-                            </Link>
-                        ))}
-                    </div>
-                </ScrollArea>
+                                <SquareKanban className='mr-2 h-4 w-4' />
+                                {project.title}
+                            </Button>
+                        </Link>
+                    ))}
+                </div>
             </div>
         </div>
     )
