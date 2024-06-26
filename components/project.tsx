@@ -28,7 +28,7 @@ export function ProjectCard({
     return (
         <div
             className={cn(
-                'flex max-w-xl overflow-hidden rounded-xl border border-slate-200 bg-white',
+                'flex max-w-xl overflow-hidden rounded-xl custom-border bg-white',
                 className
             )}
         >
