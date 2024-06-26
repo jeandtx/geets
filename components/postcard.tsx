@@ -98,21 +98,21 @@ export default function PostCard({ post }: Readonly<PostProps>) {
                     />
                     <div>
                         <Link href={`/${post.author?.email}`}>
-                            <p className='text-lg text-gray-900 font-bold hover:text-blue-500'>
+                            <p className='text-base text-gray-900 font-bold hover:text-blue-500'>
                                 {post.author?.pseudo
                                     ? post.author?.pseudo
                                     : post.author?.email}
                             </p>
                         </Link>
-                        <div className='flex items-center space-x-2'>
+                        <div className='flex text-sm items-center space-x-2'>
                             <p className='text-sm text-gray-600'>
                                 {getTimeSincePosted(post?.time)}
                             </p>
-                            <p className='text-sm text-gray-600'>•</p>
+                            <p className=' text-gray-600'>•</p>
                             <Link
                                 href={`/${post.author?.email}/${post.project?._id}`}
                             >
-                                <p className='text-sm text-gray-600 hover:text-blue-500'>
+                                <p className='text-gray-600 hover:text-blue-500'>
                                     {post.project
                                         ? post.project?.title
                                         : 'Nom de projet'}
@@ -123,7 +123,7 @@ export default function PostCard({ post }: Readonly<PostProps>) {
                 </div>
 
                 <div className='body space-y-5'>
-                    <p className='text-gray-900 mb-0'>
+                    <p className='text-gray-900 text-sm mb-0'>
                         {post.content ? post.content : 'Contenu du post'}
                     </p>
                     {post.media && (

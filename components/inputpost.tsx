@@ -78,7 +78,7 @@ export function InputPost({ className }: Readonly<InputPostProps>) {
                         onClick={handleOpenModal}
                         className='bg-stone-50 w-full px-5 py-4 rounded-full text-left text-gray-600 font-semibold text-sm border duration-300 animation-all hover:bg-stone-100'
                     >
-                        Créer un post
+                        Créer un poste
                     </button>
                     <CreatePost
                         userInfo={userInfo}
