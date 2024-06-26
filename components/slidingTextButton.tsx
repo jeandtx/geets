@@ -1,16 +1,18 @@
 import { useEffect, useRef, useState } from 'react'
 
-interface SlidingTextButtonProps {
-    text: string
-    onClick?: () => void
+interface CustomCSSProperties extends React.CSSProperties {
+    '--translateXPercent'?: string
 }
 
-export function SlidingTextButton({
-    text,
-    onClick,
-}: Readonly<SlidingTextButtonProps>) {
+interface SlidingTextButtonProps {
+    onClick?: () => void
+    children?: React.ReactNode
+}
+
+export function SlidingTextButton({ onClick, children }: Readonly<SlidingTextButtonProps>) {
     const [hover, setHover] = useState(false)
     const [isOverflowing, setIsOverflowing] = useState(false)
+    const [translateXPercent, setTranslateXPercent] = useState('0')
     const textRef = useRef<HTMLDivElement>(null)
     const containerRef = useRef<HTMLDivElement>(null)
 
@@ -20,9 +22,13 @@ export function SlidingTextButton({
 
         const checkOverflow = () => {
             if (textElement && containerElement) {
-                setIsOverflowing(
-                    textElement.scrollWidth > containerElement.clientWidth
-                )
+                const isOverflow = textElement.scrollWidth > containerElement.clientWidth
+                setIsOverflowing(isOverflow)
+
+                if (isOverflow) {
+                    const translatePercent = (textElement.scrollWidth / containerElement.clientWidth) * 100
+                    setTranslateXPercent(`${translatePercent}`)
+                }
             }
         }
 
@@ -43,23 +49,19 @@ export function SlidingTextButton({
     }
 
     return (
-        <div
-            ref={containerRef}
-            className='relative overflow-hidden w-full justify-start rounded-sm hover:bg-slate-100 px-4'
-            onClick={onClick}
-        >
+        <div ref={containerRef} className='relative overflow-hidden w-full justify-start rounded-sm hover:bg-slate-100 px-4' onClick={onClick}>
             <div
                 ref={textRef}
-                className={`whitespace-nowrap hover:animate-slide py-2 text-sm font-medium transform ${
-                    hover ? 'animate-slide' : ''
-                }`}
+                className={`flex flex-row whitespace-nowrap py-2 text-sm font-medium transform ${hover ? 'animate-slide' : ''}`}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
-                style={{
-                    animationPlayState: hover ? 'running' : 'paused',
-                }}
+                style={
+                    {
+                        '--translateXPercent': hover ? `${translateXPercent}%` : '0%'
+                    } as CustomCSSProperties
+                }
             >
-                {text}
+                {children}
             </div>
         </div>
     )
