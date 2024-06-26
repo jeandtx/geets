@@ -32,7 +32,6 @@ export default function HandleInvitation({
 	const handleAcceptInvitation = (interaction: Interaction) => async () => {
 		setAnswered(true);
 		setStatus("accepted");
-		console.log(interaction);
 		await updateInteraction({
 			...interaction,
 			join: {

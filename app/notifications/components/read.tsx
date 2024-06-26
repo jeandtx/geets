@@ -20,7 +20,6 @@ export default function Read({ row }: Readonly<ReadProps>) {
 			<Button
 				variant={"ghost"}
 				onClick={() => {
-					console.log(row.original);
 					updateInteraction({
 						...row.original,
 						read: !row.original.read,

@@ -96,10 +96,8 @@ export default function UpdateProfil({ className, user }: UpdateProfilProps) {
 
     const handleSubmit = (e: any) => {
         e.preventDefault()
-        console.log('user : ', userEdited)
         updateUser(userEdited)
     }
-    console.log(userSession, user.email)
 
     if (!userSession) {
         return (
