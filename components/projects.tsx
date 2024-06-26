@@ -22,50 +22,49 @@ export function Projects({ className, email }: Readonly<ProjectsProps>) {
                 const projects = await getProjects({
                     participants: {
                         $elemMatch: {
-                            name: email,
-                        },
-                    },
+                            name: email
+                        }
+                    }
                 })
                 const data: Project[] = JSON.parse(JSON.stringify(projects))
-                setProjects(data)
+                if (data.length === 0) {
+                    setProjects(null)
+                } else {
+                    setProjects(data)
+                }
             }
         }
         fetchProjects()
     }, [projects, email])
 
     return (
-        <div className={cn('', className)}>
-            <div className='px-3 py-2 rounded-xl custom-border bg-white w-[200px]'>
-                <h2 className='mb-2 px-4 text-lg font-semibold tracking-tight'>
-                    Mes projets
-                </h2>
-                <div className='flex flex-col space-y-1 w-full truncate'>
-                    <Link key={`098765`} href={`/098765/098765`}>
-                        <SlidingTextButton
-                            text={
-                                'This is the long text that will slide when hovered over. This is the long text that will slide when hovered over.'
-                            }
-                        />
+        <>
+            {projects && (
+                <div className={cn('', className)}>
+                    <div className='px-3 py-2 rounded-xl custom-border bg-white w-[200px]'>
+                        <h2 className='mb-2 px-4 text-lg font-semibold tracking-tight'>Mes projets</h2>
+                        <div className='flex flex-col space-y-1 w-full truncate'>
+                            {/* <Link key={`098765`} href={`/098765/098765`}>
+                        <SlidingTextButton>
+                            <p>This is the long text that will slide when hovered over. This is the long text that will slide when hovered over.</p>
+                        </SlidingTextButton>
                     </Link>
                     <Link key={'098768'} href={`/098765/098765`}>
-                        <SlidingTextButton text={'Short text.'} />
-                    </Link>
-                    {projects?.map((project) => (
-                        <Link
-                            key={`${project._id}`}
-                            href={`/${email}/${project._id}`}
-                        >
-                            <Button
-                                variant='ghost'
-                                className='w-full justify-start font-normal'
-                            >
-                                <SquareKanban className='mr-2 h-4 w-4' />
-                                {project.title}
-                            </Button>
-                        </Link>
-                    ))}
+                        <SlidingTextButton>
+                            <p>Short text.</p>
+                        </SlidingTextButton>
+                    </Link> */}
+                            {projects?.map((project) => (
+                                <Link key={`${project._id}`} href={`/${email}/${project._id}`}>
+                                    <SlidingTextButton>
+                                        <p>{project.title}</p>
+                                    </SlidingTextButton>
+                                </Link>
+                            ))}
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
+            )}
+        </>
     )
 }
