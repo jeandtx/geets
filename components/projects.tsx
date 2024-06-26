@@ -39,7 +39,7 @@ export function Projects({ className, email }: Readonly<ProjectsProps>) {
                 <h2 className='mb-2 px-4 text-lg font-semibold tracking-tight'>
                     Mes projets
                 </h2>
-                <div className='flex flex-col space-y-1 w-full truncate px-3'>
+                <div className='flex flex-col space-y-1 w-full truncate'>
                     <Link key={`098765`} href={`/098765/098765`}>
                         <SlidingTextButton
                             text={
