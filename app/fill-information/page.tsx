@@ -8,7 +8,6 @@ import { auth } from '../auth'
 export default function AdditionalInfo() {
     async function saveAdditionalInfo(formData: FormData) {
         'use server'
-        console.log('Saving additional information')
         const session = await auth()
         const userEmail = session?.user?.email
 

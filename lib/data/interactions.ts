@@ -12,7 +12,6 @@ import { ObjectId } from 'mongodb';
  */
 export async function createInteraction(interaction: Interaction): Promise<any> {
     try {
-        console.log('Interaction:', interaction.type);
 
         const client = await clientPromise;
         const db = client.db('geets');
@@ -33,7 +32,6 @@ export async function createInteraction(interaction: Interaction): Promise<any> 
 }
 export async function likePost(postId: string, userId: string, userMedia: string, postContent:string, postAuthor:string): Promise<any> {
     try{
-        console.log("first let see if the post isn't already liked by the user");
         const client = await clientPromise;
         const db = client.db('geets');
         const interaction = await db.collection('interactions').findOne({ "like.postId": postId, userId: userId });

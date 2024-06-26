@@ -2,7 +2,6 @@
 
 export default function TestingPage({ data }: any) {
 	console.log(data);
-	console.log("RUNNING");
 	return (
 		<div className="p-2 ">
 			<div className="p-4 rounded-2xl bg-white">testing shits</div>

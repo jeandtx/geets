@@ -7,27 +7,22 @@ export const sendEmail = async ({ email, emailType, userId }: any) => {
     try {
         // Create a hashed token
         const hashedToken = hashSync(userId.toString(), genSaltSync(10));
-        console.log("Generated hashedToken:", hashedToken);
 
         // Convert userId to ObjectId if it's not already one
         // const userObjectId = new ObjectId(userId);
 
         if (emailType === 'verify') {
-            console.log("Updating user for verification...");
             await updateUser({
                 _id: userId,
                 verificationToken: hashedToken,
                 verificationTokenExpires: new Date(Date.now() + 3600000) // 1 hour expiration
             });
-            console.log("User updated with verification token");
         } else if (emailType === 'reset') {
-            console.log("Updating user for password reset...");
             await updateUser({
                 _id: userId,
                 resetToken: hashedToken,
                 resetTokenExpires: new Date(Date.now() + 3600000) // 1 hour expiration
             });
-            console.log("User updated with reset token");
         }
 
         const transporter = nodemailer.createTransport({
@@ -41,7 +36,6 @@ export const sendEmail = async ({ email, emailType, userId }: any) => {
             },
         });
 
-        console.log("Nodemailer transport created");
 
         const mailOptions = {
             from: 'contact.app.laruche@gmail.com',
@@ -52,10 +46,8 @@ export const sendEmail = async ({ email, emailType, userId }: any) => {
                 : `<p>Click <a href="http://localhost:3000/api/resetpassword?token=${hashedToken}">here</a> to reset your password</p>`
         };
 
-        console.log("Mail options prepared:", mailOptions);
 
         const mailresponse = await transporter.sendMail(mailOptions);
-        console.log("Mail sent successfully:", mailresponse);
 
         return mailresponse;
     } catch (error: any) {
