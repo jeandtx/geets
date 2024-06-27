@@ -41,6 +41,23 @@ export default function NewProject() {
         participants: [],
     })
 
+    const clearLocalStorage = () => {
+        localStorage.removeItem('title');
+        localStorage.removeItem('labels');
+        localStorage.removeItem('themes');
+        localStorage.removeItem('description');
+        localStorage.removeItem('participants');
+        localStorage.removeItem('imageUrl');
+        // Réinitialiser également l'état local si nécessaire
+        setTitle('');
+        setLabels([]);
+        setThemes([]);
+        setDescription('');
+        setParticipants([]);
+        setImageUrl('');
+        setImageName('Ajouter une photo');
+    };
+
     useEffect(() => {
         if (userInfo) {
             setParticipants([{ name: userInfo.email, role: 'author' }])
@@ -97,7 +114,8 @@ export default function NewProject() {
                         project.title +
                         ' a été créé avec succès',
                     variant: 'success',
-                })
+                });
+                clearLocalStorage(); // Appel de la fonction pour vider le localStorage
             })
             .catch(() => {
                 toast({
