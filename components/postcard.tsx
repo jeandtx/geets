@@ -171,11 +171,20 @@ export default function PostCard({ post }: Readonly<PostProps>) {
 				</div>
 				<div>
 					{post.comments?.map((comment) => (
-						<div key={comment._id} className="comment">
-							<div>{comment._id}</div>
-							<div>{comment.content}</div>
-							<div>{comment.time.toString()}</div>
-							<div>{comment.postId}</div>
+						<div
+							key={comment._id}
+							className="comment mt-4 p-4 bg-gray-100 rounded-xl"
+						>
+							<p className="text-gray-900 font-semibold">
+								{comment._id}
+							</p>
+							<p className="text-gray-700">{comment.content}</p>
+							<p className="text-gray-500 text-sm">
+								{comment.time.toString()}
+							</p>
+							<p className="text-gray-500 text-sm">
+								{comment.postId}
+							</p>
 						</div>
 					))}
 				</div>
