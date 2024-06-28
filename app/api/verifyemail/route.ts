@@ -14,7 +14,6 @@ export async function GET(req: NextRequest) {
 
     try {
         const response = await verifyEmail(token);
-        console.log("Response from verifyEmail:", response);
         return response;
     } catch (error: any) {
         console.error('Error in verifyEmail API route:', error.message);

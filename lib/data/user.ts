@@ -27,7 +27,6 @@ export async function getUser(email: string) {
  * @returns {Promise<User>} A promise that resolves to the user.
  */
 export async function getUserById(id: string) {
-    console.log('id', id)
     const client = await clientPromise
     const db = client.db('geets')
     const user = await db.collection('users').findOne({
@@ -72,7 +71,6 @@ export async function findOne(query: any) {
  * @returns {Promise<NextResponse>} A promise that resolves to the response indicating the result.
  */
 export async function verifyEmail(token: string): Promise<NextResponse> {
-    console.log('helloworld', token);
     try {
         const user = await findOne({ verificationToken: token, verificationTokenExpires: { $gt: new Date() } });
 
@@ -80,14 +78,12 @@ export async function verifyEmail(token: string): Promise<NextResponse> {
             throw new Error('User not found or invalid/expired token');
         }
 
-        console.log('user', user);
 
         user.emailVerified = true;
         user.verificationToken = undefined;
         user.verificationTokenExpires = undefined;
 
         const updatedUser = await updateUser(user);
-        console.log('updatedUser', updatedUser);
 
         await sendEmail({ email: user.email, emailType: 'verify', userId: user._id });
 

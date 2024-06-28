@@ -8,7 +8,6 @@ import { auth } from '../auth'
 export default function AdditionalInfo() {
     async function saveAdditionalInfo(formData: FormData) {
         'use server'
-        console.log('Saving additional information')
         const session = await auth()
         const userEmail = session?.user?.email
 
@@ -35,8 +34,8 @@ export default function AdditionalInfo() {
 
     return (
         <div className='flex h-full w-full items-center justify-center bg-gray-50'>
-            <div className='z-10 w-full max-w-md overflow-hidden rounded-2xl border border-gray-100 shadow-xl'>
-                <div className='flex flex-col items-center justify-center space-y-3 border-b border-gray-200 bg-white px-4 py-6 pt-8 text-center sm:px-16'>
+            <div className='z-10 w-full max-w-md overflow-hidden rounded-xl custom-border shadow-xl'>
+                <div className='flex flex-col items-center justify-center space-y-3 custom-border bg-white px-4 py-6 pt-8 text-center sm:px-16'>
                     <h3 className='text-xl font-semibold'>
                         Informations supplémentaires
                     </h3>

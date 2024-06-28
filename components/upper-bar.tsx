@@ -30,7 +30,7 @@ export const UpperBar = ({ className }: UpperbarProps) => {
         <div className='flex flex-col items-center'>
             <Tabs defaultValue='feed'>
                 <div className='mx-auto flex flex-col md:flex-row justify-between items-center'>
-                    <TabsList className='py-5'>
+                    <TabsList className='py-5 space-x-3'>
                         <TabsTrigger
                             value='feed'
                             onClick={() => handleTabClick('Feed')}
@@ -51,17 +51,23 @@ export const UpperBar = ({ className }: UpperbarProps) => {
                         </TabsTrigger>
                     </TabsList>
                 </div>
-                <div className='w-full' style={{ width: '40vw' }}>
+                <div className='w-full'>
                     <TabContent value='feed'>
+                        <div className='hidden sm:block'>
                         <InputPost />
+                        </div>
                         <InfiniteScroll fetchFunction={getPosts} />
                     </TabContent>
                     <TabContent value='recommandation'>
+                    <div className='hidden sm:block'>
                         <InputPost />
+                        </div>
                         <InfiniteScroll fetchFunction={getPosts} />
                     </TabContent>
                     <TabContent value='friends'>
+                    <div className='hidden sm:block'>
                         <InputPost />
+                        </div>
                         <InfiniteScroll fetchFunction={getPosts} />
                     </TabContent>
                 </div>

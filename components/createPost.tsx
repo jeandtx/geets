@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { useSession } from 'next-auth/react'
 import { useToast } from './ui/use-toast'
 
 import { createPost } from '@/lib/data/post'
@@ -26,7 +25,6 @@ export default function CreatePost({
     const DEFAULT_USER_IMAGE =
         'https://res.cloudinary.com/dekbkndn8/image/upload/v1715719366/samples/balloons.jpg'
 
-    const { data: session } = useSession()
     const { toast } = useToast()
 
     const [content, setContent] = useState<string>('')
@@ -51,7 +49,7 @@ export default function CreatePost({
             return
         }
 
-        if (!session?.user?.email) {
+        if (!userInfo?.email) {
             toast({
                 variant: 'destructive',
                 title: 'Pas authentifié',
@@ -72,8 +70,8 @@ export default function CreatePost({
             time: new Date(),
             author: {
                 _id: '',
-                pseudo: session.user.name ?? '',
-                email: session.user.email,
+                pseudo: userInfo.pseudo ?? '',
+                email: userInfo.email,
                 media: userMedia,
             },
             media: imageUrl ?? undefined,
@@ -105,7 +103,7 @@ export default function CreatePost({
     }
 
     const handleSelectProject = (project: Project | null) => {
-        if (!session) {
+        if (!userInfo) {
             toast({
                 variant: 'destructive',
                 title: 'Pas authentifié',
@@ -118,7 +116,7 @@ export default function CreatePost({
     }
 
     return (
-        <Modal visible={visible} setVisible={setVisible} className='w-1/2'>
+        <Modal visible={visible} setVisible={setVisible} className='sm:w-1/2'>
             <div className='flex flex-col space-y-4 p-5'>
                 <div className='header flex flex-row items-center space-x-5'>
                     <Img
@@ -151,7 +149,7 @@ export default function CreatePost({
                         <SelectProject
                             onSelectProject={handleSelectProject}
                             selectedProject={selectedProject}
-                            user={session?.user?.email ?? ''}
+                            user={userInfo?.email ?? ''}
                         />
 
                         <CldUploadWidget

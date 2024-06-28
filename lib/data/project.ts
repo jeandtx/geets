@@ -12,7 +12,6 @@ import { ObjectId } from 'mongodb';
  * @throws {Error} If the project have a missing field.
     */
 export async function createProject(project: Project) {
-    console.log('Project:', project);
     const client = await clientPromise;
     const db = client.db('geets');
 
@@ -151,7 +150,6 @@ export async function searchProjects(searchTerm: string): Promise<Project[]> {
             }
         ]).toArray();
 
-        console.log("Search results obtained:", searchResults);
 
         return JSON.parse(JSON.stringify(searchResults)); // Remove ObjectID (not serializable)
     } catch (error) {
