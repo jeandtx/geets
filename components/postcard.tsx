@@ -169,6 +169,16 @@ export default function PostCard({ post }: Readonly<PostProps>) {
 						</Link>
 					</div>
 				</div>
+				<div>
+					{post.comments?.map((comment) => (
+						<div key={comment._id} className="comment">
+							<div>{comment._id}</div>
+							<div>{comment.content}</div>
+							<div>{comment.time.toString()}</div>
+							<div>{comment.postId}</div>
+						</div>
+					))}
+				</div>
 			</div>
 		</div>
 	);

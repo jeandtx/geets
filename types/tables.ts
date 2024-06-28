@@ -29,6 +29,13 @@ export interface Interaction {
     to: string;
 }
 
+export interface Comment {
+    _id: string;
+    postId: string;
+    content: string;
+    time: Date;
+}
+
 
 export interface Post {
     _id: string;
@@ -47,6 +54,7 @@ export interface Post {
     media?: string;
     labels?: string[];
     score?: number;
+    comments?: Comment[];
 }
 
 export interface User {
