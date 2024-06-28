@@ -42,3 +42,17 @@ export async function getPosts(page: number = 1, query: any | Partial<Post> = {}
 }
 
 
+/**
+ * Update a post in the database based on its ID.
+ * @param {string} postId - The ID of the post to update.
+ * @param {Partial<Post>} post - The fields to update.
+ * @returns {Promise<any>} A promise that resolves to the updated post.
+ * @throws {Error} If the post have a missing field.
+ */
+export async function updatePost(postId: string, post: Partial<Post>) {
+    const client = await clientPromise
+    const db = client.db('geets')
+    const result = await db.collection('posts').updateOne({ _id: new ObjectId(postId) }, { $set: post })
+    const data = JSON.parse(JSON.stringify(result)) // Remove ObjectID (not serializable)
+    return data
+}

@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import Img from "next/image";
 import { MessageSquare, Rocket, ThumbsUp } from "lucide-react";
@@ -6,6 +7,8 @@ import Link from "next/link";
 import { Button } from "./ui/button";
 import { createInteraction, likePost } from "@/lib/data/interactions";
 import { useUserInfo } from "@/app/context/UserInfoContext";
+import { Textarea } from "./ui/textarea";
+import { updatePost } from "@/lib/data/post";
 
 interface PostProps {
 	post: Post;
@@ -13,6 +16,8 @@ interface PostProps {
 
 export default function PostCard({ post }: Readonly<PostProps>) {
 	const { userInfo } = useUserInfo();
+	const [showCommentInput, setShowCommentInput] = React.useState(false);
+	const [comment, setComment] = React.useState("");
 	function getTimeSincePosted(time: Date) {
 		if (!time) return "Il y a un certain temps";
 		time = new Date(time);
@@ -63,6 +68,10 @@ export default function PostCard({ post }: Readonly<PostProps>) {
 	}
 
 	function handleCommentPost(e: React.MouseEvent<HTMLElement, MouseEvent>) {
+		setShowCommentInput(!showCommentInput);
+	}
+
+	function handleCreateComment() {
 		createInteraction({
 			userId: userInfo?.email,
 			userAvatar: userInfo?.media,
@@ -75,6 +84,26 @@ export default function PostCard({ post }: Readonly<PostProps>) {
 			read: false,
 			to: post.author?.email,
 		} as Interaction);
+		updatePost(post._id, {
+			comments: [
+				...(post.comments ?? []),
+				{
+					_id: "no handle yet",
+					postId: post._id,
+					content: comment,
+					time: new Date(),
+				},
+			],
+		});
+		setComment("");
+		setShowCommentInput(false);
+		post.comments?.push({
+			_id: "no handle yet",
+			postId: post._id,
+			content: comment,
+			time: new Date(),
+		});
+		console.log(post);
 	}
 
 	return (
@@ -170,7 +199,26 @@ export default function PostCard({ post }: Readonly<PostProps>) {
 					</div>
 				</div>
 				<div>
-					{post.comments?.map((comment) => (
+					{showCommentInput && (
+						<div className="comment mt-4 p-4 bg-gray-100 rounded-xl space-y-4">
+							<Textarea
+								placeholder="Commentez ici..."
+								value={comment}
+								onChange={(e) => {
+									setComment(e.target.value);
+								}}
+							></Textarea>
+							<Button
+								variant={"outline"}
+								onClick={handleCreateComment}
+							>
+								Envoyer
+							</Button>
+						</div>
+					)}
+				</div>
+				<div>
+					{post.comments?.slice(0, 3).map((comment) => (
 						<div
 							key={comment._id}
 							className="comment mt-4 p-4 bg-gray-100 rounded-xl"
