@@ -8,11 +8,7 @@ export interface Interaction {
         postId: string;
         postContent: string;
     };
-    comment?: {
-        postId: string;
-        commentId: string;
-        content: string;
-    };
+    comment?: Comment;
     follow?: {
         followerId: string;
         followerName: string;
@@ -30,7 +26,7 @@ export interface Interaction {
 }
 
 export interface Comment {
-    _id: string;
+    author: string;
     postId: string;
     content: string;
     time: Date;

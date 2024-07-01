@@ -5,10 +5,15 @@ import { MessageSquare, Rocket, ThumbsUp } from "lucide-react";
 import { Interaction, Post } from "@/types/tables";
 import Link from "next/link";
 import { Button } from "./ui/button";
-import { createInteraction, likePost } from "@/lib/data/interactions";
+import {
+	createInteraction,
+	likePost,
+	updateScore,
+} from "@/lib/data/interactions";
 import { useUserInfo } from "@/app/context/UserInfoContext";
 import { Textarea } from "./ui/textarea";
 import { updatePost } from "@/lib/data/post";
+import { get } from "http";
 
 interface PostProps {
 	post: Post;
@@ -18,6 +23,8 @@ export default function PostCard({ post }: Readonly<PostProps>) {
 	const { userInfo } = useUserInfo();
 	const [showCommentInput, setShowCommentInput] = React.useState(false);
 	const [comment, setComment] = React.useState("");
+	const [comments, setComments] = React.useState(post.comments || []); // Initialize comments state
+
 	function getTimeSincePosted(time: Date) {
 		if (!time) return "Il y a un certain temps";
 		time = new Date(time);
@@ -72,38 +79,35 @@ export default function PostCard({ post }: Readonly<PostProps>) {
 	}
 
 	function handleCreateComment() {
-		createInteraction({
-			userId: userInfo?.email,
-			userAvatar: userInfo?.media,
-			type: "comment",
-			comment: {
-				postId: post._id,
-				commentId: "no comments yet",
-				content: "no comments yet",
-			},
-			read: false,
-			to: post.author?.email,
-		} as Interaction);
-		updatePost(post._id, {
-			comments: [
-				...(post.comments ?? []),
-				{
-					_id: "no handle yet",
-					postId: post._id,
-					content: comment,
-					time: new Date(),
-				},
-			],
-		});
-		setComment("");
-		setShowCommentInput(false);
-		post.comments?.push({
-			_id: "no handle yet",
+		const newComment = {
+			author: userInfo?.email as string,
 			postId: post._id,
 			content: comment,
 			time: new Date(),
+		};
+
+		createInteraction({
+			userId: userInfo?.email as string,
+			userAvatar: userInfo?.media as string,
+			type: "comment",
+			comment: {
+				postId: post._id,
+				author: userInfo?.email as string,
+				content: comment,
+				time: new Date(),
+			},
+			read: false,
+			to: post.author?.email,
 		});
-		console.log(post);
+
+		updatePost(post._id, {
+			comments: [...comments, newComment],
+		}).then(() => {
+			setComments((prevComments) => [...prevComments, newComment]); // Update state to trigger re-render
+			setComment("");
+			setShowCommentInput(false);
+		});
+		updateScore(post._id, "comment");
 	}
 
 	return (
@@ -199,7 +203,7 @@ export default function PostCard({ post }: Readonly<PostProps>) {
 					</div>
 				</div>
 				<div>
-					{showCommentInput && (
+					{showCommentInput && userInfo && (
 						<div className="comment mt-4 p-4 bg-gray-100 rounded-xl space-y-4">
 							<Textarea
 								placeholder="Commentez ici..."
@@ -218,23 +222,24 @@ export default function PostCard({ post }: Readonly<PostProps>) {
 					)}
 				</div>
 				<div>
-					{post.comments?.slice(0, 3).map((comment) => (
-						<div
-							key={comment._id}
-							className="comment mt-4 p-4 bg-gray-100 rounded-xl"
-						>
-							<p className="text-gray-900 font-semibold">
-								{comment._id}
-							</p>
-							<p className="text-gray-700">{comment.content}</p>
-							<p className="text-gray-500 text-sm">
-								{comment.time.toString()}
-							</p>
-							<p className="text-gray-500 text-sm">
-								{comment.postId}
-							</p>
-						</div>
-					))}
+					{comments
+						.slice(-Math.min(3, comments.length))
+						.map((comment) => (
+							<div
+								key={comment.time.toString()}
+								className="comment mt-4 p-4 bg-gray-100 rounded-xl"
+							>
+								<p className="text-gray-900 font-semibold">
+									{comment.author}
+								</p>
+								<p className="text-gray-700">
+									{comment.content}
+								</p>
+								<p className="text-gray-500 text-sm">
+									{getTimeSincePosted(comment.time)}
+								</p>
+							</div>
+						))}
 				</div>
 			</div>
 		</div>
