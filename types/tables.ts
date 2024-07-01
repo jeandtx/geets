@@ -8,11 +8,7 @@ export interface Interaction {
         postId: string;
         postContent: string;
     };
-    comment?: {
-        postId: string;
-        commentId: string;
-        content: string;
-    };
+    comment?: Comment;
     follow?: {
         followerId: string;
         followerName: string;
@@ -27,6 +23,13 @@ export interface Interaction {
     };
     read?: boolean;
     to: string;
+}
+
+export interface Comment {
+    author: string;
+    postId: string;
+    content: string;
+    time: Date;
 }
 
 
@@ -47,6 +50,7 @@ export interface Post {
     media?: string;
     labels?: string[];
     score?: number;
+    comments?: Comment[];
 }
 
 export interface User {

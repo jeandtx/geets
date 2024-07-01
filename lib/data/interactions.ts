@@ -10,7 +10,7 @@ import { ObjectId } from 'mongodb';
  * @returns {Promise<any>} a validated promise
  * @throws {Error} If the interaction cannot be created
  */
-export async function createInteraction(interaction: Interaction): Promise<any> {
+export async function createInteraction(interaction: Partial<Interaction>): Promise<any> {
     try {
 
         const client = await clientPromise;
@@ -22,16 +22,16 @@ export async function createInteraction(interaction: Interaction): Promise<any> 
             _id: new ObjectId()
         });
 
-        
-        
+
+
         return result;
     } catch (error) {
         console.error('Error in createInteraction:', error);
         throw new Error('Failed to create interaction');
     }
 }
-export async function likePost(postId: string, userId: string, userMedia: string, postContent:string, postAuthor:string): Promise<any> {
-    try{
+export async function likePost(postId: string, userId: string, userMedia: string, postContent: string, postAuthor: string): Promise<any> {
+    try {
         const client = await clientPromise;
         const db = client.db('geets');
         const interaction = await db.collection('interactions').findOne({ "like.postId": postId, userId: userId });
@@ -40,7 +40,7 @@ export async function likePost(postId: string, userId: string, userMedia: string
             /// update the score
             const result2 = await updateScore(postId, "unlike");
             return result && result2;
-            
+
         }
         else {
             const result = await createInteraction({
@@ -53,12 +53,12 @@ export async function likePost(postId: string, userId: string, userMedia: string
                 },
                 read: false,
                 to: postAuthor,
-            
+
             } as Interaction);
             /// update the score
             const result2 = await updateScore(postId, "like");
             return result && result2;
-           
+
         }
 
     }
@@ -91,7 +91,7 @@ export async function updateScore(postId: string, typeInteraction: string): Prom
         } else if (typeInteraction === "comment") {
             score *= 20;
         }
-        
+
 
         const result = await db.collection('posts').updateOne(
             { _id: new ObjectId(postId) },
