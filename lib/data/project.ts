@@ -12,7 +12,6 @@ import { ObjectId } from 'mongodb';
  * @throws {Error} If the project have a missing field.
     */
 export async function createProject(project: Project) {
-    console.log('Project:', project);
     const client = await clientPromise;
     const db = client.db('geets');
 
@@ -27,7 +26,7 @@ export async function createProject(project: Project) {
         throw new Error('Missing field(s) in project. Check title: ' + project.title + ', description: ' + project.description + ', participants: ' + project.participants);
     }
 
-    const result = await db.collection('projects').insertOne({ ...project, _id: new ObjectId() });
+    const result = await db.collection('projects').insertOne({ ...project, _id: new ObjectId(), time: new Date() });
     const data = JSON.parse(JSON.stringify(result)); // Remove ObjectID (not serializable)
     return data;
 }
@@ -78,7 +77,7 @@ export async function getProject(projectId: string) {
  * Update a project in the database.
  * @param {Project} project - The project to update.
  * @returns {Promise<any>} A promise that resolves to the updated project.
- * @throws {Error} If the project have a missing field.
+ * @throws {Error} If the project has a missing field.
  */
 export async function updateProject(project: Project) {
     const client = await clientPromise;
@@ -100,6 +99,7 @@ export async function updateProject(project: Project) {
     return data;
 }
 
+
 /**
  * Delete a project from the database.
  * @param {string} projectId - The id of the project to delete.
@@ -116,4 +116,44 @@ export async function deleteProject(projectId: string) {
     const result = await db.collection('projects').deleteOne({ _id: new ObjectId(projectId) });
     const data = JSON.parse(JSON.stringify(result)); // Remove ObjectID (not serializable)
     return data;
+}
+
+
+/**
+ * Searches for projects using Atlas Search.
+ * @param {string} searchTerm - The search term for the project.
+ * @returns {Promise<Project[]>} A promise that resolves to the matched projects.
+ */
+export async function searchProjects(searchTerm: string): Promise<Project[]> {
+    
+
+    const client = await clientPromise;
+    
+
+    const db = client.db('geets');
+    
+
+    try {
+        const searchResults = await db.collection('projects').aggregate([
+            {
+                $search: {
+                    index: 'autocompleteIndex',
+                    autocomplete: {
+                        query: searchTerm,
+                        path: 'title',
+                        tokenOrder: 'any'
+                    }
+                }
+            },
+            {
+                $limit: 10
+            }
+        ]).toArray();
+
+
+        return JSON.parse(JSON.stringify(searchResults)); // Remove ObjectID (not serializable)
+    } catch (error) {
+        console.error("Error during aggregation:", error);
+        throw error;
+    }
 }

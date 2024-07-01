@@ -1,15 +1,18 @@
-import { Metadata } from "next";
-import { InputPost } from "@/components/inputpost";
+"use client";
 
-export const metadata: Metadata = {
-	title: "Testing page",
-};
-
-export default async function TestingPage() {
+export default function TestingPage({ data }: any) {
+	console.log(data);
 	return (
 		<div className="p-2 ">
+			<div className="p-4 rounded-2xl bg-white">testing shits</div>
+			<br />
 			<div className="p-4 rounded-2xl bg-white">
-				<InputPost />
+				{data && (
+					<div>
+						<h1>data</h1>
+						{JSON.stringify(data)}
+					</div>
+				)}
 			</div>
 		</div>
 	);

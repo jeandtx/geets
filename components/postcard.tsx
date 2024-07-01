@@ -1,14 +1,30 @@
+"use client";
 import React from "react";
 import Img from "next/image";
 import { MessageSquare, Rocket, ThumbsUp } from "lucide-react";
-import { Post } from "@/types/tables";
+import { Interaction, Post } from "@/types/tables";
 import Link from "next/link";
+import { Button } from "./ui/button";
+import {
+	createInteraction,
+	likePost,
+	updateScore,
+} from "@/lib/data/interactions";
+import { useUserInfo } from "@/app/context/UserInfoContext";
+import { Textarea } from "./ui/textarea";
+import { updatePost } from "@/lib/data/post";
+import { get } from "http";
 
 interface PostProps {
 	post: Post;
 }
 
 export default function PostCard({ post }: Readonly<PostProps>) {
+	const { userInfo } = useUserInfo();
+	const [showCommentInput, setShowCommentInput] = React.useState(false);
+	const [comment, setComment] = React.useState("");
+	const [comments, setComments] = React.useState(post.comments || []); // Initialize comments state
+
 	function getTimeSincePosted(time: Date) {
 		if (!time) return "Il y a un certain temps";
 		time = new Date(time);
@@ -20,7 +36,7 @@ export default function PostCard({ post }: Readonly<PostProps>) {
 		const days = Math.floor(diff / 1000 / 60 / 60 / 24);
 		const hours = Math.floor(diff / 1000 / 60 / 60);
 		const minutes = Math.floor(diff / 1000 / 60);
-		const seconds = Math.floor(diff / 1000);
+		const seconds = Math.floor(diff / 1000 / 60);
 
 		if (years > 0) return `Il y a ${years} ans`;
 		if (months > 0) return `Il y a ${months} mois`;
@@ -31,48 +47,104 @@ export default function PostCard({ post }: Readonly<PostProps>) {
 		return "Il y a un certain temps";
 	}
 
-	function handleLikePost() {
-		console.log("Like post");
+	function handleLikePost(e: React.MouseEvent<HTMLElement, MouseEvent>) {
+		console.log(post);
+		const target = e.currentTarget as HTMLElement; // Use currentTarget to refer to the element the event handler is attached to
+		const elements = target.querySelectorAll("span, svg");
+
+		elements.forEach((element) => {
+			if (element.classList.contains("text-blue-500")) {
+				element.classList.remove("text-blue-500");
+				element.classList.add("text-gray-600");
+			} else {
+				element.classList.remove(
+					"text-gray-600",
+					"text-red-500",
+					"text-green-500"
+				);
+				element.classList.add("text-blue-500");
+			}
+		});
+		likePost(
+			post._id,
+			userInfo?.email as string,
+			userInfo?.media as string,
+			post.content,
+			post.author?.email
+		) as Promise<void>;
 	}
 
-	function handleCommentPost() {
-		console.log("Comment post");
+	function handleCommentPost(e: React.MouseEvent<HTMLElement, MouseEvent>) {
+		setShowCommentInput(!showCommentInput);
+	}
+
+	function handleCreateComment() {
+		const newComment = {
+			author: userInfo?.email as string,
+			pseudo: userInfo?.pseudo,
+			postId: post._id,
+			content: comment,
+			time: new Date(),
+		};
+
+		createInteraction({
+			userId: userInfo?.email as string,
+			userAvatar: userInfo?.media as string,
+			type: "comment",
+			comment: {
+				postId: post._id,
+				pseudo: userInfo?.pseudo,
+				author: userInfo?.email as string,
+				content: comment,
+				time: new Date(),
+			},
+			read: false,
+			to: post.author?.email,
+		});
+
+		updatePost(post._id, {
+			comments: [...comments, newComment],
+		}).then(() => {
+			setComments((prevComments) => [...prevComments, newComment]); // Update state to trigger re-render
+			setComment("");
+			setShowCommentInput(false);
+		});
+		updateScore(post._id, "comment");
 	}
 
 	return (
-		<div className="flex max-w-xl overflow-hidden rounded-xl border border-slate-200 bg-white">
-			<div className="wrapper py-7">
-				<div className="header px-10 flex items-center  mb-4 space-x-4">
+		<div className="flex flex-col overflow-hidden rounded-xl custom-border bg-white">
+			<div className="wrapper pt-5 pb-3 px-7">
+				<div className="header flex items-center  mb-4 space-x-4">
 					<Img
 						className="rounded-full"
 						src={
-							post.author?.media ??
-							"https://loremflickr.com/640/480/nature"
+							post.author?.media && post.author?.media !== ""
+								? post.author?.media
+								: "https://loremflickr.com/640/480/user"
 						}
-						alt="Placeholder image"
+						alt="PP"
 						width={48}
 						height={48}
 						style={{ height: "3.5rem", width: "3.5rem" }}
 					/>
 					<div>
 						<Link href={`/${post.author?.email}`}>
-							<p className="text-lg text-gray-900 font-bold hover:text-blue-500">
+							<p className="text-base text-gray-900 font-bold hover:text-blue-500">
 								{post.author?.pseudo
 									? post.author?.pseudo
 									: post.author?.email}
 							</p>
 						</Link>
-
-						{/* div align line  */}
-						<div className="flex items-center space-x-2">
+						<div className="flex text-sm items-center space-x-2">
 							<p className="text-sm text-gray-600">
 								{getTimeSincePosted(post?.time)}
 							</p>
-							<p className="text-sm text-gray-600">•</p>
+							<p className=" text-gray-600">•</p>
 							<Link
 								href={`/${post.author?.email}/${post.project?._id}`}
 							>
-								<p className="text-sm text-gray-600 hover:text-blue-500">
+								<p className="text-gray-600 hover:text-blue-500">
 									{post.project
 										? post.project?.title
 										: "Nom de projet"}
@@ -82,40 +154,98 @@ export default function PostCard({ post }: Readonly<PostProps>) {
 					</div>
 				</div>
 
-				<div className="body px-10 space-y-5">
-					<p className="text-gray-900 mb-0">
+				<div className="body space-y-5">
+					<p className="text-gray-900 text-sm mb-0">
 						{post.content ? post.content : "Contenu du post"}
 					</p>
 					{post.media && (
 						<Img
-							className="w-full h-full object-cover rounded-xl"
+							className="w-full object-cover rounded-xl"
 							src={post.media}
-							alt="Placeholder image"
+							alt="Post media"
 							width={1280}
 							height={960}
 						/>
 					)}
 				</div>
 
-				<hr className="border-gray-300 my-5" />
+				<hr className="border-gray-300 mt-5 mb-3" />
 
-				<div className="footer px-10 space-y-5">
-					<div className="icon-group flex justify-between items-center px-20">
-						<ThumbsUp
+				<div className="footer space-y-3">
+					<div className="icon-group flex justify-between items-center ">
+						<Button
+							variant={"outline"}
+							className="border-0 flex space-x-3 px-5 py-3 rounded-xl cursor-pointer duration-200 transition-all hover:bg-slate-100 active:transform active:scale-95 select-none"
 							onClick={handleLikePost}
-							className="cursor-pointer"
-						/>
-						<MessageSquare
+						>
+							<ThumbsUp className="text-gray-600" />
+							<span className="hidden sm:block text-gray-600 font-semibold text-sm">
+								J&apos;aime
+							</span>
+						</Button>
+						<Button
+							variant={"outline"}
+							className="border-0 flex space-x-3 px-5 py-3 rounded-xl cursor-pointer duration-200 transition-all hover:bg-slate-100 active:transform active:scale-95 select-none"
 							onClick={handleCommentPost}
-							className="cursor-pointer"
-						/>
-
+						>
+							<MessageSquare className="text-gray-600" />
+							<span className="hidden sm:block text-gray-600 font-semibold text-sm">
+								Commenter
+							</span>
+						</Button>
 						<Link
+							className="items-center border-0 flex space-x-3 px-5 py-3 rounded-xl cursor-pointer duration-200 transition-all hover:bg-slate-100 active:transform active:scale-95 active:text-blue-500 select-none"
 							href={`${post.author?.email}/${post.project?._id}`}
 						>
-							<Rocket className="cursor-pointer" />
+							<Rocket className="text-gray-600" />
+							<span className="hidden sm:block text-gray-600 font-semibold text-sm">
+								Visiter
+							</span>
 						</Link>
 					</div>
+				</div>
+				<div>
+					{showCommentInput && userInfo && (
+						<div className="comment mt-4 p-4 bg-gray-100 rounded-xl space-y-4">
+							<Textarea
+								placeholder="Commentez ici..."
+								value={comment}
+								onChange={(e) => {
+									setComment(e.target.value);
+								}}
+							></Textarea>
+							<Button
+								variant={"outline"}
+								onClick={handleCreateComment}
+							>
+								Envoyer
+							</Button>
+						</div>
+					)}
+				</div>
+				<div>
+					{comments
+						.slice(-Math.min(3, comments.length))
+						.map((comment) => (
+							<div
+								key={comment.time.toString()}
+								className="comment mt-4 p-4 bg-gray-100 rounded-xl"
+							>
+								<p className="text-gray-900 font-semibold">
+									<Link href={`/${comment.author}`}>
+										{comment.pseudo
+											? comment.pseudo
+											: comment.author}
+									</Link>
+								</p>
+								<p className="text-gray-700">
+									{comment.content}
+								</p>
+								<p className="text-gray-500 text-sm">
+									{getTimeSincePosted(comment.time)}
+								</p>
+							</div>
+						))}
 				</div>
 			</div>
 		</div>

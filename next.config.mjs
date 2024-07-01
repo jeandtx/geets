@@ -23,6 +23,18 @@ const nextConfig = {
             {
                 protocol: 'https',
                 hostname: 'asset.cloudinary.com',
+            },
+            {
+                protocol: 'https',
+                hostname: 'avatars.githubusercontent.com',
+            },
+            {
+                protocol: 'https',
+                hostname: 'cloudflare-ipfs.com',
+            },
+            {
+                protocol: 'https',
+                hostname: 'picsum.photos',
             }
         ],
     },

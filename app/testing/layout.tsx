@@ -1,5 +1,9 @@
-const TestingLayout = ({ children }: { children: React.ReactNode }) => {
-	return <div>{children}</div>;
-};
+import React from "react";
 
-export default TestingLayout;
+export default async function TestingPageLayout({
+	children,
+}: Readonly<{
+	children: React.ReactNode;
+}>) {
+	return <div>{children}</div>;
+}

@@ -1,3 +1,39 @@
+export interface Interaction {
+    _id: string;
+    time: string;
+    userId: string;
+    userAvatar: string;
+    type: "like" | "comment" | "follow" | "join";
+    like?: {
+        postId: string;
+        postContent: string;
+    };
+    comment?: Comment;
+    follow?: {
+        followerId: string;
+        followerName: string;
+        followerAvatar: string;
+    };
+    join?: {
+        projectId: string;
+        projectName: string;
+        projectAvatar?: string;
+        projectOwner: string;
+        status?: "pending" | "accepted" | "rejected";
+    };
+    read?: boolean;
+    to: string;
+}
+
+export interface Comment {
+    author: string;
+    pseudo?: string;
+    postId: string;
+    content: string;
+    time: Date;
+}
+
+
 export interface Post {
     _id: string;
     project: {
@@ -14,6 +50,8 @@ export interface Post {
     };
     media?: string;
     labels?: string[];
+    score?: number;
+    comments?: Comment[];
 }
 
 export interface User {
@@ -34,7 +72,13 @@ export interface User {
     mobile?: string;
     allowEmails?: boolean;
     created?: Date;
+    emailVerified?: boolean;
+    verificationToken?: string;
+    verificationTokenExpires?: Date;
+    resetToken?: string;
+    resetTokenExpires?: Date;
 }
+
 
 export interface Participant {
     name: string;
