@@ -27,6 +27,7 @@ export interface Interaction {
 
 export interface Comment {
     author: string;
+    pseudo?: string;
     postId: string;
     content: string;
     time: Date;

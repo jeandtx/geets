@@ -81,6 +81,7 @@ export default function PostCard({ post }: Readonly<PostProps>) {
 	function handleCreateComment() {
 		const newComment = {
 			author: userInfo?.email as string,
+			pseudo: userInfo?.pseudo,
 			postId: post._id,
 			content: comment,
 			time: new Date(),
@@ -92,6 +93,7 @@ export default function PostCard({ post }: Readonly<PostProps>) {
 			type: "comment",
 			comment: {
 				postId: post._id,
+				pseudo: userInfo?.pseudo,
 				author: userInfo?.email as string,
 				content: comment,
 				time: new Date(),
@@ -230,7 +232,11 @@ export default function PostCard({ post }: Readonly<PostProps>) {
 								className="comment mt-4 p-4 bg-gray-100 rounded-xl"
 							>
 								<p className="text-gray-900 font-semibold">
-									{comment.author}
+									<Link href={`/${comment.author}`}>
+										{comment.pseudo
+											? comment.pseudo
+											: comment.author}
+									</Link>
 								</p>
 								<p className="text-gray-700">
 									{comment.content}
