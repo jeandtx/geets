@@ -13,6 +13,7 @@ import {
 import { useUserInfo } from "@/app/context/UserInfoContext";
 import { Textarea } from "./ui/textarea";
 import { updatePost } from "@/lib/data/post";
+import MentionParser from "@/components/text-content-parser";
 
 interface PostProps {
 	post: Post;
@@ -84,6 +85,7 @@ export default function PostCard({
 	function handleCreateComment() {
 		const newComment = {
 			author: userInfo?.email as string,
+			pseudo: userInfo?.pseudo,
 			postId: post._id,
 			content: comment,
 			time: new Date(),
@@ -95,6 +97,7 @@ export default function PostCard({
 			type: "comment",
 			comment: {
 				postId: post._id,
+				pseudo: userInfo?.pseudo,
 				author: userInfo?.email as string,
 				content: comment,
 				time: new Date(),
@@ -116,7 +119,7 @@ export default function PostCard({
 	return (
 		<div className="flex flex-col overflow-hidden rounded-xl custom-border bg-white">
 			<div className="wrapper pt-5 pb-3 px-7">
-				<div className="header flex items-center  mb-4 space-x-4">
+				<div className="header flex items-center mb-4 space-x-4">
 					<Img
 						className="rounded-full"
 						src={
@@ -141,7 +144,7 @@ export default function PostCard({
 							<p className="text-sm text-gray-600">
 								{getTimeSincePosted(post?.time)}
 							</p>
-							<p className=" text-gray-600">•</p>
+							<p className="text-gray-600">•</p>
 							<Link
 								href={`/${post.author?.email}/${post.project?._id}`}
 							>
@@ -157,7 +160,11 @@ export default function PostCard({
 
 				<div className="body space-y-5">
 					<p className="text-gray-900 text-sm mb-0">
-						{post.content ? post.content : "Contenu du post"}
+						{post.content ? (
+							<MentionParser content={post.content} />
+						) : (
+							"Contenu du post"
+						)}
 					</p>
 					{post.media && (
 						<Img
@@ -235,10 +242,14 @@ export default function PostCard({
 								className="comment mt-4 p-4 bg-gray-100 rounded-xl"
 							>
 								<p className="text-gray-900 font-semibold">
-									{comment.author}
+									<Link href={`/${comment.author}`}>
+										{comment.pseudo
+											? comment.pseudo
+											: comment.author}
+									</Link>
 								</p>
 								<p className="text-gray-700">
-									{comment.content}
+									<MentionParser content={comment.content} />
 								</p>
 								<p className="text-gray-500 text-sm">
 									{getTimeSincePosted(comment.time)}
