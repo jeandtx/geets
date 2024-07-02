@@ -13,7 +13,7 @@ import {
 import { useUserInfo } from "@/app/context/UserInfoContext";
 import { Textarea } from "./ui/textarea";
 import { updatePost } from "@/lib/data/post";
-import { get } from "http";
+import MentionParser from "@/components/text-content-parser";
 
 interface PostProps {
 	post: Post;
@@ -115,7 +115,7 @@ export default function PostCard({ post }: Readonly<PostProps>) {
 	return (
 		<div className="flex flex-col overflow-hidden rounded-xl custom-border bg-white">
 			<div className="wrapper pt-5 pb-3 px-7">
-				<div className="header flex items-center  mb-4 space-x-4">
+				<div className="header flex items-center mb-4 space-x-4">
 					<Img
 						className="rounded-full"
 						src={
@@ -140,14 +140,10 @@ export default function PostCard({ post }: Readonly<PostProps>) {
 							<p className="text-sm text-gray-600">
 								{getTimeSincePosted(post?.time)}
 							</p>
-							<p className=" text-gray-600">•</p>
-							<Link
-								href={`/${post.author?.email}/${post.project?._id}`}
-							>
+							<p className="text-gray-600">•</p>
+							<Link href={`/${post.author?.email}/${post.project?._id}`}>
 								<p className="text-gray-600 hover:text-blue-500">
-									{post.project
-										? post.project?.title
-										: "Nom de projet"}
+									{post.project ? post.project?.title : "Nom de projet"}
 								</p>
 							</Link>
 						</div>
@@ -156,7 +152,7 @@ export default function PostCard({ post }: Readonly<PostProps>) {
 
 				<div className="body space-y-5">
 					<p className="text-gray-900 text-sm mb-0">
-						{post.content ? post.content : "Contenu du post"}
+						{post.content ? <MentionParser content={post.content} /> : "Contenu du post"}
 					</p>
 					{post.media && (
 						<Img
@@ -172,7 +168,7 @@ export default function PostCard({ post }: Readonly<PostProps>) {
 				<hr className="border-gray-300 mt-5 mb-3" />
 
 				<div className="footer space-y-3">
-					<div className="icon-group flex justify-between items-center ">
+					<div className="icon-group flex justify-between items-center">
 						<Button
 							variant={"outline"}
 							className="border-0 flex space-x-3 px-5 py-3 rounded-xl cursor-pointer duration-200 transition-all hover:bg-slate-100 active:transform active:scale-95 select-none"
@@ -233,14 +229,10 @@ export default function PostCard({ post }: Readonly<PostProps>) {
 							>
 								<p className="text-gray-900 font-semibold">
 									<Link href={`/${comment.author}`}>
-										{comment.pseudo
-											? comment.pseudo
-											: comment.author}
+										{comment.pseudo ? comment.pseudo : comment.author}
 									</Link>
 								</p>
-								<p className="text-gray-700">
-									{comment.content}
-								</p>
+								<p className="text-gray-700"><MentionParser content={comment.content} /></p>
 								<p className="text-gray-500 text-sm">
 									{getTimeSincePosted(comment.time)}
 								</p>
