@@ -6,6 +6,8 @@ import { cn } from "@/lib/utils";
 import PostCard from "@/components/postcard";
 import React from "react";
 import LoadingSpinner from "./ui/spinner";
+import { useUserInfo } from "@/app/context/UserInfoContext";
+import Link from "next/link";
 
 interface InfiniteScrollProps {
 	/**
@@ -30,6 +32,16 @@ export default function InfiniteScroll({
 	});
 	const [posts, setPosts] = React.useState<any>([]);
 	const [page, setPage] = React.useState(1);
+	const userInfo = useUserInfo();
+	React.useEffect(() => {
+		// const fetchPosts = async () => {
+		// 	const newPosts = await fetchFunction(1);
+		// 	setPage((prevPage: number) => prevPage + 1);
+		// 	setPosts((prevPosts: any) => [...prevPosts, ...newPosts]);
+		// };
+		// fetchPosts();
+		console.log(userInfo);
+	}, []);
 
 	React.useEffect(() => {
 		if (!inView) return;
@@ -46,14 +58,38 @@ export default function InfiniteScroll({
 			className={cn("flex flex-col w-full", className)}
 			style={{ height: "100%" }}
 		>
-			<ul className="space-y-4">
-				{posts.map((post: any) => (
-					<PostCard key={post._id} post={post} />
-				))}
-			</ul>
-			<div className="flex justify-center items-center" style={{ height: "100px" }} ref={ref}>
-        <LoadingSpinner />
-      </div>
+			{userInfo?.status === "authenticated" ? (
+				<>
+					<ul className="space-y-4">
+						{posts.map((post: any) => (
+							<PostCard key={post._id} post={post} />
+						))}
+					</ul>
+					<div
+						className="flex justify-center items-center"
+						style={{ height: "100px" }}
+						ref={ref}
+					>
+						<LoadingSpinner />
+					</div>
+				</>
+			) : (
+				<div className="flex flex-col space-y-4 items-center justify-center w-full h-full b-4">
+					{posts.slice(0, 1).map((post: any) => (
+						<PostCard
+							key={post._id}
+							post={post}
+							connected={false}
+						/>
+					))}
+					<p className="text-center text-lg text-gray-500">
+						<Link href="/login" className="text-blue-500">
+							Connectez-vous
+						</Link>{" "}
+						pour plus de publications
+					</p>
+				</div>
+			)}
 		</div>
 	);
 }

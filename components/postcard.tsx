@@ -2,7 +2,7 @@
 import React from "react";
 import Img from "next/image";
 import { MessageSquare, Rocket, ThumbsUp } from "lucide-react";
-import { Interaction, Post } from "@/types/tables";
+import { Post } from "@/types/tables";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import {
@@ -13,13 +13,16 @@ import {
 import { useUserInfo } from "@/app/context/UserInfoContext";
 import { Textarea } from "./ui/textarea";
 import { updatePost } from "@/lib/data/post";
-import { get } from "http";
 
 interface PostProps {
 	post: Post;
+	connected?: boolean;
 }
 
-export default function PostCard({ post }: Readonly<PostProps>) {
+export default function PostCard({
+	post,
+	connected = true,
+}: Readonly<PostProps>) {
 	const { userInfo } = useUserInfo();
 	const [showCommentInput, setShowCommentInput] = React.useState(false);
 	const [comment, setComment] = React.useState("");
@@ -170,37 +173,39 @@ export default function PostCard({ post }: Readonly<PostProps>) {
 				<hr className="border-gray-300 mt-5 mb-3" />
 
 				<div className="footer space-y-3">
-					<div className="icon-group flex justify-between items-center ">
-						<Button
-							variant={"outline"}
-							className="border-0 flex space-x-3 px-5 py-3 rounded-xl cursor-pointer duration-200 transition-all hover:bg-slate-100 active:transform active:scale-95 select-none"
-							onClick={handleLikePost}
-						>
-							<ThumbsUp className="text-gray-600" />
-							<span className="hidden sm:block text-gray-600 font-semibold text-sm">
-								J&apos;aime
-							</span>
-						</Button>
-						<Button
-							variant={"outline"}
-							className="border-0 flex space-x-3 px-5 py-3 rounded-xl cursor-pointer duration-200 transition-all hover:bg-slate-100 active:transform active:scale-95 select-none"
-							onClick={handleCommentPost}
-						>
-							<MessageSquare className="text-gray-600" />
-							<span className="hidden sm:block text-gray-600 font-semibold text-sm">
-								Commenter
-							</span>
-						</Button>
-						<Link
-							className="items-center border-0 flex space-x-3 px-5 py-3 rounded-xl cursor-pointer duration-200 transition-all hover:bg-slate-100 active:transform active:scale-95 active:text-blue-500 select-none"
-							href={`${post.author?.email}/${post.project?._id}`}
-						>
-							<Rocket className="text-gray-600" />
-							<span className="hidden sm:block text-gray-600 font-semibold text-sm">
-								Visiter
-							</span>
-						</Link>
-					</div>
+					{connected && (
+						<div className="icon-group flex justify-between items-center ">
+							<Button
+								variant={"outline"}
+								className="border-0 flex space-x-3 px-5 py-3 rounded-xl cursor-pointer duration-200 transition-all hover:bg-slate-100 active:transform active:scale-95 select-none"
+								onClick={handleLikePost}
+							>
+								<ThumbsUp className="text-gray-600" />
+								<span className="hidden sm:block text-gray-600 font-semibold text-sm">
+									J&apos;aime
+								</span>
+							</Button>
+							<Button
+								variant={"outline"}
+								className="border-0 flex space-x-3 px-5 py-3 rounded-xl cursor-pointer duration-200 transition-all hover:bg-slate-100 active:transform active:scale-95 select-none"
+								onClick={handleCommentPost}
+							>
+								<MessageSquare className="text-gray-600" />
+								<span className="hidden sm:block text-gray-600 font-semibold text-sm">
+									Commenter
+								</span>
+							</Button>
+							<Link
+								className="items-center border-0 flex space-x-3 px-5 py-3 rounded-xl cursor-pointer duration-200 transition-all hover:bg-slate-100 active:transform active:scale-95 active:text-blue-500 select-none"
+								href={`${post.author?.email}/${post.project?._id}`}
+							>
+								<Rocket className="text-gray-600" />
+								<span className="hidden sm:block text-gray-600 font-semibold text-sm">
+									Visiter
+								</span>
+							</Link>
+						</div>
+					)}
 				</div>
 				<div>
 					{showCommentInput && userInfo && (
@@ -226,7 +231,7 @@ export default function PostCard({ post }: Readonly<PostProps>) {
 						.slice(-Math.min(3, comments.length))
 						.map((comment) => (
 							<div
-								key={comment.time.toString()}
+								key={comment.postId + comment.time.toString()}
 								className="comment mt-4 p-4 bg-gray-100 rounded-xl"
 							>
 								<p className="text-gray-900 font-semibold">
