@@ -6,6 +6,7 @@ import { getProjects } from '@/lib/data/project'
 import { getPosts } from '@/lib/data/post'
 import type { Project } from '@/types/tables'
 import { ProjectCard } from '@/components/project'
+import PostCard from "@/components/postcard";
 
 function SignOut() {
     return (
@@ -138,24 +139,11 @@ export default async function ProfilPage({
                             {userPosts.length > 0 ? (
                                 <div className='grid grid-cols-1 sm:grid-cols-2 gap-6'>
                                     {userPosts.map((post) => (
-                                        <div
-                                            key={post._id}
-                                            className='bg-white rounded-lg shadow-lg overflow-hidden'
-                                        >
-                                            <div className='p-6'>
-                                                <div className='text-sm text-gray-600 mb-2'>
-                                                    {post.project?.title
-                                                        ? post.project.title
-                                                        : 'Nom de projet'}{' '}
-                                                    •{' '}
-                                                    {post.project?._id ||
-                                                        'ID de projet'}
-                                                </div>
-                                                <p className='text-gray-900'>
-                                                    {post.content}
-                                                </p>
-                                            </div>
-                                        </div>
+                                        <ul className="space-y-4">
+                                        
+                                            <PostCard key={post._id} post={post} />
+                                        
+                                    </ul>
                                     ))}
                                 </div>
                             ) : (

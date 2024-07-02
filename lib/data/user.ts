@@ -21,6 +21,8 @@ export async function getUser(email: string) {
     return data
 }
 
+
+
 /**
  * Retrieves a user with the id from the database.
  * @param {string} id - The id of the user to retrieve.
@@ -34,6 +36,27 @@ export async function getUserById(id: string) {
     })
     const data: User = JSON.parse(JSON.stringify(user)) // Remove ObjectID (not serializable)
     return data
+}
+
+/**
+ * Retrieves a user email from the database thanks to his pseudo.
+ * @param {string} pseudo - The pseudo of the user to retrieve.
+ * @returns {Promise<string>} A promise that resolves to the user.
+ */
+export async function getEmailByPseudo(pseudo: string) {
+    const client = await clientPromise
+    const db = client.db('geets')
+    // check if the pseudo is in the database
+    const user = await db.collection('users').findOne({
+        pseudo
+    })
+    // if the pseudo is in the database, return the email
+    if (user) {
+        return user.email
+    }
+    // else return null
+    return null
+
 }
 
 /** 
