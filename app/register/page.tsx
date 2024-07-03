@@ -37,7 +37,6 @@ export default function Login() {
 				});
 			} catch (error: any) {
 				console.error("Error sending email:", error.message);
-				return "Error sending email";
 			}
 			// Automatically sign in the user after successful registration
 			await signIn("credentials", {
