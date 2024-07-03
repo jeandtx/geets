@@ -12,8 +12,10 @@ import { useUserInfo } from '@/app/context/UserInfoContext'
 import LoadingSpinner from '@/components/ui/spinner'
 import { useIsClient } from '@uidotdev/usehooks'
 import { useSession } from 'next-auth/react'
+import Select from 'react-select'
 
 export default function NewProject() {
+
     const isClient = useIsClient()
 
     const [title, setTitle] = useState<string>('')
@@ -30,6 +32,38 @@ export default function NewProject() {
     const [imageUrl, setImageUrl] = useState<string>('')
     const [imageName, setImageName] = useState<string>('Ajouter une photo')
     const { userInfo } = useUserInfo()
+
+    const themeOptions = [
+        { value: 'sport', label: 'Sport' },
+        { value: 'social', label: 'Social' },
+        { value: 'finance', label: 'Finance' },
+        { value: 'musique', label: 'Musique' },
+        { value: 'application', label: 'Application' },
+        { value: 'productivite', label: 'Productivité' },
+        { value: 'divertissement', label: 'Divertissement' },
+        { value: 'jeu', label: 'Jeu' },
+        { value: 'education', label: 'Éducation' },
+        { value: 'sante', label: 'Santé' },
+        { value: 'art', label: 'Art' },
+        { value: 'design', label: 'Design' },
+        { value: 'technologie', label: 'Technologie' },
+        { value: 'environnement', label: 'Environnement' },
+        { value: 'photographie', label: 'Photographie' },
+        { value: 'science', label: 'Science' },
+    ];
+
+    const labelOptions = [
+        { value: 'developpement', label: 'Développement' },
+        { value: 'design', label: 'Design' },
+        { value: 'marketing', label: 'Marketing' },
+        { value: 'communication', label: 'Communication' },
+        { value: 'finance', label: 'Finance' },
+        { value: 'management', label: 'Management' },
+        { value: 'juridique', label: 'Juridique' },
+        { value: 'photographie', label: 'Photographie' },
+        { value: 'science', label: 'Science' },
+        { value: 'autre', label: 'Autre' },
+    ]
 
     const [project, setProject] = useState<Project>({
         _id: 'Generated',
@@ -195,42 +229,34 @@ export default function NewProject() {
                             placeholder='Titre'
                             required
                         />
-                        <form
-                            onSubmit={(e) => {
-                                e.preventDefault()
-                                setThemes((prev) => [...prev, theme])
-                                setTheme('')
-                            }}
-                        >
-                            <Input
-                                type='text'
-                                name='themes'
-                                onChange={(e) => setTheme(e.target.value)}
-                                value={theme}
-                                placeholder='Thèmes'
-                            />
-                            <div className='flex flex-wrap gap-2 mt-2'>
-                                {themes.map((theme) => (
-                                    <Badge
-                                        key={theme}
-                                        onClick={() => {
-                                            setThemes((prev) =>
-                                                prev.filter((t) => t !== theme)
-                                            )
-                                        }}
-                                    >
-                                        {theme}
-                                    </Badge>
-                                ))}
-                            </div>
-                        </form>
                         <Textarea
                             name='description'
                             onChange={handleChange}
                             value={description}
                             placeholder='Description'
                         />
-
+                        <Select
+                            isMulti 
+                            name='themes'
+                            className='rounded-md border border-input bg-background px-0 py-0 text-sm'
+                            options={themeOptions}
+                            placeholder="Thèmes"
+                            onChange={(selectedOptions) => setThemes(selectedOptions.map(option => option.value))}
+                            value={themeOptions.filter(option => themes.includes(option.value))}
+                            // overwrite the style of the select component by removing the default border 
+                            styles={{
+                                control: (provided) => ({
+                                ...provided,
+                                border: 'none',
+                                boxShadow: 'none', 
+                                padding: '0'
+                                }), 
+                                placeholder: (provided) => ({
+                                    ...provided,
+                                    color: 'rgb(108, 114, 127)'
+                                })
+                            }}
+                        />
                         {/* Media Upload Section */}
                         <CldUploadWidget
                             uploadPreset='onrkam98'
@@ -259,36 +285,29 @@ export default function NewProject() {
                                 )
                             }}
                         </CldUploadWidget>
-
-                        <form
-                            onSubmit={(e) => {
-                                e.preventDefault()
-                                setLabels((prev) => [...prev, label])
-                                setLabel('')
+                        
+                        <Select
+                            isMulti 
+                            name='competences'
+                            className='rounded-md border border-input bg-background px-0 py-0 text-sm'
+                            options={labelOptions}
+                            placeholder="Compétences requises"
+                            onChange={(selectedOptions) => setLabels(selectedOptions.map(option => option.value))}
+                            value={labelOptions.filter(option => labels.includes(option.value))}
+                            // overwrite the style of the select component by removing the default border 
+                            styles={{
+                                control: (provided) => ({
+                                ...provided,
+                                border: 'none',
+                                boxShadow: 'none', 
+                                padding: '0'
+                                }), 
+                                placeholder: (provided) => ({
+                                    ...provided,
+                                    color: 'rgb(108, 114, 127)'
+                                })
                             }}
-                        >
-                            <Input
-                                type='text'
-                                name='labels'
-                                onChange={(e) => setLabel(e.target.value)}
-                                value={label}
-                                placeholder='Labels'
-                            />
-                            <div className='flex flex-wrap gap-2 mt-2'>
-                                {labels.map((label) => (
-                                    <Badge
-                                        key={label}
-                                        onClick={() => {
-                                            setLabels((prev) =>
-                                                prev.filter((l) => l !== label)
-                                            )
-                                        }}
-                                    >
-                                        {label}
-                                    </Badge>
-                                ))}
-                            </div>
-                        </form>
+                        />
 
                         <div className='flex space-x-2'>
                             <Input
@@ -338,7 +357,7 @@ export default function NewProject() {
                             onSubmit={handleSubmit}
                             className='flex flex-col gap-2'
                         >
-                            <Button type='submit'>Enregistrer</Button>
+                            <Button type='submit'>Publier mon projet</Button>
                         </form>
                     </div>
                 </div>
