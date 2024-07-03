@@ -1,5 +1,7 @@
 'use client'
 import React, { useState, useEffect } from 'react'
+import { Search } from 'lucide-react';
+
 import Link from 'next/link'
 import { Project } from '@/types/tables'
 import { searchProjects } from '@/lib/data/project'
@@ -9,6 +11,11 @@ const SearchComponent: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState('')
     const [results, setResults] = useState<Project[]>([])
     const [isLoading, setIsLoading] = useState(false)
+    const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+          window.location.href = `/hashtag/${searchTerm}`;
+        }
+      };
 
     useEffect(() => {
         const fetchResults = async () => {
@@ -35,13 +42,33 @@ const SearchComponent: React.FC = () => {
 
     return (
         <div className='flex flex-col items-center'>
+                    <div className="relative w-full max-w-2xl">
+            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <Search className="text-gray-400" />
+            </div>
             <input
                 type='text'
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder='Rechercher...'
-                className='w-full max-w-2xl bg-white px-5 py-4 rounded-full text-left text-gray-600 font-semibold text-sm custom-border duration-300 animation-all focus:bg-stone-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
+                onKeyPress={handleKeyPress}
+                placeholder='Chercher'
+                className='w-full bg-white pl-10 pr-5 py-4 rounded-full text-left text-gray-600 font-semibold text-sm custom-border duration-300 animation-all focus:bg-stone-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
             />
+            </div>
+
+            <h2 className='text-lg font-semibold mt-4'>Rechercher un projet spécifique</h2>
+            <div className="relative w-full max-w-2xl">
+            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <Search className="text-gray-400" />
+            </div>
+            <input
+                type='text'
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder='Rechercher'
+                className='w-full bg-white pl-10 pr-5 py-4 rounded-full text-left text-gray-600 font-semibold text-sm custom-border duration-300 animation-all focus:bg-stone-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
+            />
+            </div>
 
             {isLoading && (
                 <div>

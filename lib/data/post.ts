@@ -41,6 +41,20 @@ export async function getPosts(page: number = 1, query: any | Partial<Post> = {}
     return data
 }
 
+/**
+ * Function that takes in entry a keyword and returns the posts that contain this keyword or the comments to the posts that contains it.
+ * @param {string} keyword - The keyword to search for.
+ * @returns {Promise<Array<any>>} A promise that resolves to an array of posts. 
+ */
+export async function getPostsKeyWord(keyword: string, page: number = 1, query: any | Partial<Post> = {}): Promise<Post[]> {
+    const client = await clientPromise
+    const db = client.db('geets')
+    console.log(keyword)
+    const posts = await db.collection('posts').find({ $or: [{ content: { $regex: keyword } }, { comments: { $elemMatch: { content: { $regex: keyword } } } }] }).toArray()
+    const data: Post[] = JSON.parse(JSON.stringify(posts)) // Remove ObjectID (not serializable)
+    return data
+}
+
 
 /**
  * Update a post in the database based on its ID.

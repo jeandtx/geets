@@ -34,7 +34,7 @@ export default function ProjectPage({
     }, [projectId])
 
     if (isLoading) {
-        return <div>Chargement...</div>
+        return <div>Chargement....</div>
     }
 
     return (

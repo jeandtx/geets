@@ -1,3 +1,5 @@
+// src/components/MentionParser.tsx
+
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { getEmailByPseudo } from '@/lib/data/user';
@@ -56,9 +58,9 @@ const MentionParser: React.FC<MentionParserProps> = ({ content }) => {
         // Handle hashtags
         const hashtag = match[0].substring(1);
         parts.push(
-          <span key={match.index} className="text-green-500">
-            #{hashtag}
-          </span>
+          <Link key={match.index} href={`/hashtag/${hashtag}`}>
+            <span className="text-green-500">#{hashtag}</span>
+          </Link>
         );
       } else if (match[0].startsWith('**') && match[0].endsWith('**')) {
         // Handle bold text
