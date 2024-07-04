@@ -1,15 +1,11 @@
 import nodemailer from 'nodemailer';
 import { genSaltSync, hashSync } from 'bcrypt-ts';
 import { updateUser } from './data/user';
-import { ObjectId } from 'mongodb';
 
 export const sendEmail = async ({ email, emailType, userId }: any) => {
     try {
-        // Create a hashed token
         const hashedToken = hashSync(userId.toString(), genSaltSync(10));
 
-        // Convert userId to ObjectId if it's not already one
-        // const userObjectId = new ObjectId(userId);
 
         if (emailType === 'verify') {
             await updateUser({
@@ -31,8 +27,8 @@ export const sendEmail = async ({ email, emailType, userId }: any) => {
             port: 465,
             secure: true,
             auth: {
-                user: process.env.GMAIL_USER, 
-                pass: process.env.GMAIL_PASS, 
+                user: process.env.GMAIL_USER,
+                pass: process.env.GMAIL_PASS,
             },
         });
 
@@ -41,9 +37,9 @@ export const sendEmail = async ({ email, emailType, userId }: any) => {
             from: 'contact.app.laruche@gmail.com',
             to: email,
             subject: emailType === 'verify' ? 'LaRuche - Email Verification' : 'LaRuche - Password Reset',
-            html: emailType === 'verify' 
-                ? `<p>Click <a href="http://localhost:3000/api/verifyemail?token=${hashedToken}">here</a> to verify your email</p>`
-                : `<p>Click <a href="http://localhost:3000/api/resetpassword?token=${hashedToken}">here</a> to reset your password</p>`
+            html: emailType === 'verify'
+                ? `<p>Click <a href="${process.env.DOMAIN}/api/verifyemail?token=${hashedToken}">here</a> to verify your email</p>`
+                : `<p>Click <a href="${process.env.DOMAIN}/api/resetpassword?token=${hashedToken}">here</a> to reset your password</p>`
         };
 
 

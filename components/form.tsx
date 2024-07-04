@@ -1,19 +1,28 @@
 'use client'
 import { useToast } from './ui/use-toast'
+import { useState } from 'react'
+import { CldUploadWidget } from 'next-cloudinary'
 
 export function Form({
-    action,
-    children,
-    fillInformationForm = false,
+	action,
+	children,
+	fillInformationForm = false,
 }: Readonly<{
-    action: any
-    children: React.ReactNode
-    fillInformationForm?: boolean
+	action: any;
+	children: React.ReactNode;
+	fillInformationForm?: boolean;
 }>) {
     const { toast } = useToast()
+    const [imageUrl, setImageUrl] = useState<string>('')
+    const [imageName, setImageName] = useState<string>('Ajouter une photo')
 
     function handleSubmit(e: any) {
-        action(e)
+        e.preventDefault()
+        const formData = new FormData(e.target)
+        if (imageUrl) {
+            formData.append('media', imageUrl)
+        }
+        action(formData)
             .catch(() => {
                 toast({
                     variant: 'destructive',
@@ -32,7 +41,7 @@ export function Form({
 
     return (
         <form
-            action={handleSubmit}
+            onSubmit={handleSubmit}
             className='flex flex-col space-y-4 px-4 py-1 pb-20 sm:px-16'
         >
             {!fillInformationForm ? (
@@ -169,42 +178,42 @@ export function Form({
                         </select>
                     </div>
 
-                    <div>
-                        <label
-                            htmlFor='experience'
-                            className='block text-xs textcolor'
-                        >
-                            Expériences
-                        </label>
-                        <input
-                            id='experience'
-                            name='experience'
-                            type='number'
-                            required
-                            className='mt-1 block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-inputborder focus:outline-none focus:ring-black sm:text-sm'
-                        />
-                    </div>
-                    <div>
-                        <label
-                            htmlFor='available'
-                            className='block text-xs textcolor'
-                        >
-                            Disponible
-                        </label>
-                        <select
-                            id='available'
-                            name='available'
-                            required
-                            className='mt-1 block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-inputborder focus:outline-none focus:ring-black sm:text-sm'
-                        >
-                            <option value=''>
-                                --Veuillez choisir une option--
-                            </option>
-                            <option value='yes'>Oui</option>
-                            <option value='no'>Non</option>
-                            <option value='maybe'>Peut-être</option>
-                        </select>
-                    </div>
+					<div>
+						<label
+							htmlFor="experience"
+							className="block text-xs textcolor"
+						>
+							Expériences
+						</label>
+						<input
+							id="experience"
+							name="experience"
+							type="number"
+							required
+							className="mt-1 block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-inputborder focus:outline-none focus:ring-black sm:text-sm"
+						/>
+					</div>
+					<div>
+						<label
+							htmlFor="available"
+							className="block text-xs textcolor"
+						>
+							Disponible
+						</label>
+						<select
+							id="available"
+							name="available"
+							required
+							className="mt-1 block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-inputborder focus:outline-none focus:ring-black sm:text-sm"
+						>
+							<option value="">
+								--Veuillez choisir une option--
+							</option>
+							<option value="yes">Oui</option>
+							<option value="no">Non</option>
+							<option value="maybe">Peut-être</option>
+						</select>
+					</div>
 
                     <div>
                         <label
@@ -241,10 +250,44 @@ export function Form({
                             <option value='no'>Non</option>
                         </select>
                     </div>
+                    <div>
+                        <label className='block text-xs textcolor'>
+                            Photo de profil
+                        </label>
+                        <div className='flex items-center justify-center'>
+                            <CldUploadWidget
+                                uploadPreset='onrkam98'
+                                onSuccess={(result) => {
+                                    setImageUrl((result as any).info.secure_url)
+                                    setImageName(
+                                        (result as any).info.original_filename
+                                    ) // Update the image name
+                                }}
+                            >
+                                {({ open }) => {
+                                    return (
+                                        <button
+                                            className='w-full overflow-hidden inline-flex items-center justify-center border border-input bg-background rounded-md px-6 py-3 text-sm font-medium hover:bg-slate-50'
+                                            style={{
+                                                height: '40px',
+                                                whiteSpace: 'nowrap',
+                                                textOverflow: 'ellipsis',
+                                                overflow: 'hidden',
+                                            }}
+                                            type='button'
+                                            onClick={() => open()}
+                                        >
+                                            <div className='p-1'>📥</div>{imageName}
+                                        </button>
+                                    )
+                                }}
+                            </CldUploadWidget>
+                        </div>
+                    </div>
                 </div>
             )}
 
-            {children}
-        </form>
-    )
+			{children}
+		</form>
+	);
 }

@@ -29,7 +29,7 @@ export const UpperBar = ({ className }: UpperbarProps) => {
     return (
         <div className='flex flex-col items-center'>
             <Tabs defaultValue='feed'>
-                <div className='mx-auto flex flex-col md:flex-row justify-between items-center'>
+                {/* <div className='mx-auto flex flex-col md:flex-row justify-between items-center'>
                     <TabsList className='py-5 space-x-3'>
                         <TabsTrigger
                             value='feed'
@@ -50,7 +50,7 @@ export const UpperBar = ({ className }: UpperbarProps) => {
                             Abonnements
                         </TabsTrigger>
                     </TabsList>
-                </div>
+                </div> */}
                 <div className='w-full'>
                     <TabContent value='feed'>
                         <div className='hidden sm:block'>
