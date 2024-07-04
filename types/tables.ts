@@ -56,12 +56,12 @@ export interface User {
     projectIds?: string[];
     labels?: string[];
     media?: string;
-    first_name?: string;
-    lastName?: string;
+    name?: string;
+    last_name?: string;
     birth_date: Date;
-    localisation?: string;
-    gender?: string;
-    experience?: string;
+    location?: string;
+    sexe?: string;
+    bio?: string;
     available?: boolean;
     mobile?: string;
     allowEmails?: boolean;
@@ -71,6 +71,7 @@ export interface User {
     verificationTokenExpires?: Date;
     resetToken?: string;
     resetTokenExpires?: Date;
+    profil_picture?: string;
 }
 
 

@@ -49,7 +49,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ email, role }) => {
 			<Avatar>
 				<AvatarImage
 					src={user.media ?? ""}
-					alt={user.first_name ?? "Anonymous"}
+					alt={user.name ?? "Anonymous"}
 				/>
 				<AvatarFallback>
 					{user.email?.charAt(0).toUpperCase() || "A"}

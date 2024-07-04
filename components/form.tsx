@@ -90,14 +90,14 @@ export function Form({
 					</div>
 					<div>
 						<label
-							htmlFor="lastName"
+							htmlFor="last_name"
 							className="block text-xs textcolor"
 						>
 							Last Name
 						</label>
 						<input
-							id="lastName"
-							name="lastName"
+							id="last_name"
+							name="last_name"
 							type="text"
 							required
 							className="mt-1 block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-inputborder focus:outline-none focus:ring-black sm:text-sm"
@@ -167,15 +167,15 @@ export function Form({
 					</div>
 					<div>
 						<label
-							htmlFor="gender"
+							htmlFor="sexe"
 							className="block text-xs textcolor"
 						>
-							Gender
+							sexe
 						</label>
 						{/* can only choose male or female */}
 						<select
-							id="gender"
-							name="gender"
+							id="sexe"
+							name="sexe"
 							required
 							className="mt-1 block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-inputborder focus:outline-none focus:ring-black sm:text-sm"
 						>
@@ -185,21 +185,21 @@ export function Form({
 							<option value="female">Female</option>
 							<option value="male">Male</option>
 							<option value="hamster">
-								Want to be original by not saying his gender
+								Want to be original by not saying his sexe
 							</option>
 						</select>
 					</div>
 
 					<div>
 						<label
-							htmlFor="experience"
+							htmlFor="bio"
 							className="block text-xs textcolor"
 						>
-							Experience
+							bio
 						</label>
 						<input
-							id="experience"
-							name="experience"
+							id="bio"
+							name="bio"
 							type="number"
 							required
 							className="mt-1 block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-inputborder focus:outline-none focus:ring-black sm:text-sm"

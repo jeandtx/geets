@@ -27,6 +27,7 @@ import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { useSession } from "next-auth/react";
+import { CldUploadWidget } from "next-cloudinary";
 
 interface DatePickerDemoProps {
 	className?: string;
@@ -149,6 +150,36 @@ export default function UpdateProfil({ className, user }: UpdateProfilProps) {
 					/>
 				</div>
 				<div>
+					{/* <CldUploadWidget
+								uploadPreset="onrkam98"
+								onSuccess={(result) => {
+									setImageUrl((result as any).info.secure_url);
+									setImageName(
+										(result as any).info.original_filename
+									); // Update the image name
+								}}
+							>
+								{({ open }) => {
+									return (
+										<button
+											className="overflow-hidden inline-flex items-center justify-center rounded-md bg-primary px-6 py-3 text-base font-medium text-white"
+											style={{
+												height: "40px",
+												whiteSpace: "nowrap",
+												textOverflow: "ellipsis",
+												overflow: "hidden",
+											}}
+											type="button"
+											onClick={() => open()}
+										>
+											{imageName}
+										</button>
+									);
+								}}
+							</CldUploadWidget> */}
+
+				</div>
+				<div>
 					First name :
 					<Input
 						className={
@@ -159,11 +190,11 @@ export default function UpdateProfil({ className, user }: UpdateProfilProps) {
 						readOnly={!onEdit}
 						type="text"
 						name="name"
-						value={userEdited.first_name}
+						value={userEdited.name}
 						onChange={(e) =>
 							setUserEdited({
 								...userEdited,
-								first_name: e.target.value,
+								name: e.target.value,
 							})
 						}
 					/>
@@ -179,11 +210,11 @@ export default function UpdateProfil({ className, user }: UpdateProfilProps) {
 						readOnly={!onEdit}
 						type="text"
 						name="last_name"
-						value={userEdited.lastName}
+						value={userEdited.last_name}
 						onChange={(e) =>
 							setUserEdited({
 								...userEdited,
-								lastName: e.target.value,
+								last_name: e.target.value,
 							})
 						}
 					/>
@@ -210,15 +241,15 @@ export default function UpdateProfil({ className, user }: UpdateProfilProps) {
 					)}
 				</div>
 				<div>
-					Gender :
+					sexe :
 					{onEdit ? (
 						<Select
-							value={userEdited.gender ?? ""}
+							value={userEdited.sexe ?? ""}
 							aria-labelledby="sexe-select"
 							onValueChange={(value) =>
 								setUserEdited({
 									...userEdited,
-									gender: value ?? "Rather not say",
+									sexe: value ?? "Rather not say",
 								})
 							}
 						>
@@ -236,7 +267,7 @@ export default function UpdateProfil({ className, user }: UpdateProfilProps) {
 					) : (
 						<div>
 							<Select
-								value={userEdited.gender ?? "Rather not say"}
+								value={userEdited.sexe ?? "Rather not say"}
 								aria-labelledby="sexe-select"
 								disabled={!onEdit}
 							>
@@ -267,27 +298,27 @@ export default function UpdateProfil({ className, user }: UpdateProfilProps) {
 						readOnly={!onEdit}
 						type="text"
 						name="location"
-						value={userEdited.localisation}
+						value={userEdited.location}
 						onChange={(e) =>
 							setUserEdited({
 								...userEdited,
-								localisation: e.target.value,
+								location: e.target.value,
 							})
 						}
 					/>
 				</div>
 				<div>
-					Experience :<div className="h-[20px]"></div>
+					bio :<div className="h-[20px]"></div>
 					{onEdit ? (
 						<>
 							<Slider
 								max={10}
 								step={1}
-								value={[parseInt(userEdited.experience ?? "0")]}
+								value={[parseInt(userEdited.bio ?? "0")]}
 								onValueChange={(newValue) =>
 									setUserEdited({
 										...userEdited,
-										experience: newValue[0].toString(),
+										bio: newValue[0].toString(),
 									})
 								}
 							/>
@@ -296,7 +327,7 @@ export default function UpdateProfil({ className, user }: UpdateProfilProps) {
 						<Slider
 							max={10}
 							step={1}
-							value={[parseInt(userEdited.experience ?? "0")]}
+							value={[parseInt(userEdited.bio ?? "0")]}
 							disabled={!onEdit}
 						/>
 					)}

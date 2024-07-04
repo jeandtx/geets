@@ -16,15 +16,15 @@ export default function AdditionalInfo() {
 
 		const fields: Partial<User> = {
 			_id: user._id,
-			first_name: formData.get("firstName") as string,
-			lastName: formData.get("lastName") as string,
+			name: formData.get("firstName") as string,
+			last_name: formData.get("last_name") as string,
 			mobile: formData.get("mobile") as string,
 			pseudo: formData.get("pseudo") as string,
 			birth_date: new Date(formData.get("birthday") as string),
 			// age: parseInt(formData.get("age") as string),
-			localisation: formData.get("location") as string,
-			gender: formData.get("gender") as string,
-			experience: formData.get("experience") as string, // Convert to string before parsing
+			location: formData.get("location") as string,
+			sexe: formData.get("sexe") as string,
+			bio: formData.get("bio") as string, // Convert to string before parsing
 			available: formData.get("available") === "on",
 			allowEmails: formData.get("allowEmails") === "on",
 		};
