@@ -20,7 +20,7 @@ import {
     TooltipTrigger,
   } from "@/components/ui/tooltip"
 import { Trash } from 'lucide-react'
-import UserSearchComponent from '@/components/userSearchBar' // Assurez-vous que le chemin est correct
+import UserSearchComponent from '@/components/userSearchBar' 
 
 export default function NewProject() {
 
@@ -156,8 +156,12 @@ export default function NewProject() {
                         project.title +
                         ' a été créé avec succès',
                     variant: 'success',
+                    duration: 5000,
                 });
                 clearLocalStorage(); // Appel de la fonction pour vider le localStorage
+                setTimeout(() => {
+                    window.location.reload();
+                }, 800);
             })
             .catch(() => {
                 toast({
