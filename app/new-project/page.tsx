@@ -13,6 +13,12 @@ import LoadingSpinner from '@/components/ui/spinner'
 import { useIsClient } from '@uidotdev/usehooks'
 import { useSession } from 'next-auth/react'
 import Select from 'react-select'
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+  } from "@/components/ui/tooltip"
 
 export default function NewProject() {
 
@@ -235,79 +241,46 @@ export default function NewProject() {
                             value={description}
                             placeholder='Description'
                         />
-                        <Select
-                            isMulti 
-                            name='themes'
-                            className='rounded-md border border-input bg-background px-0 py-0 text-sm'
-                            options={themeOptions}
-                            placeholder="Thèmes"
-                            onChange={(selectedOptions) => setThemes(selectedOptions.map(option => option.value))}
-                            value={themeOptions.filter(option => themes.includes(option.value))}
-                            // overwrite the style of the select component by removing the default border 
-                            styles={{
-                                control: (provided) => ({
-                                ...provided,
-                                border: 'none',
-                                boxShadow: 'none', 
-                                padding: '0'
-                                }), 
-                                placeholder: (provided) => ({
+
+                        <div className='inline-flex justify-between'>
+                            <Select
+                                isMulti 
+                                name='themes'
+                                className='w-11/12 rounded-md border border-input bg-background px-0 py-0 text-sm'
+                                options={themeOptions}
+                                placeholder="Thèmes"
+                                onChange={(selectedOptions) => setThemes(selectedOptions.map(option => option.value))}
+                                value={themeOptions.filter(option => themes.includes(option.value))}
+                                // overwrite the style of the select component by removing the default border 
+                                styles={{
+                                    control: (provided) => ({
                                     ...provided,
-                                    color: 'rgb(108, 114, 127)'
-                                })
-                            }}
-                        />
-                        {/* Media Upload Section */}
-                        <CldUploadWidget
-                            uploadPreset='onrkam98'
-                            onSuccess={(result) => {
-                                setImageUrl((result as any).info.secure_url)
-                                setImageName(
-                                    (result as any).info.original_filename
-                                ) // Update the image name
-                            }}
-                        >
-                            {({ open }) => {
-                                return (
-                                    <button
-                                        className='overflow-hidden inline-flex items-center justify-center rounded-md bg-primary px-6 py-3 text-base font-medium text-white'
-                                        style={{
-                                            height: '40px',
-                                            whiteSpace: 'nowrap',
-                                            textOverflow: 'ellipsis',
-                                            overflow: 'hidden',
-                                        }}
-                                        type='button'
-                                        onClick={() => open()}
-                                    >
-                                        {imageName}
-                                    </button>
-                                )
-                            }}
-                        </CldUploadWidget>
-                        
-                        <Select
-                            isMulti 
-                            name='competences'
-                            className='rounded-md border border-input bg-background px-0 py-0 text-sm'
-                            options={labelOptions}
-                            placeholder="Compétences requises"
-                            onChange={(selectedOptions) => setLabels(selectedOptions.map(option => option.value))}
-                            value={labelOptions.filter(option => labels.includes(option.value))}
-                            // overwrite the style of the select component by removing the default border 
-                            styles={{
-                                control: (provided) => ({
-                                ...provided,
-                                border: 'none',
-                                boxShadow: 'none', 
-                                padding: '0'
-                                }), 
-                                placeholder: (provided) => ({
-                                    ...provided,
-                                    color: 'rgb(108, 114, 127)'
-                                })
-                            }}
-                        />
+                                    border: 'none',
+                                    boxShadow: 'none', 
+                                    padding: '0'
+                                    }), 
+                                    placeholder: (provided) => ({
+                                        ...provided,
+                                        color: 'rgb(108, 114, 127)'
+                                    })
+                                }}
+                            />
+
+                            <TooltipProvider>
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                    <button className='border rounded-full border-gray-200 inline-flex items-center justify-center px-2 py-1 w-7 hover:bg-slate-50'>
+                                        ❔
+                                    </button>       
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                            <div>
+                                                Renseigne les thèmes de ton projet !
+                                            </div>
+                                    </TooltipContent>
+                                </Tooltip>
+                            </TooltipProvider>
+                        </div>
 
                         <div className='flex space-x-2'>
                             <Input
@@ -352,6 +325,75 @@ export default function NewProject() {
                                     </Badge>
                                 ))}
                         </div>
+
+                        <div className='inline-flex justify-between'>
+                            <Select
+                                isMulti 
+                                name='competences'
+                                className='w-11/12 rounded-md border border-input bg-background px-0 py-0 text-sm'
+                                options={labelOptions}
+                                placeholder="Compétences requises"
+                                onChange={(selectedOptions) => setLabels(selectedOptions.map(option => option.value))}
+                                value={labelOptions.filter(option => labels.includes(option.value))}
+                                // overwrite the style of the select component by removing the default border 
+                                styles={{
+                                    control: (provided) => ({
+                                    ...provided,
+                                    border: 'none',
+                                    boxShadow: 'none', 
+                                    padding: '0'
+                                    }), 
+                                    placeholder: (provided) => ({
+                                        ...provided,
+                                        color: 'rgb(108, 114, 127)'
+                                    })
+                                }}
+                            />
+
+                            <TooltipProvider>
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                    <button className='border rounded-full border-gray-200 inline-flex items-center justify-center px-2 py-1 w-7 hover:bg-slate-50'>
+                                        ❔
+                                    </button>       
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                            <div>
+                                                Renseigne les compétences spécifiques que tu recherches pour donner vie à ton projet ! 
+                                            </div>
+                                    </TooltipContent>
+                                </Tooltip>
+                            </TooltipProvider>
+                        </div>
+
+                        {/* Media Upload Section */}
+                        <CldUploadWidget
+                            uploadPreset='onrkam98'
+                            onSuccess={(result) => {
+                                setImageUrl((result as any).info.secure_url)
+                                setImageName(
+                                    (result as any).info.original_filename
+                                ) // Update the image name
+                            }}
+                        >
+                            {({ open }) => {
+                                return (
+                                    <button
+                                        className='overflow-hidden inline-flex items-center justify-center rounded-md bg-primary px-6 py-3 text-base font-medium text-white'
+                                        style={{
+                                            height: '40px',
+                                            whiteSpace: 'nowrap',
+                                            textOverflow: 'ellipsis',
+                                            overflow: 'hidden',
+                                        }}
+                                        type='button'
+                                        onClick={() => open()}
+                                    >
+                                        {imageName}
+                                    </button>
+                                )
+                            }}
+                        </CldUploadWidget>
 
                         <form
                             onSubmit={handleSubmit}
