@@ -12,7 +12,6 @@ import { ObjectId } from 'mongodb';
  * @throws {Error} If the project have a missing field.
     */
 export async function createProject(project: Project) {
-    console.log('Project:', project);
     const client = await clientPromise;
     const db = client.db('geets');
 
@@ -89,21 +88,12 @@ export async function updateProject(project: Project) {
     }
 
     const projectId = new ObjectId(project._id); // Ensure _id is a valid ObjectId
-
-    // Build the update object dynamically based on the field that are already not null
-    const updateFields: Partial<Project> = {};
-    if (project.title !== undefined) updateFields.title = project.title;
-    if (project.themes !== undefined) updateFields.themes = project.themes;
-    if (project.description !== undefined) updateFields.description = project.description;
-    if (project.media !== undefined) updateFields.media = project.media;
-    if (project.labels !== undefined) updateFields.labels = project.labels;
-
-    // If there are no fields to update, throw an error
-    if (Object.keys(updateFields).length === 0) {
-        throw new Error('No fields to update.');
+    let projectWithoutObjectId = {
+        ...project,
+        _id: project._id ? new ObjectId(project._id) : undefined
     }
-
-    const result = await db.collection('projects').updateOne({ _id: projectId }, { $set: updateFields });
+    delete projectWithoutObjectId._id
+    const result = await db.collection('projects').updateOne({ _id: projectId }, { $set: projectWithoutObjectId });
 
     const data = JSON.parse(JSON.stringify(result)); // Remove ObjectID (not serializable)
     return data;
@@ -135,24 +125,35 @@ export async function deleteProject(projectId: string) {
  * @returns {Promise<Project[]>} A promise that resolves to the matched projects.
  */
 export async function searchProjects(searchTerm: string): Promise<Project[]> {
+    
+
     const client = await clientPromise;
+    
+
     const db = client.db('geets');
+    
 
-    const searchResults = await db.collection('projects').aggregate([
-        {
-            $search: {
-                index: 'autocompleteIndex',
-                autocomplete: {
-                    query: searchTerm,
-                    path: 'title',
-                    tokenOrder: 'any'
+    try {
+        const searchResults = await db.collection('projects').aggregate([
+            {
+                $search: {
+                    index: 'autocompleteIndex',
+                    autocomplete: {
+                        query: searchTerm,
+                        path: 'title',
+                        tokenOrder: 'any'
+                    }
                 }
+            },
+            {
+                $limit: 10
             }
-        },
-        {
-            $limit: 10
-        }
-    ]).toArray();
+        ]).toArray();
 
-    return JSON.parse(JSON.stringify(searchResults)); // Remove ObjectID (not serializable)
+
+        return JSON.parse(JSON.stringify(searchResults)); // Remove ObjectID (not serializable)
+    } catch (error) {
+        console.error("Error during aggregation:", error);
+        throw error;
+    }
 }

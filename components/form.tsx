@@ -17,14 +17,14 @@ export function Form({
 			.catch(() => {
 				toast({
 					variant: "destructive",
-					title: "Uh oh! Something went wrong.",
-					description: "Title, hook and themes are required.",
+					title: "Uh oh! Un problème est survenu",
+					description: "Un titre, un hook et un thème sont requis.",
 				});
 			})
 			.finally(() => {
 				toast({
-					title: "Success!",
-					description: "Your form has been submitted.",
+					title: "Succès",
+					description: "Votre formulaire a été soumis",
 					variant: "success",
 				});
 			});
@@ -35,15 +35,14 @@ export function Form({
 			action={handleSubmit}
 			className="flex flex-col space-y-4 px-4 py-1 pb-20 sm:px-16"
 		>
-			{/* if fillInformationForm is false display the div */}
 			{!fillInformationForm ? (
-				<div>
+				<div className="space-y-2">
 					<div>
 						<label
 							htmlFor="email"
 							className="block text-xs textcolor"
 						>
-							Email Address
+							Adresse e-mail
 						</label>
 						<input
 							id="email"
@@ -52,7 +51,7 @@ export function Form({
 							placeholder="user@acme.com"
 							autoComplete="email"
 							required
-							className="mt-1 block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-inputborder focus:outline-none focus:ring-black sm:text-sm"
+							className="mt-1 block w-full appearance-none rounded-md custom-border px-3 py-2 placeholder-gray-400 shadow-sm focus:border-inputborder focus:outline-none focus:ring-black sm:text-sm"
 						/>
 					</div>
 					<div>
@@ -60,7 +59,7 @@ export function Form({
 							htmlFor="password"
 							className="block text-xs textcolor"
 						>
-							Your Password
+							Mot de passe
 						</label>
 						<input
 							id="password"
@@ -72,13 +71,13 @@ export function Form({
 					</div>
 				</div>
 			) : (
-				<div>
+				<div className="space-y-2">
 					<div>
 						<label
 							htmlFor="firstName"
 							className="block text-xs textcolor"
 						>
-							First Name
+							Prénom
 						</label>
 						<input
 							id="firstName"
@@ -90,14 +89,14 @@ export function Form({
 					</div>
 					<div>
 						<label
-							htmlFor="last_name"
+							htmlFor="lastName"
 							className="block text-xs textcolor"
 						>
-							Last Name
+							Nom de famille
 						</label>
 						<input
-							id="last_name"
-							name="last_name"
+							id="lastName"
+							name="lastName"
 							type="text"
 							required
 							className="mt-1 block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-inputborder focus:outline-none focus:ring-black sm:text-sm"
@@ -118,13 +117,12 @@ export function Form({
 							className="mt-1 block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-inputborder focus:outline-none focus:ring-black sm:text-sm"
 						/>
 					</div>
-					{/* birthday div */}
 					<div>
 						<label
 							htmlFor="birthday"
 							className="block text-xs textcolor"
 						>
-							Birthday
+							Date de naissance
 						</label>
 						<input
 							id="birthday"
@@ -134,28 +132,12 @@ export function Form({
 							className="mt-1 block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-inputborder focus:outline-none focus:ring-black sm:text-sm"
 						/>
 					</div>
-
-					{/* <div>
-						<label
-							htmlFor="age"
-							className="block text-xs textcolor"
-						>
-							Age
-						</label>
-						<input
-							id="age"
-							name="age"
-							type="number"
-							required
-							className="mt-1 block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-inputborder focus:outline-none focus:ring-black sm:text-sm"
-						/>
-					</div> */}
 					<div>
 						<label
 							htmlFor="location"
 							className="block text-xs textcolor"
 						>
-							Location
+							Localisation
 						</label>
 						<input
 							id="location"
@@ -167,39 +149,36 @@ export function Form({
 					</div>
 					<div>
 						<label
-							htmlFor="sexe"
+							htmlFor="gender"
 							className="block text-xs textcolor"
 						>
-							sexe
+							Genre
 						</label>
-						{/* can only choose male or female */}
 						<select
-							id="sexe"
-							name="sexe"
+							id="gender"
+							name="gender"
 							required
 							className="mt-1 block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-inputborder focus:outline-none focus:ring-black sm:text-sm"
 						>
 							<option value="">
-								--Please choose an option--
+								--Veuillez choisir une option--
 							</option>
-							<option value="female">Female</option>
-							<option value="male">Male</option>
-							<option value="hamster">
-								Want to be original by not saying his sexe
-							</option>
+							<option value="female">Femme</option>
+							<option value="male">Homme</option>
+							<option value="hamster">Confidentiel</option>
 						</select>
 					</div>
 
 					<div>
 						<label
-							htmlFor="bio"
+							htmlFor="experience"
 							className="block text-xs textcolor"
 						>
-							bio
+							Expériences
 						</label>
 						<input
-							id="bio"
-							name="bio"
+							id="experience"
+							name="experience"
 							type="number"
 							required
 							className="mt-1 block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-inputborder focus:outline-none focus:ring-black sm:text-sm"
@@ -210,9 +189,8 @@ export function Form({
 							htmlFor="available"
 							className="block text-xs textcolor"
 						>
-							Available
+							Disponible
 						</label>
-						{/* can only choose male or female */}
 						<select
 							id="available"
 							name="available"
@@ -220,11 +198,11 @@ export function Form({
 							className="mt-1 block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-inputborder focus:outline-none focus:ring-black sm:text-sm"
 						>
 							<option value="">
-								--Please choose an option--
+								--Veuillez choisir une option--
 							</option>
-							<option value="yes">Yes</option>
-							<option value="no">No</option>
-							<option value="maybe">Maybe</option>
+							<option value="yes">Oui</option>
+							<option value="no">Non</option>
+							<option value="maybe">Peut-être</option>
 						</select>
 					</div>
 
@@ -248,9 +226,8 @@ export function Form({
 							htmlFor="allowEmails"
 							className="block text-xs textcolor"
 						>
-							Allow Emails
+							Autoriser les e-mails
 						</label>
-						{/* can only choose male or female */}
 						<select
 							id="allowEmails"
 							name="allowEmails"
@@ -258,10 +235,10 @@ export function Form({
 							className="mt-1 block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-inputborder focus:outline-none focus:ring-black sm:text-sm"
 						>
 							<option value="">
-								--Please choose an option--
+								--Veuillez choisir une option--
 							</option>
-							<option value="yes">Yes</option>
-							<option value="no">No</option>
+							<option value="yes">Oui</option>
+							<option value="no">Non</option>
 						</select>
 					</div>
 				</div>

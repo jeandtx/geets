@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { Form } from "@/components/form";
-import { redirect } from "next/navigation";
 import { createUser, getUser } from "@/app/db";
 import { signIn } from "@/app/auth";
 import { SubmitButton } from "@/components/ui/submit-button";
@@ -10,11 +9,9 @@ import { sendEmail } from "@/lib/mailer";
 export default function Login() {
 	async function register(formData: FormData) {
 		"use server";
-		console.log("Registering user");
 		let email = formData.get("email") as string;
 		let password = formData.get("password") as string;
 		let user = await getUser(email);
-		console.log("User: ", user);
 
 		if (user) {
 			console.log("User already exists");
@@ -32,14 +29,15 @@ export default function Login() {
 				verificationToken,
 				verificationTokenExpires
 			);
-			console.log("User created");
-
-			await sendEmail({
-				email,
-				emailType: "verify",
-				userId: result.insertedId,
-			});
-
+			try {
+				await sendEmail({
+					email,
+					emailType: "verify",
+					userId: result.insertedId,
+				});
+			} catch (error: any) {
+				console.error("Error sending email:", error.message);
+			}
 			// Automatically sign in the user after successful registration
 			await signIn("credentials", {
 				redirectTo: "/fill-information",
@@ -50,25 +48,32 @@ export default function Login() {
 	}
 
 	return (
-		<div className="flex h-full w-full items-center justify-center bg-gray-50">
-			<div className="z-10 w-full max-w-md overflow-hidden rounded-2xl border border-gray-100 shadow-xl">
-				<div className="flex flex-col items-center justify-center space-y-3 border-b border-gray-200 bg-white px-4 py-6 pt-8 text-center sm:px-16">
-					<h3 className="text-xl font-semibold">Sign Up</h3>
+		<div className="flex w-full items-center justify-center">
+			<div className="z-10 w-full max-w-md overflow-hidden rounded-xl custom-border bg-white">
+				<div className="flex flex-col items-center justify-center space-y-3 px-4 py-6 pt-8 text-center sm:px-16	">
+					<h3 className="text-xl font-semibold">S&apos;inscire</h3>
 					<div className="text-sm text-gray-500">
-						Create an account with your email and password
+						Rejoignez notre plateforme et découvrez de nouveaux
+						projets
 					</div>
 				</div>
 				<Form action={register}>
-					<SubmitButton>Sign Up</SubmitButton>
-					<div className="text-center text-sm text-gray-600">
-						{"Already have an account? "}
+					<SubmitButton
+						style={{
+							backgroundColor: "rgb(58, 93, 240)",
+							color: "white",
+						}}
+					>
+						S&apos;inscire
+					</SubmitButton>
+					<div className="text-center text-xs text-gray-500">
+						{"Vous avez déjà un compte ? "}
 						<Link
 							href="/fill-information"
-							className="font-semibold text-gray-800"
+							className="font-semibold text-textblue"
 						>
-							Sign in
+							Connectez-vous
 						</Link>
-						{" instead."}
 					</div>
 				</Form>
 			</div>

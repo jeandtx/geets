@@ -3,12 +3,13 @@ import React from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
-	SquareKanban,
+	List,
 	BookHeart,
-	PersonStanding,
-	SquareMousePointer,
+	CircleUser,
+	SquarePlus,
 } from "lucide-react";
 import { useUserInfo } from "@/app/context/UserInfoContext";
+import { InputPost } from "./inputpost";
 export function Navbar() {
 	const { userInfo } = useUserInfo();
 
@@ -32,17 +33,20 @@ export function Navbar() {
 							className="h-15 w-15 flex flex-col items-center"
 						>
 							<span className="text-sm">
-								<SquareKanban />
+								<List />
 							</span>
 						</Button>
 					</Link>
+					<div className="relative">
+						<InputPost />
+					</div>
 					<Link href={`/${userInfo?.email}`}>
 						<Button
 							variant="ghost"
 							className="h-15 w-15 flex flex-col items-center"
 						>
 							<span className="text-sm">
-								<PersonStanding />
+								<CircleUser />
 							</span>
 						</Button>
 					</Link>
@@ -52,7 +56,7 @@ export function Navbar() {
 							className="h-15 w-15 flex flex-col items-center"
 						>
 							<span className="text-sm">
-								<SquareMousePointer />
+								<SquarePlus />
 							</span>
 						</Button>
 					</Link>

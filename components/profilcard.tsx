@@ -30,7 +30,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ email, role }) => {
 				<Avatar>
 					<AvatarImage
 						src="https://avatars.githubusercontent.com/u/124599?v=4"
-						alt="Anonymous"
+						alt="Anonyme"
 					/>
 					<AvatarFallback>
 						{email.charAt(0).toUpperCase()}
@@ -49,7 +49,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ email, role }) => {
 			<Avatar>
 				<AvatarImage
 					src={user.media ?? ""}
-					alt={user.name ?? "Anonymous"}
+					alt={user.first_name ?? "Anonyme"}
 				/>
 				<AvatarFallback>
 					{user.email?.charAt(0).toUpperCase() || "A"}
@@ -57,7 +57,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ email, role }) => {
 			</Avatar>
 			<div className="ml-4">
 				<div className="text-xl font-bold">
-					{user.email || "Anonymous"}
+					{user.email || "Anonyme"}
 				</div>
 				<div className="text-sm text-gray-500">{role}</div>
 			</div>

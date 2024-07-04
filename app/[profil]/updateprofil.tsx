@@ -27,7 +27,6 @@ import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { useSession } from "next-auth/react";
-import { CldUploadWidget } from "next-cloudinary";
 
 interface DatePickerDemoProps {
 	className?: string;
@@ -64,7 +63,11 @@ export function DatePickerDemo({
 					)}
 				>
 					<CalendarIcon className="mr-2 h-4 w-4" />
-					{value ? format(value, "PPP") : <span>Pick a date</span>}
+					{value ? (
+						format(value, "PPP")
+					) : (
+						<span>Choisissez une date</span>
+					)}
 				</Button>
 			</PopoverTrigger>
 			<PopoverContent className="w-auto p-0">
@@ -93,15 +96,13 @@ export default function UpdateProfil({ className, user }: UpdateProfilProps) {
 
 	const handleSubmit = (e: any) => {
 		e.preventDefault();
-		console.log("user : ", userEdited);
 		updateUser(userEdited);
 	};
-	console.log(userSession, user.email);
 
 	if (!userSession) {
 		return (
 			<div className="flex justify-center items-center h-[80vh] w-full text-2xl font-bold text-center text-gray-500">
-				Loading …
+				Chargement…
 			</div>
 		);
 	}
@@ -150,37 +151,7 @@ export default function UpdateProfil({ className, user }: UpdateProfilProps) {
 					/>
 				</div>
 				<div>
-					{/* <CldUploadWidget
-								uploadPreset="onrkam98"
-								onSuccess={(result) => {
-									setImageUrl((result as any).info.secure_url);
-									setImageName(
-										(result as any).info.original_filename
-									); // Update the image name
-								}}
-							>
-								{({ open }) => {
-									return (
-										<button
-											className="overflow-hidden inline-flex items-center justify-center rounded-md bg-primary px-6 py-3 text-base font-medium text-white"
-											style={{
-												height: "40px",
-												whiteSpace: "nowrap",
-												textOverflow: "ellipsis",
-												overflow: "hidden",
-											}}
-											type="button"
-											onClick={() => open()}
-										>
-											{imageName}
-										</button>
-									);
-								}}
-							</CldUploadWidget> */}
-
-				</div>
-				<div>
-					First name :
+					Prénom :
 					<Input
 						className={
 							onEdit
@@ -190,17 +161,17 @@ export default function UpdateProfil({ className, user }: UpdateProfilProps) {
 						readOnly={!onEdit}
 						type="text"
 						name="name"
-						value={userEdited.name}
+						value={userEdited.first_name}
 						onChange={(e) =>
 							setUserEdited({
 								...userEdited,
-								name: e.target.value,
+								first_name: e.target.value,
 							})
 						}
 					/>
 				</div>
 				<div>
-					Last name :
+					Nom de famille :
 					<Input
 						className={
 							onEdit
@@ -210,17 +181,17 @@ export default function UpdateProfil({ className, user }: UpdateProfilProps) {
 						readOnly={!onEdit}
 						type="text"
 						name="last_name"
-						value={userEdited.last_name}
+						value={userEdited.lastName}
 						onChange={(e) =>
 							setUserEdited({
 								...userEdited,
-								last_name: e.target.value,
+								lastName: e.target.value,
 							})
 						}
 					/>
 				</div>
 				<div>
-					Birth date:
+					Date de naissance :
 					{onEdit ? (
 						<DatePickerDemo
 							className="bg-green-200"
@@ -241,15 +212,15 @@ export default function UpdateProfil({ className, user }: UpdateProfilProps) {
 					)}
 				</div>
 				<div>
-					sexe :
+					Genre :
 					{onEdit ? (
 						<Select
-							value={userEdited.sexe ?? ""}
+							value={userEdited.gender ?? ""}
 							aria-labelledby="sexe-select"
 							onValueChange={(value) =>
 								setUserEdited({
 									...userEdited,
-									sexe: value ?? "Rather not say",
+									gender: value ?? "Rather not say",
 								})
 							}
 						>
@@ -257,30 +228,30 @@ export default function UpdateProfil({ className, user }: UpdateProfilProps) {
 								<SelectValue placeholder="Sexe" />
 							</SelectTrigger>
 							<SelectContent>
-								<SelectItem value="Male">Male</SelectItem>
-								<SelectItem value="Female">Female</SelectItem>
+								<SelectItem value="Male">Homme</SelectItem>
+								<SelectItem value="Female">Femme</SelectItem>
 								<SelectItem value="Rather not say">
-									Rather not say
+									Confidentiel
 								</SelectItem>
 							</SelectContent>
 						</Select>
 					) : (
 						<div>
 							<Select
-								value={userEdited.sexe ?? "Rather not say"}
+								value={userEdited.gender ?? "Confidentiel"}
 								aria-labelledby="sexe-select"
 								disabled={!onEdit}
 							>
 								<SelectTrigger className="w-[180px]">
-									<SelectValue placeholder="Rather not say" />
+									<SelectValue placeholder="Confidentiel" />
 								</SelectTrigger>
 								<SelectContent>
-									<SelectItem value="Male">Male</SelectItem>
+									<SelectItem value="Male">Homme</SelectItem>
 									<SelectItem value="Female">
-										Female
+										Femme
 									</SelectItem>
 									<SelectItem value="Rather not say">
-										Rather not say
+										Confidentiel
 									</SelectItem>
 								</SelectContent>
 							</Select>
@@ -298,36 +269,34 @@ export default function UpdateProfil({ className, user }: UpdateProfilProps) {
 						readOnly={!onEdit}
 						type="text"
 						name="location"
-						value={userEdited.location}
+						value={userEdited.localisation}
 						onChange={(e) =>
 							setUserEdited({
 								...userEdited,
-								location: e.target.value,
+								localisation: e.target.value,
 							})
 						}
 					/>
 				</div>
 				<div>
-					bio :<div className="h-[20px]"></div>
+					Experience :<div className="h-[20px]"></div>
 					{onEdit ? (
-						<>
-							<Slider
-								max={10}
-								step={1}
-								value={[parseInt(userEdited.bio ?? "0")]}
-								onValueChange={(newValue) =>
-									setUserEdited({
-										...userEdited,
-										bio: newValue[0].toString(),
-									})
-								}
-							/>
-						</>
+						<Slider
+							max={10}
+							step={1}
+							value={[parseInt(userEdited.experience ?? "0")]}
+							onValueChange={(newValue) =>
+								setUserEdited({
+									...userEdited,
+									experience: newValue[0].toString(),
+								})
+							}
+						/>
 					) : (
 						<Slider
 							max={10}
 							step={1}
-							value={[parseInt(userEdited.bio ?? "0")]}
+							value={[parseInt(userEdited.experience ?? "0")]}
 							disabled={!onEdit}
 						/>
 					)}
@@ -335,36 +304,32 @@ export default function UpdateProfil({ className, user }: UpdateProfilProps) {
 				<div>
 					Available :<div className="h-[20px]"></div>
 					{onEdit ? (
-						<>
-							<div className="flex items-center space-x-2">
-								<Switch
-									id="join-projects"
-									checked={userEdited.available}
-									onCheckedChange={() =>
-										setUserEdited({
-											...userEdited,
-											available: !userEdited.available,
-										})
-									}
-								/>
-								<Label htmlFor="join-projects">
-									I want to join other projects{" "}
-								</Label>
-							</div>
-						</>
+						<div className="flex items-center space-x-2">
+							<Switch
+								id="join-projects"
+								checked={userEdited.available}
+								onCheckedChange={() =>
+									setUserEdited({
+										...userEdited,
+										available: !userEdited.available,
+									})
+								}
+							/>
+							<Label htmlFor="join-projects">
+								Je veux rejoindre d&apos;autres projets{" "}
+							</Label>
+						</div>
 					) : (
-						<>
-							<div className="flex items-center space-x-2">
-								<Switch
-									id="join-projects"
-									disabled={true}
-									checked={userEdited.available}
-								/>
-								<Label htmlFor="join-projects">
-									I want to join other projects{" "}
-								</Label>
-							</div>
-						</>
+						<div className="flex items-center space-x-2">
+							<Switch
+								id="join-projects"
+								disabled={true}
+								checked={userEdited.available}
+							/>
+							<Label htmlFor="join-projects">
+								Je veux rejoindre d&apos;autres projets{" "}
+							</Label>
+						</div>
 					)}
 				</div>
 				{userSession === user.email && (

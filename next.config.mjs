@@ -31,6 +31,10 @@ const nextConfig = {
             {
                 protocol: 'https',
                 hostname: 'cloudflare-ipfs.com',
+            },
+            {
+                protocol: 'https',
+                hostname: 'picsum.photos',
             }
         ],
     },

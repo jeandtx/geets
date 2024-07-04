@@ -8,11 +8,7 @@ export interface Interaction {
         postId: string;
         postContent: string;
     };
-    comment?: {
-        postId: string;
-        commentId: string;
-        content: string;
-    };
+    comment?: Comment;
     follow?: {
         followerId: string;
         followerName: string;
@@ -27,6 +23,14 @@ export interface Interaction {
     };
     read?: boolean;
     to: string;
+}
+
+export interface Comment {
+    author: string;
+    pseudo?: string;
+    postId: string;
+    content: string;
+    time: Date;
 }
 
 
@@ -46,6 +50,8 @@ export interface Post {
     };
     media?: string;
     labels?: string[];
+    score?: number;
+    comments?: Comment[];
 }
 
 export interface User {
@@ -56,12 +62,12 @@ export interface User {
     projectIds?: string[];
     labels?: string[];
     media?: string;
-    name?: string;
-    last_name?: string;
+    first_name?: string;
+    lastName?: string;
     birth_date: Date;
-    location?: string;
-    sexe?: string;
-    bio?: string;
+    localisation?: string;
+    gender?: string;
+    experience?: string;
     available?: boolean;
     mobile?: string;
     allowEmails?: boolean;
@@ -71,7 +77,6 @@ export interface User {
     verificationTokenExpires?: Date;
     resetToken?: string;
     resetTokenExpires?: Date;
-    profil_picture?: string;
 }
 
 

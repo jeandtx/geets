@@ -21,13 +21,14 @@ export async function getUser(email: string) {
     return data
 }
 
+
+
 /**
  * Retrieves a user with the id from the database.
  * @param {string} id - The id of the user to retrieve.
  * @returns {Promise<User>} A promise that resolves to the user.
  */
 export async function getUserById(id: string) {
-    console.log('id', id)
     const client = await clientPromise
     const db = client.db('geets')
     const user = await db.collection('users').findOne({
@@ -35,6 +36,27 @@ export async function getUserById(id: string) {
     })
     const data: User = JSON.parse(JSON.stringify(user)) // Remove ObjectID (not serializable)
     return data
+}
+
+/**
+ * Retrieves a user email from the database thanks to his pseudo.
+ * @param {string} pseudo - The pseudo of the user to retrieve.
+ * @returns {Promise<string>} A promise that resolves to the user.
+ */
+export async function getEmailByPseudo(pseudo: string) {
+    const client = await clientPromise
+    const db = client.db('geets')
+    // check if the pseudo is in the database
+    const user = await db.collection('users').findOne({
+        pseudo
+    })
+    // if the pseudo is in the database, return the email
+    if (user) {
+        return user.email
+    }
+    // else return null
+    return null
+
 }
 
 /** 
@@ -72,7 +94,6 @@ export async function findOne(query: any) {
  * @returns {Promise<NextResponse>} A promise that resolves to the response indicating the result.
  */
 export async function verifyEmail(token: string): Promise<NextResponse> {
-    console.log('helloworld', token);
     try {
         const user = await findOne({ verificationToken: token, verificationTokenExpires: { $gt: new Date() } });
 
@@ -80,14 +101,12 @@ export async function verifyEmail(token: string): Promise<NextResponse> {
             throw new Error('User not found or invalid/expired token');
         }
 
-        console.log('user', user);
 
         user.emailVerified = true;
         user.verificationToken = undefined;
         user.verificationTokenExpires = undefined;
 
         const updatedUser = await updateUser(user);
-        console.log('updatedUser', updatedUser);
 
         await sendEmail({ email: user.email, emailType: 'verify', userId: user._id });
 
@@ -96,5 +115,45 @@ export async function verifyEmail(token: string): Promise<NextResponse> {
     } catch (error: any) {
         console.error('Error verifying email:', error.message);
         return NextResponse.json({ message: error.message, success: false });
+    }
+}
+
+
+/**
+ * Searches for users using Atlas Search.
+ * @param {string} searchTerm - The search term for the user.
+ * @returns {Promise<User[]>} A promise that resolves to the matched users.
+ */
+export async function searchUsers(searchTerm: string): Promise<User[]> {
+    
+
+    const client = await clientPromise;
+    
+
+    const db = client.db('geets');
+    
+
+    try {
+        const searchResults = await db.collection('users').aggregate([
+            {
+                $search: {
+                    index: 'SearchUser',
+                    autocomplete: {
+                        query: searchTerm,
+                        path: 'pseudo',
+                        tokenOrder: 'any'
+                    }
+                }
+            },
+            {
+                $limit: 10
+            }
+        ]).toArray();
+
+
+        return JSON.parse(JSON.stringify(searchResults)); // Remove ObjectID (not serializable)
+    } catch (error) {
+        console.error("Error during aggregation:", error);
+        throw error;
     }
 }

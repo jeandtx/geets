@@ -8,7 +8,6 @@ import { auth } from "../auth";
 export default function AdditionalInfo() {
 	async function saveAdditionalInfo(formData: FormData) {
 		"use server";
-		console.log("Saving additional information");
 		const session = await auth();
 		const userEmail = session?.user?.email;
 
@@ -16,15 +15,15 @@ export default function AdditionalInfo() {
 
 		const fields: Partial<User> = {
 			_id: user._id,
-			name: formData.get("firstName") as string,
-			last_name: formData.get("last_name") as string,
+			first_name: formData.get("firstName") as string,
+			lastName: formData.get("lastName") as string,
 			mobile: formData.get("mobile") as string,
 			pseudo: formData.get("pseudo") as string,
 			birth_date: new Date(formData.get("birthday") as string),
 			// age: parseInt(formData.get("age") as string),
-			location: formData.get("location") as string,
-			sexe: formData.get("sexe") as string,
-			bio: formData.get("bio") as string, // Convert to string before parsing
+			localisation: formData.get("location") as string,
+			gender: formData.get("gender") as string,
+			experience: formData.get("experience") as string, // Convert to string before parsing
 			available: formData.get("available") === "on",
 			allowEmails: formData.get("allowEmails") === "on",
 		};
@@ -35,19 +34,21 @@ export default function AdditionalInfo() {
 
 	return (
 		<div className="flex h-full w-full items-center justify-center bg-gray-50">
-			<div className="z-10 w-full max-w-md overflow-hidden rounded-2xl border border-gray-100 shadow-xl">
-				<div className="flex flex-col items-center justify-center space-y-3 border-b border-gray-200 bg-white px-4 py-6 pt-8 text-center sm:px-16">
+			<div className="z-10 w-full max-w-md overflow-hidden rounded-xl custom-border shadow-xl">
+				<div className="flex flex-col items-center justify-center space-y-3 custom-border bg-white px-4 py-6 pt-8 text-center sm:px-16">
 					<h3 className="text-xl font-semibold">
-						Additional Information
+						Informations supplémentaires
 					</h3>
 					<div className="text-sm text-gray-500">
-						Please provide additional information to complete your
-						profile
+						Veuillez fournir des informations supplémentaires pour
+						compléter votre profil
 					</div>
 				</div>
 				<Form action={saveAdditionalInfo} fillInformationForm={true}>
 					<div className="px-4 py-6 sm:px-16 space-y-4">
-						<SubmitButton>Save and Continue</SubmitButton>
+						<SubmitButton>
+							Enregistrer les informations
+						</SubmitButton>
 					</div>
 				</Form>
 			</div>

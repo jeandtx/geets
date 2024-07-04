@@ -11,7 +11,6 @@ import { ObjectId } from 'mongodb'
  * @throws {Error} If the post have a missing field.
  */
 export async function createPost(post: Post) {
-    console.log('Post:', post)
     const client = await clientPromise
     const db = client.db('geets')
     if (!post.media) {
@@ -37,8 +36,22 @@ export async function getPosts(page: number = 1, query: any | Partial<Post> = {}
         offset = 0
         postsPerPage = 100
     }
-    const posts = await db.collection('posts').find(query).sort({ time: -1 }).skip(offset).limit(postsPerPage).toArray()
+    const posts = await db.collection('posts').find(query).sort({ score: -1, time: -1 }).skip(offset).limit(postsPerPage).toArray()
     const data: Post[] = JSON.parse(JSON.stringify(posts)) // Remove ObjectID (not serializable)
+    return data
+}
 
+/**
+ * Update a post in the database based on its ID.
+ * @param {string} postId - The ID of the post to update.
+ * @param {Partial<Post>} post - The fields to update.
+ * @returns {Promise<any>} A promise that resolves to the updated post.
+ * @throws {Error} If the post have a missing field.
+ */
+export async function updatePost(postId: string, post: Partial<Post>) {
+    const client = await clientPromise
+    const db = client.db('geets')
+    const result = await db.collection('posts').updateOne({ _id: new ObjectId(postId) }, { $set: post })
+    const data = JSON.parse(JSON.stringify(result)) // Remove ObjectID (not serializable)
     return data
 }

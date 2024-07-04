@@ -19,8 +19,8 @@ export function ProjectCard({
 	const handleDelete = async (projectId: string) => {
 		deleteProject(projectId);
 		toast({
-			title: "Success!",
-			description: "Your project has been deleted.",
+			title: "Succès",
+			description: "Votre projet a été supprimé.",
 			variant: "success",
 		});
 	};
@@ -28,7 +28,7 @@ export function ProjectCard({
 	return (
 		<div
 			className={cn(
-				"flex max-w-xl overflow-hidden rounded-xl border border-slate-200 bg-white",
+				"flex max-w-xl overflow-hidden rounded-xl custom-border bg-white",
 				className
 			)}
 		>
@@ -44,14 +44,14 @@ export function ProjectCard({
 							{project.description}
 						</p>
 					</div>
-					<Button
-						variant={"destructive"}
-						onClick={() => {
-							handleDelete(project._id);
-						}}
-					>
-						Delete
-					</Button>
+					{/* <Button
+                        variant={'destructive'}
+                        onClick={() => {
+                            handleDelete(project._id)
+                        }}
+                    >
+                        Supprimer
+                    </Button> */}
 				</div>
 			</div>
 		</div>
