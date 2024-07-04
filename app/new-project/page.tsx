@@ -367,33 +367,35 @@ export default function NewProject() {
                         </div>
 
                         {/* Media Upload Section */}
-                        <CldUploadWidget
-                            uploadPreset='onrkam98'
-                            onSuccess={(result) => {
-                                setImageUrl((result as any).info.secure_url)
-                                setImageName(
-                                    (result as any).info.original_filename
-                                ) // Update the image name
-                            }}
-                        >
-                            {({ open }) => {
-                                return (
-                                    <button
-                                        className='overflow-hidden inline-flex items-center justify-center rounded-md bg-primary px-6 py-3 text-base font-medium text-white'
-                                        style={{
-                                            height: '40px',
-                                            whiteSpace: 'nowrap',
-                                            textOverflow: 'ellipsis',
-                                            overflow: 'hidden',
-                                        }}
-                                        type='button'
-                                        onClick={() => open()}
-                                    >
-                                        {imageName}
-                                    </button>
-                                )
-                            }}
-                        </CldUploadWidget>
+                        <div className='flex items-center justify-center'>
+                            <CldUploadWidget
+                                uploadPreset='onrkam98'
+                                onSuccess={(result) => {
+                                    setImageUrl((result as any).info.secure_url)
+                                    setImageName(
+                                        (result as any).info.original_filename
+                                    ) // Update the image name
+                                }}
+                            >
+                                {({ open }) => {
+                                    return (
+                                        <button
+                                            className='w-1/3 overflow-hidden inline-flex items-center justify-center border border-input bg-background rounded-md px-6 py-3 text-sm font-medium hover:bg-slate-50'
+                                            style={{
+                                                height: '40px',
+                                                whiteSpace: 'nowrap',
+                                                textOverflow: 'ellipsis',
+                                                overflow: 'hidden',
+                                            }}
+                                            type='button'
+                                            onClick={() => open()}
+                                        >
+                                            <div className='p-1'>📥</div>{imageName}
+                                        </button>
+                                    )
+                                }}
+                            </CldUploadWidget>
+                        </div>
 
                         <form
                             onSubmit={handleSubmit}
