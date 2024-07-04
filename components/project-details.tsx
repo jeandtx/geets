@@ -129,7 +129,7 @@ export default function ProjectDetails({
                                 </div>
                             )}
                         </div>
-                        <div className='py-5'>
+                        <div className='sm:hidden py-5'>
                                     <Button
                                         onClick={() =>
                                             handleAddParticipant(
