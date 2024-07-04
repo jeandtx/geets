@@ -14,8 +14,8 @@ export default function Home() {
 					<UpperBar />
 				</div>
 			</div>
-			<div className="sm:block w-0 sm:w-1/4 sm:min-w-48 space-y-5 sm:pl-5 flex flex-col ">
-				<div className="hidden lg:block px-3 rounded-xl custom-border bg-white h-[300px] items-start pt-4	 justify-center">
+			<div className="sm:block w-0 sm:w-1/4 sm:min-w-48 space-y-5 sm:pl-5 flex flex-col">
+				<div className="hidden lg:block px-3 rounded-xl custom-border bg-white h-[300px] items-start pt-4 justify-center overflow-hidden">
 					<div className="">
 						<SearchComponent />
 					</div>
