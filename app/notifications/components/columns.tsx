@@ -3,7 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 
 import { Badge } from "@/components/ui/badge";
-// import { Checkbox } from "@/components/ui/checkbox";
+import Link from "next/link";
 import Img from "next/image";
 import { types } from "../data/data";
 import { DataTableColumnHeader } from "./data-table-column-header";
@@ -13,32 +13,6 @@ import Read from "./read";
 import HandleInvitation from "./handleInvitation";
 
 export const columns: ColumnDef<Interaction>[] = [
-	// {
-	// 	id: "select",
-	// 	header: ({ table }) => (
-	// 		<Checkbox
-	// 			checked={
-	// 				table.getIsAllPageRowsSelected() ||
-	// 				(table.getIsSomePageRowsSelected() && "indeterminate")
-	// 			}
-	// 			onCheckedChange={(value) =>
-	// 				table.toggleAllPageRowsSelected(!!value)
-	// 			}
-	// 			aria-label="Select all"
-	// 			className="translate-y-[2px]"
-	// 		/>
-	// 	),
-	// 	cell: ({ row }) => (
-	// 		<Checkbox
-	// 			checked={row.getIsSelected()}
-	// 			onCheckedChange={(value) => row.toggleSelected(!!value)}
-	// 			aria-label="Select row"
-	// 			className="translate-y-[2px]"
-	// 		/>
-	// 	),
-	// 	enableSorting: false,
-	// 	enableHiding: false,
-	// },
 	{
 		accessorKey: "read",
 		header: ({ column }) => (
@@ -126,22 +100,38 @@ export const columns: ColumnDef<Interaction>[] = [
 			if (row.original.type === "comment") {
 				return (
 					<div className="text-sm text-muted-foreground">
-						{row.original.userId} commented{" "}
-						{row.original.comment?.content} on your post{" "}
+						<Link
+							href={`/${row.original.userId}`}
+							className="text-blue-600"
+						>
+							{row.original.userId}{" "}
+						</Link>
+						commented {row.original.comment?.content} on your post{" "}
 						{row.original.comment?.postId}
 					</div>
 				);
 			} else if (row.original.type === "like") {
 				return (
 					<div className="text-sm text-muted-foreground">
-						{row.original.userId} liked your post{" "}
-						{row.original.like?.postContent}
+						<Link
+							href={`/${row.original.userId}`}
+							className="text-blue-600"
+						>
+							{row.original.userId}{" "}
+						</Link>
+						liked your post {row.original.like?.postContent}
 					</div>
 				);
 			} else if (row.original.type === "follow") {
 				return (
 					<div className="text-sm text-muted-foreground">
-						{row.original.userId} followed you{" "}
+						<Link
+							href={`/${row.original.userId}`}
+							className="text-blue-600"
+						>
+							{row.original.userId}{" "}
+						</Link>
+						followed you{" "}
 					</div>
 				);
 			} else {
