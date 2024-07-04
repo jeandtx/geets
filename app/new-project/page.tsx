@@ -19,6 +19,8 @@ import {
     TooltipProvider,
     TooltipTrigger,
   } from "@/components/ui/tooltip"
+import { Trash } from 'lucide-react'
+import UserSearchComponent from '@/components/userSearchBar' // Assurez-vous que le chemin est correct
 
 export default function NewProject() {
 
@@ -178,6 +180,13 @@ export default function NewProject() {
         }
     }
 
+    const handleSelectUser = (user: { name: string; email: string }) => {
+        setParticipants((prev) => [
+            ...prev,
+            { name: user.name, role: 'collaborator' },
+        ]);
+    };
+
     // Use localStorage only if it's on the client side
     useEffect(() => {
         if (isClient) {
@@ -282,34 +291,19 @@ export default function NewProject() {
                             </TooltipProvider>
                         </div>
 
-                        <div className='flex space-x-2'>
-                            <Input
-                                type='text'
-                                name='participantName'
-                                onChange={(e) =>
-                                    setParticipantName(e.target.value)
-                                }
-                                value={participantName}
-                                placeholder='Participants'
-                            />
-                            <Input
-                                type='text'
-                                name='participantRole'
-                                onChange={(e) =>
-                                    setParticipantRole(e.target.value)
-                                }
-                                value={participantRole}
-                                placeholder='Rôle du participant'
-                            />
-                            <Button onClick={handleAddParticipant}>
-                                Ajouter
-                            </Button>
+                        
+
+                        {/* Barre de recherche pour ajouter des participants */}
+                        <div className='mt-4'>
+                            <UserSearchComponent onSelectUser={handleSelectUser} />
                         </div>
-                        <div className='flex flex-wrap gap-2 mt-2'>
+
+                        <div className='flex flex-wrap gap-4 mt-2'>
                             {participants
                                 .filter((p) => p.role !== 'author')
                                 .map((participant) => (
                                     <Badge
+                                
                                         key={participant.name}
                                         onClick={() => {
                                             setParticipants((prev) =>
@@ -322,6 +316,8 @@ export default function NewProject() {
                                         }}
                                     >
                                         {participant.name} ({participant.role})
+                                        
+                                        <Trash className='ml-2 h-4 w-4 text-red-500'/>
                                     </Badge>
                                 ))}
                         </div>

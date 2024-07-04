@@ -64,7 +64,7 @@ export function InputPost({ className }: Readonly<InputPostProps>) {
 
     return (
         <div className={className}>
-            <div className='flex flex-col gap-5 p-5 rounded-xl custom-border bg-white'>
+            <div className='flex flex-col gap-5 py-3 px-5 rounded-xl custom-border bg-white'>
                 <div className='flex gap-2'>
                     <div className='hidden sm:block'><Img
                         className='rounded-full'

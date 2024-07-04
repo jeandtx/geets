@@ -41,7 +41,6 @@ export async function getPosts(page: number = 1, query: any | Partial<Post> = {}
     return data
 }
 
-
 /**
  * Update a post in the database based on its ID.
  * @param {string} postId - The ID of the post to update.
