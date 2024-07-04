@@ -37,7 +37,7 @@ const SearchComponent: React.FC = () => {
 
 	return (
 		<div className="flex flex-col items-center">
-			<h2 className="text-lg font-semibold mt-4">Rechercher un projet</h2>
+			<h2 className="text-lg font-semibold mt-4 sm:hidden ">Rechercher un projet</h2>
 			<div className="relative w-full max-w-2xl">
 				<div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
 					<Search className="text-gray-400" />

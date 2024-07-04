@@ -1,10 +1,10 @@
 import { cn } from '@/lib/utils'
 import { Button } from './ui/button'
 import {
-    SquareKanban,
+    List,
     BookHeart,
-    PersonStanding,
-    SquareMousePointer,
+    CircleUser,
+    SquarePlus,
     BellRing,
 } from 'lucide-react'
 import Link from 'next/link'
@@ -34,7 +34,7 @@ export async function Sidebar({ className, email }: Readonly<SidebarProps>) {
                             variant='ghost'
                             className='justify-start w-full'
                         >
-                            <SquareMousePointer className='mr-2 h-4 w-4' />
+                            <SquarePlus className='mr-2 h-4 w-4' />
                             Créer un projet
                         </Button>
                     </Link>
@@ -43,7 +43,7 @@ export async function Sidebar({ className, email }: Readonly<SidebarProps>) {
                             variant='ghost'
                             className='justify-start w-full'
                         >
-                            <SquareKanban className='mr-2 h-4 w-4' />
+                            <List className='mr-2 h-4 w-4' />
                             Mes projets
                         </Button>
                     </Link>
@@ -61,7 +61,7 @@ export async function Sidebar({ className, email }: Readonly<SidebarProps>) {
                             variant='ghost'
                             className='justify-start w-full'
                         >
-                            <PersonStanding className='mr-2 h-4 w-4' />
+                            <CircleUser className='mr-2 h-4 w-4' />
                             Compte
                         </Button>
                     </Link>

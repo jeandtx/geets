@@ -117,3 +117,43 @@ export async function verifyEmail(token: string): Promise<NextResponse> {
         return NextResponse.json({ message: error.message, success: false });
     }
 }
+
+
+/**
+ * Searches for users using Atlas Search.
+ * @param {string} searchTerm - The search term for the user.
+ * @returns {Promise<User[]>} A promise that resolves to the matched users.
+ */
+export async function searchUsers(searchTerm: string): Promise<User[]> {
+    
+
+    const client = await clientPromise;
+    
+
+    const db = client.db('geets');
+    
+
+    try {
+        const searchResults = await db.collection('users').aggregate([
+            {
+                $search: {
+                    index: 'SearchUser',
+                    autocomplete: {
+                        query: searchTerm,
+                        path: 'pseudo',
+                        tokenOrder: 'any'
+                    }
+                }
+            },
+            {
+                $limit: 10
+            }
+        ]).toArray();
+
+
+        return JSON.parse(JSON.stringify(searchResults)); // Remove ObjectID (not serializable)
+    } catch (error) {
+        console.error("Error during aggregation:", error);
+        throw error;
+    }
+}

@@ -126,6 +126,7 @@ export async function deleteProject(projectId: string) {
  */
 export async function searchProjects(searchTerm: string): Promise<Project[]> {
     
+    
 
     const client = await clientPromise;
     
