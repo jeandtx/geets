@@ -3,8 +3,7 @@
 import clientPromise from '@/lib/mongodb'
 import { Project } from '@/types/tables'
 import { ObjectId } from 'mongodb';
-import { UserVerifEmail } from './user';
-import { el } from '@faker-js/faker';
+// import { UserVerifEmail } from './user';
 
 /**
  * Creates a project in the database.
@@ -14,12 +13,12 @@ import { el } from '@faker-js/faker';
     */
 
 export async function createProject(project: Project) {
-    const firstParticipantEmail = project.participants?.[0]?.name ?? "No participant found";
-    const isVerified = await UserVerifEmail(firstParticipantEmail);
-    if (!isVerified) {
-        throw new Error('User email not verified: ' + firstParticipantEmail);
-    }
-    else {
+    // const firstParticipantEmail = project.participants?.[0]?.name ?? "No participant found";
+    // const isVerified = await UserVerifEmail(firstParticipantEmail);
+    // if (!isVerified) {
+    //     throw new Error('User email not verified: ' + firstParticipantEmail);
+    // }
+    // else {
     const client = await clientPromise;
     const db = client.db('geets');
 
@@ -37,7 +36,7 @@ export async function createProject(project: Project) {
     const result = await db.collection('projects').insertOne({ ...project, _id: new ObjectId(), time: new Date() });
     const data = JSON.parse(JSON.stringify(result)); // Remove ObjectID (not serializable)
     return data;
-}
+    // }
 }
 
 
@@ -134,14 +133,14 @@ export async function deleteProject(projectId: string) {
  * @returns {Promise<Project[]>} A promise that resolves to the matched projects.
  */
 export async function searchProjects(searchTerm: string): Promise<Project[]> {
-    
-    
+
+
 
     const client = await clientPromise;
-    
+
 
     const db = client.db('geets');
-    
+
 
     try {
         const searchResults = await db.collection('projects').aggregate([
