@@ -40,6 +40,7 @@ export default function NewProject() {
     const [imageUrl, setImageUrl] = useState<string>('')
     const [imageName, setImageName] = useState<string>('Ajouter une photo')
     const { userInfo } = useUserInfo()
+    const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
     const themeOptions = [
         { value: 'sport', label: 'Sport' },
@@ -147,6 +148,7 @@ export default function NewProject() {
                 })),
             }))
         }
+        setIsSubmitting(true)
         createProject(project)
             .then(() => {
                 toast({
@@ -161,7 +163,7 @@ export default function NewProject() {
                 clearLocalStorage(); // Appel de la fonction pour vider le localStorage
                 setTimeout(() => {
                     window.location.reload();
-                }, 800);
+                }, 600);
             })
             .catch(() => {
                 toast({
@@ -170,6 +172,7 @@ export default function NewProject() {
                     description:
                         "Vérifiez l'email ou le mot de passe et réessayez.",
                 })
+                setIsSubmitting(false)
             })
     }
 
@@ -401,7 +404,9 @@ export default function NewProject() {
                             onSubmit={handleSubmit}
                             className='flex flex-col gap-2'
                         >
-                            <Button type='submit'>Publier mon projet</Button>
+                            <Button type='submit' disabled={isSubmitting}> 
+                                {isSubmitting ? 'En cours...' : 'Publier mon projet'}
+                            </Button>
                         </form>
                     </div>
                 </div>
