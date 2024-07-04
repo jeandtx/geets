@@ -11,6 +11,11 @@ const SearchComponent: React.FC = () => {
 	const [searchTerm, setSearchTerm] = useState("");
 	const [results, setResults] = useState<Project[]>([]);
 	const [isLoading, setIsLoading] = useState(false);
+	const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+		if (e.key === "Enter") {
+			window.location.href = `/hashtag/${searchTerm}`;
+		}
+	};
 
 	useEffect(() => {
 		const fetchResults = async () => {
@@ -48,6 +53,7 @@ const SearchComponent: React.FC = () => {
 					onChange={(e) => setSearchTerm(e.target.value)}
 					placeholder="Rechercher"
 					className="w-full bg-white pl-10 pr-5 py-4 rounded-full text-left text-gray-600 font-semibold text-sm custom-border duration-300 animation-all focus:bg-stone-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+					onKeyPress={handleKeyPress}
 				/>
 			</div>
 
