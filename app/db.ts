@@ -49,7 +49,7 @@ export async function createUser(email: string, password: string, verificationTo
             age: 0,
             location: '',
             sexe: '',
-            experience: 0,
+            bio: 0,
             chercheARejoindreUnProjet: false,
             mobile: '',
             media: '',

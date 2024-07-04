@@ -55,76 +55,95 @@ export default async function ProfilPage({
 							{user?.email}
 						</h1>
 						{user ? (
-							<table className="min-w-full divide-y divide-gray-200 mt-6">
-								<thead>
-									<tr>
-										<th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-											Champs
-										</th>
-										<th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-											Valeur
-										</th>
-									</tr>
-								</thead>
-								<tbody className="bg-white divide-y divide-gray-200">
-									{[
-										{ label: "Pseudo", value: user.pseudo },
-										{ label: "Email", value: user.email },
-										{
-											label: "Prénom",
-											value: user.first_name,
-										},
-										{
-											label: "Nom de famille",
-											value: user.lastName,
-										},
-										{
-											label: "Âge",
-											value: user.birth_date
-												? new Date().getFullYear() -
-												  new Date(
-														user.birth_date
-												  ).getFullYear()
-												: "Unknown",
-										},
-										{
-											label: "Localisation",
-											value: user.localisation,
-										},
-										{ label: "Genre", value: user.gender },
-										{
-											label: "Expériences",
-											value: user.experience,
-										},
-										{
-											label: "Dispobilité",
-											value: user.available
-												? "Oui"
-												: "Non",
-										},
-										{ label: "Mobile", value: user.mobile },
-										{
-											label: "Autoriser les emails",
-											value: user.allowEmails
-												? "Oui"
-												: "Non",
-										},
-										{
-											label: "Créé le",
-											value: user.created,
-										},
-									].map(({ label, value }) => (
-										<tr key={label}>
-											<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-												{label}:
-											</td>
-											<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-												{value?.toLocaleString()}
-											</td>
+							<>
+								<Link href={`/fill-information`}>
+									<Button variant="link">
+										Editer mon profil
+									</Button>
+								</Link>
+								<table className="min-w-full divide-y divide-gray-200 mt-6">
+									<thead>
+										<tr>
+											<th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+												Champs
+											</th>
+											<th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+												Valeur
+											</th>
 										</tr>
-									))}
-								</tbody>
-							</table>
+									</thead>
+									<tbody className="bg-white divide-y divide-gray-200">
+										{[
+											{
+												label: "Pseudo",
+												value: user.pseudo,
+											},
+											{
+												label: "Email",
+												value: user.email,
+											},
+											{
+												label: "Prénom",
+												value: user.first_name,
+											},
+											{
+												label: "Nom de famille",
+												value: user.lastName,
+											},
+											{
+												label: "Âge",
+												value: user.birth_date
+													? new Date().getFullYear() -
+													  new Date(
+															user.birth_date
+													  ).getFullYear()
+													: "Unknown",
+											},
+											{
+												label: "Localisation",
+												value: user.localisation,
+											},
+											{
+												label: "Genre",
+												value: user.gender,
+											},
+											{
+												label: "Expériences",
+												value: user.experience,
+											},
+											{
+												label: "Dispobilité",
+												value: user.available
+													? "Oui"
+													: "Non",
+											},
+											{
+												label: "Mobile",
+												value: user.mobile,
+											},
+											{
+												label: "Autoriser les emails",
+												value: user.allowEmails
+													? "Oui"
+													: "Non",
+											},
+											{
+												label: "Créé le",
+												value: user.created,
+											},
+										].map(({ label, value }) => (
+											<tr key={label}>
+												<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+													{label}:
+												</td>
+												<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+													{value?.toLocaleString()}
+												</td>
+											</tr>
+										))}
+									</tbody>
+								</table>
+							</>
 						) : (
 							<div className="mt-6 text-center text-gray-500">
 								Utilisateur non trouvé
@@ -158,7 +177,7 @@ export default async function ProfilPage({
 						</section>
 						<section>
 							<h2 className="text-2xl font-semibold text-gray-900">
-								Projets de {decodeEmail}
+								Projets auxquels {decodeEmail} participe
 							</h2>
 							{participatingProjects.length > 0 ? (
 								<div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -201,6 +220,25 @@ export default async function ProfilPage({
 											);
 										}
 									)}
+								</div>
+							) : (
+								<div className="mt-6 text-center text-gray-500">
+									Aucun projet trouvé
+								</div>
+							)}
+						</section>
+						<section>
+							<h2 className="text-2xl font-semibold text-gray-900">
+								Projets créés par {decodeEmail}
+							</h2>
+							{userProjects.length > 0 ? (
+								<div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4">
+									{userProjects.map((project: Project) => (
+										<ProjectCard
+											key={project._id.toString()}
+											project={project}
+										/>
+									))}
 								</div>
 							) : (
 								<div className="mt-6 text-center text-gray-500">

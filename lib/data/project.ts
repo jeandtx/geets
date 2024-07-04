@@ -3,7 +3,8 @@
 import clientPromise from '@/lib/mongodb'
 import { Project } from '@/types/tables'
 import { ObjectId } from 'mongodb';
-
+import { UserVerifEmail } from './user';
+import { el } from '@faker-js/faker';
 
 /**
  * Creates a project in the database.
@@ -11,7 +12,14 @@ import { ObjectId } from 'mongodb';
  * @returns {Promise<any>} A promise that resolves to the created project.
  * @throws {Error} If the project have a missing field.
     */
+
 export async function createProject(project: Project) {
+    const firstParticipantEmail = project.participants?.[0]?.name ?? "No participant found";
+    const isVerified = await UserVerifEmail(firstParticipantEmail);
+    if (!isVerified) {
+        throw new Error('User email not verified: ' + firstParticipantEmail);
+    }
+    else {
     const client = await clientPromise;
     const db = client.db('geets');
 
@@ -29,6 +37,7 @@ export async function createProject(project: Project) {
     const result = await db.collection('projects').insertOne({ ...project, _id: new ObjectId(), time: new Date() });
     const data = JSON.parse(JSON.stringify(result)); // Remove ObjectID (not serializable)
     return data;
+}
 }
 
 
