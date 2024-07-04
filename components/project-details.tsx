@@ -82,6 +82,7 @@ export default function ProjectDetails({
             <div>
                 <div className='p-5'>
                     <div className='flex flex-col'>
+
                         <div className='flex flex-row gap-2 justify-between items-center'>
                             <div className='flex flex-row gap-2 items-center'>
                                 <Img
@@ -109,10 +110,12 @@ export default function ProjectDetails({
                                             }
                                         </div>
                                     )}
+                                    
                                 </div>
+                                
                             </div>
                             {session?.user?.email && (
-                                <div className='ml-auto'>
+                                <div className='ml-auto sm:flex hidden'>
                                     <Button
                                         onClick={() =>
                                             handleAddParticipant(
@@ -126,6 +129,18 @@ export default function ProjectDetails({
                                 </div>
                             )}
                         </div>
+                        <div className='py-5'>
+                                    <Button
+                                        onClick={() =>
+                                            handleAddParticipant(
+                                                session?.user?.email ?? ''
+                                            )
+                                        }
+                                        className='text-lg font-normal text-white p-2 rounded'
+                                    >
+                                        Rejoindre le projet !
+                                    </Button>
+                                </div>
                         <div className='flex flex-col pt-5'>
                             <div className='text-xl font-medium text-black'>
                                 Description
@@ -156,14 +171,14 @@ export default function ProjectDetails({
                                 {project.themes?.join(', ')}
                             </div>
                         </div>
-                        <div className='flex flex-col pt-5'>
+                        <div className='flex flex-col pt-5 '>
                             <div className='text-xl font-medium text-black'>
                                 Posts
                             </div>
                             <div className='flex flex-wrap m-0 p-0 list-none'>
                                 {posts.length > 0 ? (
                                     posts.map((post) => (
-                                        <div className='w-2/3' key={post._id}>
+                                        <div className='sm:w-2/3 py-2' key={post._id}>
                                             <PostCard post={post} />
                                         </div>
                                     ))
