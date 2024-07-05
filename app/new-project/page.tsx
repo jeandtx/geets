@@ -119,7 +119,7 @@ export default function NewProject() {
             media: imageUrl,
             participants: participants,
         }))
-    }, [themes, labels, imageUrl, participants])
+    }, [title, themes, description, labels, imageUrl, participants])
 
     const handleChange = (e: any) => {
         const { name, value } = e.target
