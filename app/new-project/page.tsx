@@ -27,9 +27,7 @@ export default function NewProject() {
     const isClient = useIsClient()
 
     const [title, setTitle] = useState<string>('')
-    const [label, setLabel] = useState<string>('')
     const [labels, setLabels] = useState<string[]>([])
-    const [theme, setTheme] = useState<string>('')
     const [themes, setThemes] = useState<string[]>([])
     const [description, setDescription] = useState<string>('')
     const [participantName, setParticipantName] = useState<string>('')
@@ -114,7 +112,9 @@ export default function NewProject() {
     useEffect(() => {
         setProject((prev) => ({
             ...prev,
+            title: title,
             themes: themes,
+            description: description,
             labels: labels,
             media: imageUrl,
             participants: participants,
@@ -138,16 +138,17 @@ export default function NewProject() {
                 description:
                     "Vérifiez l'email ou le mot de passe et réessayez.",
             })
-            return
-        } else {
-            setProject((prev) => ({
-                ...prev,
-                participants: participants.map((p) => ({
-                    name: p.name,
-                    role: p.role,
-                })),
-            }))
+            return;
         }
+        const updatedProject = {
+            ...project,
+            title: title,
+            description: description,
+            themes: themes,
+            labels: labels,
+            media: imageUrl,
+            participants: participants,
+        };
         setIsSubmitting(true)
         createProject(project)
             .then(() => {
