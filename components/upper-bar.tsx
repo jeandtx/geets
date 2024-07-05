@@ -20,7 +20,7 @@ const TabContent = ({
 )
 
 export const UpperBar = ({ className }: UpperbarProps) => {
-    const [selectedTab, setSelectedTab] = useState('Feed')
+    const [selectedTab, setSelectedTab] = useState('recent')
 
     const handleTabClick = (tabName: string) => {
         setSelectedTab(tabName)
@@ -28,48 +28,48 @@ export const UpperBar = ({ className }: UpperbarProps) => {
 
     return (
         <div className='flex flex-col items-center'>
-            <Tabs defaultValue='feed'>
-                {/* <div className='mx-auto flex flex-col md:flex-row justify-between items-center'>
+            <Tabs defaultValue='recent'>
+                <div className='mx-auto flex flex-col md:flex-row justify-between items-center'>
                     <TabsList className='py-5 space-x-3'>
                         <TabsTrigger
-                            value='feed'
-                            onClick={() => handleTabClick('Feed')}
+                            value='recent'
+                            onClick={() => handleTabClick('recent')}
                         >
-                            Feed
+                            Récents ⏳
                         </TabsTrigger>
                         <TabsTrigger
-                            value='recommandation'
-                            onClick={() => handleTabClick('Pour vous')}
+                            value='popular'
+                            onClick={() => handleTabClick('popular')}
                         >
-                            Pour vous
+                            Populaires 🔥
                         </TabsTrigger>
-                        <TabsTrigger
+                        {/* <TabsTrigger
                             value='friends'
                             onClick={() => handleTabClick('Abonnements')}
                         >
                             Abonnements
-                        </TabsTrigger>
+                        </TabsTrigger> */}
                     </TabsList>
-                </div> */}
+                </div>
                 <div className='w-full'>
-                    <TabContent value='feed'>
+                    <TabContent value='recent'>
                         <div className='hidden sm:block'>
                         <InputPost />
                         </div>
-                        <InfiniteScroll fetchFunction={getPosts} />
+                        <InfiniteScroll sort='recent' />
                     </TabContent>
-                    <TabContent value='recommandation'>
+                    <TabContent value='popular'>
+                    <div className='hidden sm:block'>
+                        <InputPost />
+                        </div>
+                        <InfiniteScroll sort='popular' />
+                    </TabContent>
+                    {/* <TabContent value='friends'>
                     <div className='hidden sm:block'>
                         <InputPost />
                         </div>
                         <InfiniteScroll fetchFunction={getPosts} />
-                    </TabContent>
-                    <TabContent value='friends'>
-                    <div className='hidden sm:block'>
-                        <InputPost />
-                        </div>
-                        <InfiniteScroll fetchFunction={getPosts} />
-                    </TabContent>
+                    </TabContent> */}
                 </div>
             </Tabs>
         </div>

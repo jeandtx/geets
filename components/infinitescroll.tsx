@@ -2,45 +2,36 @@
 import { useInView } from "react-intersection-observer";
 import { cn } from "@/lib/utils";
 import PostCard from "@/components/postcard";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import LoadingSpinner from "./ui/spinner";
 import { useUserInfo } from "@/app/context/UserInfoContext";
 import Link from "next/link";
+import { getPosts } from "@/lib/data/post";
 
 interface InfiniteScrollProps {
-	/**
-	 * Additional class name(s) for the component.
-	 */
 	className?: string;
-
-	/**
-	 * The function used to fetch data. Triggered when the user scrolls to the bottom of the page.
-	 * @param params Optional parameters for the fetch function.
-	 * @returns The result of the fetch function.
-	 */
-	fetchFunction: (page: number) => Promise<any>;
+	sort: "recent" | "popular";
 }
 
-export default function InfiniteScroll({
+const InfiniteScroll: React.FC<InfiniteScrollProps> = ({
 	className,
-	fetchFunction,
-}: Readonly<InfiniteScrollProps>) {
+	sort,
+}) => {
 	const { ref, inView } = useInView({
 		threshold: 0,
 	});
-	const [posts, setPosts] = React.useState<any>([]);
-	const [page, setPage] = React.useState(1);
+	const [posts, setPosts] = useState<any[]>([]);
+	const [page, setPage] = useState(1);
 	const userInfo = useUserInfo();
 
-	React.useEffect(() => {
-		if (!inView) return;
+	useEffect(() => {
 		const fetchPosts = async () => {
-			const newPosts = await fetchFunction(page);
-			setPage((prevPage: number) => prevPage + 1);
-			setPosts((prevPosts: any) => [...prevPosts, ...newPosts]);
+			const newPosts = await getPosts(page, {}, sort);
+			setPage((prevPage) => prevPage + 1);
+			setPosts((prevPosts) => [...prevPosts, ...newPosts]);
 		};
 		fetchPosts();
-	}, [inView]);
+	}, [inView, sort]);
 
 	return (
 		<div
@@ -89,3 +80,5 @@ export default function InfiniteScroll({
 		</div>
 	);
 }
+
+export default InfiniteScroll;
