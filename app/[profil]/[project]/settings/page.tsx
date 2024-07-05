@@ -13,6 +13,10 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import Select from 'react-select'
 import { Trash } from 'lucide-react'
 import UserSearchComponent from '@/components/userSearchBar' 
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+    AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+    AlertDialogTrigger } from '@/components/ui/alert-dialog'
+import Link from 'next/link'
 
 export default function SettingsPage({
     params,
@@ -332,9 +336,31 @@ export default function SettingsPage({
                         <form onSubmit={handleUpdate} className="flex flex-col gap-2">
                             <Button type="submit">Modifier mon projet</Button>
                         </form>
-                        <Button variant={"destructive"} onClick={handleDelete}>
-                            Supprimer mon projet
-                        </Button>
+                        
+                        <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                                <Button variant="destructive">Supprimer le projet</Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                                <AlertDialogHeader>
+                                    <AlertDialogTitle>Es-tu sûr(e) ?</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                        Cette action ne peut pas être annulée. Cette option va supprimer définitivement le projet et toutes les données associées.
+                                    </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                    <AlertDialogCancel>Annuler</AlertDialogCancel>
+                                    <Link href={`/new-project`}>
+                                        <AlertDialogAction onClick={async () => {
+                                                await handleDelete();
+                                            }}
+                                        >
+                                            Supprimer
+                                        </AlertDialogAction>
+                                    </Link>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
                     </div>
                 </div>
             )}
