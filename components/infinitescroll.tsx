@@ -6,11 +6,11 @@ import React, { useEffect, useState } from "react";
 import LoadingSpinner from "./ui/spinner";
 import { useUserInfo } from "@/app/context/UserInfoContext";
 import Link from "next/link";
-import { getPosts } from "@/lib/data/post";
+import { getPosts, getFriendsPost } from "@/lib/data/post";
 
 interface InfiniteScrollProps {
 	className?: string;
-	sort: "recent" | "popular";
+	sort: "recent" | "popular" | "suivi";
 }
 
 const InfiniteScroll: React.FC<InfiniteScrollProps> = ({
@@ -26,12 +26,17 @@ const InfiniteScroll: React.FC<InfiniteScrollProps> = ({
 
 	useEffect(() => {
 		const fetchPosts = async () => {
-			const newPosts = await getPosts(page, {}, sort);
+			let newPosts;
+			if (sort === 'suivi' && userInfo?.userInfo?.email) {
+				newPosts = await getFriendsPost(userInfo.userInfo.email, page, 'recent');
+			} else {
+				newPosts = await getPosts(page, {}, sort);
+			}
 			setPage((prevPage) => prevPage + 1);
 			setPosts((prevPosts) => [...prevPosts, ...newPosts]);
 		};
 		fetchPosts();
-	}, [inView, sort]);
+	}, [inView, sort, userInfo?.userInfo?.email]);
 
 	return (
 		<div

@@ -38,17 +38,17 @@ export const UpperBar = ({ className }: UpperbarProps) => {
                             Populaires 🔥
                         </TabsTrigger>
                         <TabsTrigger
+                            value='friends'
+                            onClick={() => handleTabClick('Abonnements')}
+                        >
+                            Suivis 👥
+                        </TabsTrigger>
+                        <TabsTrigger
                             value='recent'
                             onClick={() => handleTabClick('recent')}
                         >
                             Récents ⏳
                         </TabsTrigger>
-                        {/* <TabsTrigger
-                            value='friends'
-                            onClick={() => handleTabClick('Abonnements')}
-                        >
-                            Abonnements
-                        </TabsTrigger> */}
                     </TabsList>
                 </div>
                 <div className='w-full'>
@@ -64,12 +64,12 @@ export const UpperBar = ({ className }: UpperbarProps) => {
                         </div>
                         <InfiniteScroll sort='popular' />
                     </TabContent>
-                    {/* <TabContent value='friends'>
+                    <TabContent value='friends'>
                     <div className='hidden sm:block'>
                         <InputPost />
                         </div>
-                        <InfiniteScroll fetchFunction={getPosts} />
-                    </TabContent> */}
+                        <InfiniteScroll sort='suivi' />
+                    </TabContent>
                 </div>
             </Tabs>
         </div>
