@@ -28,20 +28,20 @@ export const UpperBar = ({ className }: UpperbarProps) => {
 
     return (
         <div className='flex flex-col items-center'>
-            <Tabs defaultValue='recent'>
+            <Tabs defaultValue='popular'>
                 <div className='mx-auto flex flex-col md:flex-row justify-between items-center'>
                     <TabsList className='py-5 space-x-3'>
-                        <TabsTrigger
-                            value='recent'
-                            onClick={() => handleTabClick('recent')}
-                        >
-                            Récents ⏳
-                        </TabsTrigger>
                         <TabsTrigger
                             value='popular'
                             onClick={() => handleTabClick('popular')}
                         >
                             Populaires 🔥
+                        </TabsTrigger>
+                        <TabsTrigger
+                            value='recent'
+                            onClick={() => handleTabClick('recent')}
+                        >
+                            Récents ⏳
                         </TabsTrigger>
                         {/* <TabsTrigger
                             value='friends'

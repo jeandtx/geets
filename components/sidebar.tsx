@@ -26,7 +26,7 @@ export async function Sidebar({ className, email }: Readonly<SidebarProps>) {
                             className='justify-start w-full'
                         >
                             <BookHeart className='mr-2 h-4 w-4' />
-                            Pour vous
+                            Pour toi
                         </Button>
                     </Link>
                     <Link href={`/new-project`}>
