@@ -143,7 +143,10 @@ export default function SettingsPage({
                         project.title +
                         ' a été supprimé.',
                     variant: "success",
-                });
+                }); 
+                setTimeout(() => {
+                    window.location.href = '/new-project';
+                }, 800);
             } catch (error) {
                 toast({
                     variant: 'destructive',
@@ -350,14 +353,12 @@ export default function SettingsPage({
                                 </AlertDialogHeader>
                                 <AlertDialogFooter>
                                     <AlertDialogCancel>Annuler</AlertDialogCancel>
-                                    <Link href={`/new-project`}>
                                         <AlertDialogAction onClick={async () => {
                                                 await handleDelete();
                                             }}
                                         >
                                             Supprimer
                                         </AlertDialogAction>
-                                    </Link>
                                 </AlertDialogFooter>
                             </AlertDialogContent>
                         </AlertDialog>
