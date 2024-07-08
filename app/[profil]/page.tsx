@@ -108,8 +108,8 @@ export default async function ProfilPage({
 												value: user.gender,
 											},
 											{
-												label: "Expériences",
-												value: user.experience,
+												label: "Biographie",
+												value: user.bio,
 											},
 											{
 												label: "Dispobilité",

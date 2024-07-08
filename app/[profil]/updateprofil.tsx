@@ -279,26 +279,24 @@ export default function UpdateProfil({ className, user }: UpdateProfilProps) {
 					/>
 				</div>
 				<div>
-					Experience :<div className="h-[20px]"></div>
+					Biographie :<div className="h-[20px]"></div>
 					{onEdit ? (
-						<Slider
-							max={10}
-							step={1}
-							value={[parseInt(userEdited.experience ?? "0")]}
-							onValueChange={(newValue) =>
+						<textarea
+							className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+							value={userEdited.bio ?? ""}
+							onChange={(e) =>
 								setUserEdited({
 									...userEdited,
-									experience: newValue[0].toString(),
+									bio: e.target.value,
 								})
 							}
+							rows={4}
+							placeholder="Enter your bio"
 						/>
 					) : (
-						<Slider
-							max={10}
-							step={1}
-							value={[parseInt(userEdited.experience ?? "0")]}
-							disabled={!onEdit}
-						/>
+						<div className="p-2 bg-gray-100 rounded-lg">
+							{userEdited.bio ?? " "}
+						</div>
 					)}
 				</div>
 				<div>
