@@ -21,10 +21,11 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-
+import { CldUploadWidget } from "next-cloudinary";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { useSession } from "next-auth/react";
+import Img from "next/image";
 
 interface DatePickerDemoProps {
 	className?: string;
@@ -91,6 +92,8 @@ export default function UpdateProfil({ className, user }: UpdateProfilProps) {
 	});
 	const session = useSession();
 	const userSession = session.data?.user?.email;
+	const [imageUrl, setImageUrl] = useState<string>("");
+	const [imageName, setImageName] = useState<string>("Ajouter une photo");
 
 	const handleSubmit = (e: any) => {
 		e.preventDefault();
@@ -330,6 +333,53 @@ export default function UpdateProfil({ className, user }: UpdateProfilProps) {
 							</Label>
 						</div>
 					)}
+				</div>
+				<div>
+					<label className="block text-xs textcolor">
+						Photo de profil
+					</label>
+					<Img
+						className="rounded-full"
+						src={
+							user.media && user.media !== ""
+								? user.media
+								: "https://loremflickr.com/640/480/user"
+						}
+						alt="PP"
+						width={65}
+						height={65}
+						style={{ height: "5rem", width: "5rem" }}
+					/>
+					<div className="flex items-center justify-center">
+						<CldUploadWidget
+							uploadPreset="onrkam98"
+							onSuccess={(result) => {
+								setImageUrl((result as any).info.secure_url);
+								setImageName(
+									(result as any).info.original_filename
+								); // Update the image name
+							}}
+						>
+							{({ open }) => {
+								return (
+									<button
+										className="w-full overflow-hidden inline-flex items-center justify-center border border-input bg-background rounded-md px-6 py-3 text-sm font-medium hover:bg-slate-50"
+										style={{
+											height: "40px",
+											whiteSpace: "nowrap",
+											textOverflow: "ellipsis",
+											overflow: "hidden",
+										}}
+										type="button"
+										onClick={() => open()}
+									>
+										<div className="p-1">📥</div>
+										{imageName}
+									</button>
+								);
+							}}
+						</CldUploadWidget>
+					</div>
 				</div>
 				{userSession === user.email && (
 					<form

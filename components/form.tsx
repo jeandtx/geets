@@ -256,6 +256,7 @@ export function Form({
 						<label className="block text-xs textcolor">
 							Photo de profil
 						</label>
+
 						<div className="flex items-center justify-center">
 							<CldUploadWidget
 								uploadPreset="onrkam98"
