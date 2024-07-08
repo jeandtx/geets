@@ -56,7 +56,7 @@ export default async function ProfilPage({
 						</h1>
 						{user ? (
 							<>
-								<Link href={`/fill-information`}>
+								<Link href={`/${user.email}/edit`}>
 									<Button variant="link">
 										Editer mon profil
 									</Button>
