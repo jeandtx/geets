@@ -5,6 +5,8 @@ import { verify } from 'crypto';
 import { ObjectId } from 'mongodb';
 import { NextResponse } from 'next/server';
 import { sendEmail } from '../mailer';
+import { boolean } from 'zod';
+import { get } from 'http';
 
 /**
  * Retrieves a user with the email from the database.
@@ -155,5 +157,17 @@ export async function searchUsers(searchTerm: string): Promise<User[]> {
     } catch (error) {
         console.error("Error during aggregation:", error);
         throw error;
+    }
+}
+export async function UserVerifEmail(email: string): Promise<boolean> {
+    try {
+        const user = await getUser(email); // Attendre la résolution de la promesse
+        if (user && user.emailVerified) {
+            return true;
+        }
+        return false;
+    } catch (error) {
+        console.error('Error fetching user:', error);
+        return false;
     }
 }

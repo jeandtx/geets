@@ -1,8 +1,6 @@
 "use client";
-
 import { useInView } from "react-intersection-observer";
 import { cn } from "@/lib/utils";
-
 import PostCard from "@/components/postcard";
 import React from "react";
 import LoadingSpinner from "./ui/spinner";
@@ -33,15 +31,6 @@ export default function InfiniteScroll({
 	const [posts, setPosts] = React.useState<any>([]);
 	const [page, setPage] = React.useState(1);
 	const userInfo = useUserInfo();
-	React.useEffect(() => {
-		// const fetchPosts = async () => {
-		// 	const newPosts = await fetchFunction(1);
-		// 	setPage((prevPage: number) => prevPage + 1);
-		// 	setPosts((prevPosts: any) => [...prevPosts, ...newPosts]);
-		// };
-		// fetchPosts();
-		console.log(userInfo);
-	}, []);
 
 	React.useEffect(() => {
 		if (!inView) return;
@@ -88,6 +77,13 @@ export default function InfiniteScroll({
 						</Link>{" "}
 						pour plus de publications
 					</p>
+					<div
+						className="flex justify-center items-center"
+						style={{ height: "100px" }}
+						ref={ref}
+					>
+						<LoadingSpinner />
+					</div>
 				</div>
 			)}
 		</div>
