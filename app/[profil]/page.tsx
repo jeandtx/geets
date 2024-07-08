@@ -7,6 +7,7 @@ import { getPosts } from "@/lib/data/post";
 import type { Project } from "@/types/tables";
 import { ProjectCard } from "@/components/project";
 import PostCard from "@/components/postcard";
+import EditProfilButton from "./editProfilButton";
 
 function SignOut() {
 	return (
@@ -56,11 +57,7 @@ export default async function ProfilPage({
 						</h1>
 						{user ? (
 							<>
-								<Link href={`/${user.email}/edit`}>
-									<Button variant="link">
-										Editer mon profil
-									</Button>
-								</Link>
+								<EditProfilButton user={user.email} />
 								<table className="min-w-full divide-y divide-gray-200 mt-6">
 									<thead>
 										<tr>
