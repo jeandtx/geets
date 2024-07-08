@@ -5,7 +5,6 @@ import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { updateUser } from "@/lib/data/user";
-
 import * as React from "react";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
@@ -230,19 +229,22 @@ export default function UpdateProfil({ className, user }: UpdateProfilProps) {
 								<SelectItem value="Male">Homme</SelectItem>
 								<SelectItem value="Female">Femme</SelectItem>
 								<SelectItem value="Rather not say">
-									Confidentiel
+									Je ne préfère pas le dire
 								</SelectItem>
 							</SelectContent>
 						</Select>
 					) : (
 						<div>
 							<Select
-								value={userEdited.gender ?? "Confidentiel"}
+								value={
+									userEdited.gender ??
+									"Je ne préfère pas le dire"
+								}
 								aria-labelledby="sexe-select"
 								disabled={!onEdit}
 							>
 								<SelectTrigger className="w-[180px]">
-									<SelectValue placeholder="Confidentiel" />
+									<SelectValue placeholder="Je ne préfère pas le dire" />
 								</SelectTrigger>
 								<SelectContent>
 									<SelectItem value="Male">Homme</SelectItem>
@@ -250,7 +252,7 @@ export default function UpdateProfil({ className, user }: UpdateProfilProps) {
 										Femme
 									</SelectItem>
 									<SelectItem value="Rather not say">
-										Confidentiel
+										Je ne préfère pas le dire
 									</SelectItem>
 								</SelectContent>
 							</Select>
@@ -336,7 +338,9 @@ export default function UpdateProfil({ className, user }: UpdateProfilProps) {
 					>
 						<Button
 							variant="default"
-							onClick={() => setOnEdit(!onEdit)}
+							onClick={() => {
+								setOnEdit(!onEdit);
+							}}
 						>
 							{onEdit ? "Save" : "Edit"}
 						</Button>

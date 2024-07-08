@@ -175,7 +175,9 @@ export function Form({
 							</option>
 							<option value="female">Femme</option>
 							<option value="male">Homme</option>
-							<option value="hamster">Confidentiel</option>
+							<option value="hamster">
+								Je ne préfère pas le dire
+							</option>
 						</select>
 					</div>
 
