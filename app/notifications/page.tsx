@@ -24,7 +24,7 @@ export default async function NotificationsPage() {
 						Notifications
 					</h2>
 					<p className="text-muted-foreground">
-						Here&apos;s a list of your latest notifications.
+						Voici la liste de vos dernières notifications.
 					</p>
 				</div>
 			</div>

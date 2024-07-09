@@ -68,7 +68,7 @@ export interface User {
     birth_date: Date;
     localisation?: string;
     gender?: string;
-    experience?: string;
+    bio?: string;
     available?: boolean;
     mobile?: string;
     allowEmails?: boolean;

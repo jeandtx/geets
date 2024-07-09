@@ -7,6 +7,8 @@ import { getPosts } from "@/lib/data/post";
 import type { Project } from "@/types/tables";
 import { ProjectCard } from "@/components/project";
 import PostCard from "@/components/postcard";
+import EditProfilButton from "./editProfilButton";
+import Img from "next/image";
 
 function SignOut() {
 	return (
@@ -51,16 +53,24 @@ export default async function ProfilPage({
 			<div className="max-w-4xl mx-auto">
 				<div className="bg-white shadow-lg rounded-lg p-8 space-y-6">
 					<div className="flex flex-col items-center">
+						<Img
+							className="rounded-full"
+							src={
+								user.media && user.media !== ""
+									? user.media
+									: "https://loremflickr.com/640/480/user"
+							}
+							alt="PP"
+							width={65}
+							height={65}
+							style={{ height: "5rem", width: "5rem" }}
+						/>
 						<h1 className="text-3xl font-extrabold text-gray-900">
 							{user?.email}
 						</h1>
 						{user ? (
 							<>
-								<Link href={`/fill-information`}>
-									<Button variant="link">
-										Editer mon profil
-									</Button>
-								</Link>
+								<EditProfilButton user={user.email} />
 								<table className="min-w-full divide-y divide-gray-200 mt-6">
 									<thead>
 										<tr>
@@ -108,8 +118,8 @@ export default async function ProfilPage({
 												value: user.gender,
 											},
 											{
-												label: "Expériences",
-												value: user.experience,
+												label: "Biographie",
+												value: user.bio,
 											},
 											{
 												label: "Dispobilité",

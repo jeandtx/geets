@@ -5,7 +5,6 @@ import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { updateUser } from "@/lib/data/user";
-
 import * as React from "react";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
@@ -22,11 +21,11 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { Slider } from "@/components/ui/slider";
-
+import { CldUploadWidget } from "next-cloudinary";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { useSession } from "next-auth/react";
+import Img from "next/image";
 
 interface DatePickerDemoProps {
 	className?: string;
@@ -87,12 +86,14 @@ interface UpdateProfilProps {
 	user: User;
 }
 export default function UpdateProfil({ className, user }: UpdateProfilProps) {
-	const [onEdit, setOnEdit] = useState<boolean>(false);
+	const [onEdit, setOnEdit] = useState<boolean>(true);
 	const [userEdited, setUserEdited] = useState<User>({
 		...user,
 	});
 	const session = useSession();
 	const userSession = session.data?.user?.email;
+	const [imageUrl, setImageUrl] = useState<string>("");
+	const [imageName, setImageName] = useState<string>("Ajouter une photo");
 
 	const handleSubmit = (e: any) => {
 		e.preventDefault();
@@ -110,12 +111,46 @@ export default function UpdateProfil({ className, user }: UpdateProfilProps) {
 	return (
 		<div className={cn("flex justify-center items-center", className)}>
 			<div className="flex flex-col space-y-5">
+				<div className="flex items-center justify-center">
+					<CldUploadWidget
+						uploadPreset="onrkam98"
+						onSuccess={(result) => {
+							setImageUrl((result as any).info.secure_url);
+							setImageName(
+								(result as any).info.original_filename
+							);
+							setUserEdited({
+								...userEdited,
+								media: (result as any).info.secure_url,
+							});
+						}}
+					>
+						{({ open }) => {
+							return (
+								<button
+									className="w-full overflow-hidden inline-flex items-center justify-center border border-input bg-background rounded-md px-6 py-3 text-sm font-medium hover:bg-slate-50"
+									style={{
+										height: "40px",
+										whiteSpace: "nowrap",
+										textOverflow: "ellipsis",
+										overflow: "hidden",
+									}}
+									type="button"
+									onClick={() => open()}
+								>
+									<div className="p-1">📥</div>
+									{imageName}
+								</button>
+							);
+						}}
+					</CldUploadWidget>
+				</div>
 				<div>
 					Pseudo :
 					<Input
 						className={
 							onEdit
-								? "bg-green-200"
+								? "bg-white-200"
 								: "bg-transparent border-none text-black font-normal flex h-5 w-full px-3 py-2 text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300 hover:border-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0 min-h-[40px]"
 						}
 						readOnly={!onEdit}
@@ -135,7 +170,7 @@ export default function UpdateProfil({ className, user }: UpdateProfilProps) {
 					<Input
 						className={
 							onEdit
-								? "bg-green-200"
+								? "bg-white-200"
 								: "bg-transparent border-none text-black font-normal flex h-5 w-full px-3 py-2 text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300 hover:border-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0 min-h-[40px]"
 						}
 						readOnly={!onEdit}
@@ -155,7 +190,7 @@ export default function UpdateProfil({ className, user }: UpdateProfilProps) {
 					<Input
 						className={
 							onEdit
-								? "bg-green-200"
+								? "bg-white-200"
 								: "bg-transparent border-none text-black font-normal flex h-5 w-full px-3 py-2 text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300 hover:border-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0 min-h-[40px]"
 						}
 						readOnly={!onEdit}
@@ -175,7 +210,7 @@ export default function UpdateProfil({ className, user }: UpdateProfilProps) {
 					<Input
 						className={
 							onEdit
-								? "bg-green-200"
+								? "bg-white-200"
 								: "bg-transparent border-none text-black font-normal flex h-5 w-full px-3 py-2 text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300 hover:border-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0 min-h-[40px]"
 						}
 						readOnly={!onEdit}
@@ -194,7 +229,7 @@ export default function UpdateProfil({ className, user }: UpdateProfilProps) {
 					Date de naissance :
 					{onEdit ? (
 						<DatePickerDemo
-							className="bg-green-200"
+							className="bg-white-200"
 							value={userEdited.birth_date}
 							onChange={(date) =>
 								setUserEdited({
@@ -231,19 +266,22 @@ export default function UpdateProfil({ className, user }: UpdateProfilProps) {
 								<SelectItem value="Male">Homme</SelectItem>
 								<SelectItem value="Female">Femme</SelectItem>
 								<SelectItem value="Rather not say">
-									Confidentiel
+									Je ne préfère pas le dire
 								</SelectItem>
 							</SelectContent>
 						</Select>
 					) : (
 						<div>
 							<Select
-								value={userEdited.gender ?? "Confidentiel"}
+								value={
+									userEdited.gender ??
+									"Je ne préfère pas le dire"
+								}
 								aria-labelledby="sexe-select"
 								disabled={!onEdit}
 							>
 								<SelectTrigger className="w-[180px]">
-									<SelectValue placeholder="Confidentiel" />
+									<SelectValue placeholder="Je ne préfère pas le dire" />
 								</SelectTrigger>
 								<SelectContent>
 									<SelectItem value="Male">Homme</SelectItem>
@@ -251,7 +289,7 @@ export default function UpdateProfil({ className, user }: UpdateProfilProps) {
 										Femme
 									</SelectItem>
 									<SelectItem value="Rather not say">
-										Confidentiel
+										Je ne préfère pas le dire
 									</SelectItem>
 								</SelectContent>
 							</Select>
@@ -263,7 +301,7 @@ export default function UpdateProfil({ className, user }: UpdateProfilProps) {
 					<Input
 						className={
 							onEdit
-								? "bg-green-200"
+								? "bg-white-200"
 								: "bg-transparent border-none text-black font-normal flex h-5 w-full px-3 py-2 text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300 hover:border-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0 min-h-[40px]"
 						}
 						readOnly={!onEdit}
@@ -279,26 +317,24 @@ export default function UpdateProfil({ className, user }: UpdateProfilProps) {
 					/>
 				</div>
 				<div>
-					Experience :<div className="h-[20px]"></div>
+					Biographie :<div className="h-[20px]"></div>
 					{onEdit ? (
-						<Slider
-							max={10}
-							step={1}
-							value={[parseInt(userEdited.experience ?? "0")]}
-							onValueChange={(newValue) =>
+						<textarea
+							className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+							value={userEdited.bio ?? ""}
+							onChange={(e) =>
 								setUserEdited({
 									...userEdited,
-									experience: newValue[0].toString(),
+									bio: e.target.value,
 								})
 							}
+							rows={4}
+							placeholder="Enter your bio"
 						/>
 					) : (
-						<Slider
-							max={10}
-							step={1}
-							value={[parseInt(userEdited.experience ?? "0")]}
-							disabled={!onEdit}
-						/>
+						<div className="p-2 bg-gray-100 rounded-lg">
+							{userEdited.bio ?? " "}
+						</div>
 					)}
 				</div>
 				<div>
@@ -332,6 +368,23 @@ export default function UpdateProfil({ className, user }: UpdateProfilProps) {
 						</div>
 					)}
 				</div>
+				<div>
+					<label className="block text-xs textcolor">
+						Photo de profil
+					</label>
+					<Img
+						className="rounded-full"
+						src={
+							user.media && user.media !== ""
+								? user.media
+								: "https://loremflickr.com/640/480/user"
+						}
+						alt="PP"
+						width={65}
+						height={65}
+						style={{ height: "5rem", width: "5rem" }}
+					/>
+				</div>
 				{userSession === user.email && (
 					<form
 						onSubmit={handleSubmit}
@@ -339,9 +392,11 @@ export default function UpdateProfil({ className, user }: UpdateProfilProps) {
 					>
 						<Button
 							variant="default"
-							onClick={() => setOnEdit(!onEdit)}
+							onClick={() => {
+								window.location.href = `/${userEdited.email}`;
+							}}
 						>
-							{onEdit ? "Save" : "Edit"}
+							Sauvegarder
 						</Button>
 					</form>
 				)}
