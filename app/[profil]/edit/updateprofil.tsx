@@ -21,7 +21,6 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import Link from "next/link";
 import { CldUploadWidget } from "next-cloudinary";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
@@ -112,6 +111,40 @@ export default function UpdateProfil({ className, user }: UpdateProfilProps) {
 	return (
 		<div className={cn("flex justify-center items-center", className)}>
 			<div className="flex flex-col space-y-5">
+				<div className="flex items-center justify-center">
+					<CldUploadWidget
+						uploadPreset="onrkam98"
+						onSuccess={(result) => {
+							setImageUrl((result as any).info.secure_url);
+							setImageName(
+								(result as any).info.original_filename
+							);
+							setUserEdited({
+								...userEdited,
+								media: (result as any).info.secure_url,
+							});
+						}}
+					>
+						{({ open }) => {
+							return (
+								<button
+									className="w-full overflow-hidden inline-flex items-center justify-center border border-input bg-background rounded-md px-6 py-3 text-sm font-medium hover:bg-slate-50"
+									style={{
+										height: "40px",
+										whiteSpace: "nowrap",
+										textOverflow: "ellipsis",
+										overflow: "hidden",
+									}}
+									type="button"
+									onClick={() => open()}
+								>
+									<div className="p-1">📥</div>
+									{imageName}
+								</button>
+							);
+						}}
+					</CldUploadWidget>
+				</div>
 				<div>
 					Pseudo :
 					<Input
@@ -351,36 +384,6 @@ export default function UpdateProfil({ className, user }: UpdateProfilProps) {
 						height={65}
 						style={{ height: "5rem", width: "5rem" }}
 					/>
-					<div className="flex items-center justify-center">
-						<CldUploadWidget
-							uploadPreset="onrkam98"
-							onSuccess={(result) => {
-								setImageUrl((result as any).info.secure_url);
-								setImageName(
-									(result as any).info.original_filename
-								); // Update the image name
-							}}
-						>
-							{({ open }) => {
-								return (
-									<button
-										className="w-full overflow-hidden inline-flex items-center justify-center border border-input bg-background rounded-md px-6 py-3 text-sm font-medium hover:bg-slate-50"
-										style={{
-											height: "40px",
-											whiteSpace: "nowrap",
-											textOverflow: "ellipsis",
-											overflow: "hidden",
-										}}
-										type="button"
-										onClick={() => open()}
-									>
-										<div className="p-1">📥</div>
-										{imageName}
-									</button>
-								);
-							}}
-						</CldUploadWidget>
-					</div>
 				</div>
 				{userSession === user.email && (
 					<form

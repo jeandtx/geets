@@ -15,8 +15,8 @@ export default function UpdateProfilePage() {
 	}
 	if (userInfo) {
 		return (
-			<div>
-				<h1>UpdateProfilePage</h1>
+			<div className="flex flex-col items-center justify-center space-y-3 px-4 py-6 pt-8 text-center sm:px-16">
+				<h1 className="text-xl font-semibold">Modifiez votre profil</h1>
 				<UpdateProfil user={userInfo} />
 			</div>
 		);
