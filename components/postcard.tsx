@@ -1,4 +1,5 @@
 "use client";
+import MentionParser from "@/components/text-content-parser";
 import React from "react";
 import Img from "next/image";
 import { MessageSquare, Rocket, ThumbsUp } from "lucide-react";
@@ -13,7 +14,8 @@ import {
 import { useUserInfo } from "@/app/context/UserInfoContext";
 import { Textarea } from "./ui/textarea";
 import { updatePost } from "@/lib/data/post";
-import MentionParser from "@/components/text-content-parser";
+import { addLikePost } from "@/lib/data/post";
+import { add } from "date-fns";
 
 interface PostProps {
 	post: Post;
@@ -28,6 +30,12 @@ export default function PostCard({
 	const [showCommentInput, setShowCommentInput] = React.useState(false);
 	const [comment, setComment] = React.useState("");
 	const [comments, setComments] = React.useState(post.comments || []); // Initialize comments state
+	const [commentsToShow, setCommentsToShow] = React.useState(3);
+	const [likes, setLikes] = React.useState(post.likes || []); // Initialize likes state
+
+	const handleShowMoreComments = () => {
+		setCommentsToShow((prev) => prev + 5);
+	};
 
 	function getTimeSincePosted(time: Date) {
 		if (!time) return "Il y a un certain temps";
@@ -53,8 +61,20 @@ export default function PostCard({
 
 	function handleLikePost(e: React.MouseEvent<HTMLElement, MouseEvent>) {
 		console.log(post);
-		const target = e.currentTarget as HTMLElement; // Use currentTarget to refer to the element the event handler is attached to
+		const target = e.currentTarget as HTMLElement;
 		const elements = target.querySelectorAll("span, svg");
+		addLikePost(post._id, userInfo?.pseudo as string);
+
+		const hasLiked = likes.includes(userInfo?.pseudo as string);
+		if (hasLiked) {
+			// Remove like
+			setLikes((prevLikes) =>
+				prevLikes.filter((like) => like !== userInfo?.pseudo)
+			);
+		} else {
+			// Add like
+			setLikes((prevLikes) => [...prevLikes, userInfo?.pseudo as string]);
+		}
 
 		elements.forEach((element) => {
 			if (element.classList.contains("text-blue-500")) {
@@ -180,6 +200,15 @@ export default function PostCard({
 				<hr className="border-gray-300 mt-5 mb-3" />
 
 				<div className="footer space-y-3">
+					{/* If the list of likes is null don't display anything, else write "liké par" and display the 3 first users */}
+					{likes.length > 0 && (
+						<p>
+							{`Aimé par ${likes.slice(0, 3).join(", ")}${
+								likes.length > 3 ? ` et ${likes.length - 3} autres` : ""
+							}`}
+						</p>
+					)}
+
 					{connected && (
 						<div className="icon-group flex justify-between items-center ">
 							<Button
@@ -187,9 +216,21 @@ export default function PostCard({
 								className="border-0 flex space-x-3 px-5 py-3 rounded-xl cursor-pointer duration-200 transition-all hover:bg-slate-100 active:transform active:scale-95 select-none"
 								onClick={handleLikePost}
 							>
-								<ThumbsUp className="text-gray-600" />
-								<span className="hidden sm:block text-gray-600 font-semibold text-sm">
-									J&apos;aime
+								<ThumbsUp
+									className={`${
+										likes.includes(userInfo?.pseudo as string)
+											? "text-blue-500"
+											: "text-gray-600"
+									}`}
+								/>
+								<span
+									className={`hidden sm:block font-semibold text-sm ${
+										likes.includes(userInfo?.pseudo as string)
+											? "text-blue-500"
+											: "text-gray-600"
+									}`}
+								>
+									J&apos;aime ({likes.length})
 								</span>
 							</Button>
 							<Button
@@ -234,29 +275,35 @@ export default function PostCard({
 					)}
 				</div>
 				<div>
-					{comments
-						.slice(-Math.min(3, comments.length))
-						.map((comment) => (
-							<div
-								key={comment.postId + comment.time.toString()}
-								className="comment mt-4 p-4 bg-gray-100 rounded-xl"
-							>
-								<p className="text-gray-900 font-semibold">
-									<Link href={`/${comment.author}`}>
-										{comment.pseudo
-											? comment.pseudo
-											: comment.author}
-									</Link>
-								</p>
-								<p className="text-gray-700">
-									<MentionParser content={comment.content} />
-								</p>
-								<p className="text-gray-500 text-sm">
-									{getTimeSincePosted(comment.time)}
-								</p>
-							</div>
-						))}
-				</div>
+  {comments
+    .slice()
+    .reverse()
+    .slice(0, commentsToShow)
+    .map((comment) => (
+      <div key={comment.postId + comment.time.toString()} className="comment mt-4 p-4 bg-gray-100 rounded-xl">
+        <p className="text-gray-900 font-semibold">
+          <Link href={`/${comment.author}`}>
+            {comment.pseudo ? comment.pseudo : comment.author}
+          </Link>
+        </p>
+        <p className="text-gray-700">
+          <MentionParser content={comment.content} />
+        </p>
+        <p className="text-gray-500 text-sm">{getTimeSincePosted(comment.time)}</p>
+      </div>
+    ))}
+  {commentsToShow < comments.length && (
+    <div className="mt-4">
+      <button
+        onClick={handleShowMoreComments}
+        className="text-blue-500 hover:underline"
+      >
+        Voir plus de commentaires
+      </button>
+    </div>
+  )}
+</div>
+
 			</div>
 		</div>
 	);

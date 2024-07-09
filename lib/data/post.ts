@@ -55,3 +55,17 @@ export async function updatePost(postId: string, post: Partial<Post>) {
     const data = JSON.parse(JSON.stringify(result)) // Remove ObjectID (not serializable)
     return data
 }
+
+/**
+ * Add the user's email to the likes array of a post in the database.
+ * @param {string} postId - The ID of the post to like.
+ * @param {string} email - The email of the user who liked the post.
+ * @returns {Promise<any>} A promise that resolves to the updated post.
+ */
+export async function addLikePost(postId: string, email: string) {
+    const client = await clientPromise
+    const db = client.db('geets')
+    const result = await db.collection('posts').updateOne({ _id: new ObjectId(postId) }, { $addToSet: { likes: email } })
+    const data = JSON.parse(JSON.stringify(result)) // Remove ObjectID (not serializable)
+    return data
+}
