@@ -21,6 +21,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import Link from "next/link";
 import { CldUploadWidget } from "next-cloudinary";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
@@ -86,7 +87,7 @@ interface UpdateProfilProps {
 	user: User;
 }
 export default function UpdateProfil({ className, user }: UpdateProfilProps) {
-	const [onEdit, setOnEdit] = useState<boolean>(false);
+	const [onEdit, setOnEdit] = useState<boolean>(true);
 	const [userEdited, setUserEdited] = useState<User>({
 		...user,
 	});
@@ -116,7 +117,7 @@ export default function UpdateProfil({ className, user }: UpdateProfilProps) {
 					<Input
 						className={
 							onEdit
-								? "bg-green-200"
+								? "bg-white-200"
 								: "bg-transparent border-none text-black font-normal flex h-5 w-full px-3 py-2 text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300 hover:border-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0 min-h-[40px]"
 						}
 						readOnly={!onEdit}
@@ -136,7 +137,7 @@ export default function UpdateProfil({ className, user }: UpdateProfilProps) {
 					<Input
 						className={
 							onEdit
-								? "bg-green-200"
+								? "bg-white-200"
 								: "bg-transparent border-none text-black font-normal flex h-5 w-full px-3 py-2 text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300 hover:border-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0 min-h-[40px]"
 						}
 						readOnly={!onEdit}
@@ -156,7 +157,7 @@ export default function UpdateProfil({ className, user }: UpdateProfilProps) {
 					<Input
 						className={
 							onEdit
-								? "bg-green-200"
+								? "bg-white-200"
 								: "bg-transparent border-none text-black font-normal flex h-5 w-full px-3 py-2 text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300 hover:border-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0 min-h-[40px]"
 						}
 						readOnly={!onEdit}
@@ -176,7 +177,7 @@ export default function UpdateProfil({ className, user }: UpdateProfilProps) {
 					<Input
 						className={
 							onEdit
-								? "bg-green-200"
+								? "bg-white-200"
 								: "bg-transparent border-none text-black font-normal flex h-5 w-full px-3 py-2 text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300 hover:border-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0 min-h-[40px]"
 						}
 						readOnly={!onEdit}
@@ -195,7 +196,7 @@ export default function UpdateProfil({ className, user }: UpdateProfilProps) {
 					Date de naissance :
 					{onEdit ? (
 						<DatePickerDemo
-							className="bg-green-200"
+							className="bg-white-200"
 							value={userEdited.birth_date}
 							onChange={(date) =>
 								setUserEdited({
@@ -267,7 +268,7 @@ export default function UpdateProfil({ className, user }: UpdateProfilProps) {
 					<Input
 						className={
 							onEdit
-								? "bg-green-200"
+								? "bg-white-200"
 								: "bg-transparent border-none text-black font-normal flex h-5 w-full px-3 py-2 text-sm focus:outline-none focus:ring-0 focus:shadow-none focus:border-gray-300 hover:border-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0 min-h-[40px]"
 						}
 						readOnly={!onEdit}
@@ -389,10 +390,10 @@ export default function UpdateProfil({ className, user }: UpdateProfilProps) {
 						<Button
 							variant="default"
 							onClick={() => {
-								setOnEdit(!onEdit);
+								window.location.href = `/${userEdited.email}`;
 							}}
 						>
-							{onEdit ? "Save" : "Edit"}
+							Sauvegarder
 						</Button>
 					</form>
 				)}
