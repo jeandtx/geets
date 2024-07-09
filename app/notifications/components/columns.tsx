@@ -16,7 +16,7 @@ export const columns: ColumnDef<Interaction>[] = [
 	{
 		accessorKey: "read",
 		header: ({ column }) => (
-			<DataTableColumnHeader column={column} title="Read" />
+			<DataTableColumnHeader column={column} title="Lu" />
 		),
 		cell: ({ row }) => <Read row={row} />,
 		enableSorting: false,
@@ -25,7 +25,7 @@ export const columns: ColumnDef<Interaction>[] = [
 	{
 		accessorKey: "time",
 		header: ({ column }) => (
-			<DataTableColumnHeader column={column} title="Time" />
+			<DataTableColumnHeader column={column} title="Date" />
 		),
 		cell: ({ row }) => (
 			<div className="w-[80px] text-sm text-muted-foreground overflow-hidden">
@@ -41,7 +41,7 @@ export const columns: ColumnDef<Interaction>[] = [
 	{
 		id: "userId",
 		header: ({ column }) => (
-			<DataTableColumnHeader column={column} title="User ID" />
+			<DataTableColumnHeader column={column} title="Utilisateur" />
 		),
 		cell: ({ row }) => (
 			<div className="flex items-center space-x-2 align-center overflow-hidden max-w-[250px]">

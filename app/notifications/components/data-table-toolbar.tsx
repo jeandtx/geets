@@ -23,7 +23,7 @@ export function DataTableToolbar<TData>({
 		<div className="flex items-center justify-between">
 			<div className="flex flex-1 items-center space-x-2">
 				<Input
-					placeholder="Search by time"
+					placeholder="Rechercher"
 					value={
 						(table.getColumn("time")?.getFilterValue() as string) ??
 						""
@@ -57,7 +57,7 @@ export function DataTableToolbar<TData>({
 					size="sm"
 					className="ml-auto hidden h-8 lg:flex"
 				>
-					Mark all read
+					Tout marquer comme lu
 				</Button>
 			</div>
 			<DataTableViewOptions table={table} />
