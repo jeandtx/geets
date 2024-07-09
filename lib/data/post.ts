@@ -27,7 +27,7 @@ export async function createPost(post: Post) {
  * @param {number} page - The page number to retrieve.
  * @returns {Promise<Array<any>>} A promise that resolves to an array of posts.
  */
-export async function getPosts(page: number = 1, query: any | Partial<Post> = {}): Promise<Post[]> {
+export async function getPosts(page: number = 1, query: any | Partial<Post> = {}, sort: any = { score: -1, time: -1 }): Promise<Post[]> {
     const client = await clientPromise
     const db = client.db('geets')
     let postsPerPage = 10
@@ -36,7 +36,7 @@ export async function getPosts(page: number = 1, query: any | Partial<Post> = {}
         offset = 0
         postsPerPage = 100
     }
-    const posts = await db.collection('posts').find(query).sort({ score: -1, time: -1 }).skip(offset).limit(postsPerPage).toArray()
+    const posts = await db.collection('posts').find(query).sort(sort).skip(offset).limit(postsPerPage).toArray()
     const data: Post[] = JSON.parse(JSON.stringify(posts)) // Remove ObjectID (not serializable)
     return data
 }
@@ -52,6 +52,20 @@ export async function updatePost(postId: string, post: Partial<Post>) {
     const client = await clientPromise
     const db = client.db('geets')
     const result = await db.collection('posts').updateOne({ _id: new ObjectId(postId) }, { $set: post })
+    const data = JSON.parse(JSON.stringify(result)) // Remove ObjectID (not serializable)
+    return data
+}
+
+/**
+ * Add the user's email to the likes array of a post in the database.
+ * @param {string} postId - The ID of the post to like.
+ * @param {string} email - The email of the user who liked the post.
+ * @returns {Promise<any>} A promise that resolves to the updated post.
+ */
+export async function addLikePost(postId: string, email: string) {
+    const client = await clientPromise
+    const db = client.db('geets')
+    const result = await db.collection('posts').updateOne({ _id: new ObjectId(postId) }, { $addToSet: { likes: email } })
     const data = JSON.parse(JSON.stringify(result)) // Remove ObjectID (not serializable)
     return data
 }

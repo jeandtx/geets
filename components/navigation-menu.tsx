@@ -37,7 +37,7 @@ export function NavigationMenuDemo({
                                     className='w-full justify-start'
                                 >
                                     <BookHeart className='mr-2 h-4 w-4' />
-                                    Pour vous
+                                    Pour toi
                                 </Button>
                             </ListItem>
                             <ListItem href='/testing'>

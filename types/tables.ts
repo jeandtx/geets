@@ -52,6 +52,7 @@ export interface Post {
     labels?: string[];
     score?: number;
     comments?: Comment[];
+    likes?: string[];
 }
 
 export interface User {

@@ -20,16 +20,14 @@ import {
     TooltipTrigger,
   } from "@/components/ui/tooltip"
 import { Trash } from 'lucide-react'
-import UserSearchComponent from '@/components/userSearchBar' // Assurez-vous que le chemin est correct
+import UserSearchComponent from '@/components/userSearchBar' 
 
 export default function NewProject() {
 
     const isClient = useIsClient()
 
     const [title, setTitle] = useState<string>('')
-    const [label, setLabel] = useState<string>('')
     const [labels, setLabels] = useState<string[]>([])
-    const [theme, setTheme] = useState<string>('')
     const [themes, setThemes] = useState<string[]>([])
     const [description, setDescription] = useState<string>('')
     const [participantName, setParticipantName] = useState<string>('')
@@ -40,6 +38,7 @@ export default function NewProject() {
     const [imageUrl, setImageUrl] = useState<string>('')
     const [imageName, setImageName] = useState<string>('Ajouter une photo')
     const { userInfo } = useUserInfo()
+    const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
     const themeOptions = [
         { value: 'sport', label: 'Sport' },
@@ -113,12 +112,14 @@ export default function NewProject() {
     useEffect(() => {
         setProject((prev) => ({
             ...prev,
+            title: title,
             themes: themes,
+            description: description,
             labels: labels,
             media: imageUrl,
             participants: participants,
         }))
-    }, [themes, labels, imageUrl, participants])
+    }, [title, themes, description, labels, imageUrl, participants])
 
     const handleChange = (e: any) => {
         const { name, value } = e.target
@@ -137,16 +138,18 @@ export default function NewProject() {
                 description:
                     "Vérifiez l'email ou le mot de passe et réessayez.",
             })
-            return
-        } else {
-            setProject((prev) => ({
-                ...prev,
-                participants: participants.map((p) => ({
-                    name: p.name,
-                    role: p.role,
-                })),
-            }))
+            return;
         }
+        const updatedProject = {
+            ...project,
+            title: title,
+            description: description,
+            themes: themes,
+            labels: labels,
+            media: imageUrl,
+            participants: participants,
+        };
+        setIsSubmitting(true)
         createProject(project)
             .then(() => {
                 toast({
@@ -156,8 +159,12 @@ export default function NewProject() {
                         project.title +
                         ' a été créé avec succès',
                     variant: 'success',
+                    duration: 5000,
                 });
                 clearLocalStorage(); // Appel de la fonction pour vider le localStorage
+                setTimeout(() => {
+                    window.location.reload();
+                }, 600);
             })
             .catch(() => {
                 toast({
@@ -166,6 +173,7 @@ export default function NewProject() {
                     description:
                         "Vérifiez l'email ou le mot de passe et réessayez.",
                 })
+                setIsSubmitting(false)
             })
     }
 
@@ -397,7 +405,9 @@ export default function NewProject() {
                             onSubmit={handleSubmit}
                             className='flex flex-col gap-2'
                         >
-                            <Button type='submit'>Publier mon projet</Button>
+                            <Button type='submit' disabled={isSubmitting}> 
+                                {isSubmitting ? 'En cours...' : 'Publier mon projet'}
+                            </Button>
                         </form>
                     </div>
                 </div>
