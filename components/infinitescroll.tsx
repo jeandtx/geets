@@ -2,41 +2,45 @@
 import { useInView } from "react-intersection-observer";
 import { cn } from "@/lib/utils";
 import PostCard from "@/components/postcard";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import LoadingSpinner from "./ui/spinner";
 import { useUserInfo } from "@/app/context/UserInfoContext";
 import Link from "next/link";
-import { getPosts, getFriendsPost } from "@/lib/data/post";
 
 interface InfiniteScrollProps {
+	/**
+	 * Additional class name(s) for the component.
+	 */
 	className?: string;
-	sort: "recent" | "popular" | "suivi";
+
+	/**
+	 * The function used to fetch data. Triggered when the user scrolls to the bottom of the page.
+	 * @param params Optional parameters for the fetch function.
+	 * @returns The result of the fetch function.
+	 */
+	fetchFunction: (page: number) => Promise<any>;
 }
 
-const InfiniteScroll: React.FC<InfiniteScrollProps> = ({
+export default function InfiniteScroll({
 	className,
-	sort,
-}) => {
+	fetchFunction,
+}: Readonly<InfiniteScrollProps>) {
 	const { ref, inView } = useInView({
 		threshold: 0,
 	});
-	const [posts, setPosts] = useState<any[]>([]);
-	const [page, setPage] = useState(1);
+	const [posts, setPosts] = React.useState<any>([]);
+	const [page, setPage] = React.useState(1);
 	const userInfo = useUserInfo();
 
-	useEffect(() => {
+	React.useEffect(() => {
+		if (!inView) return;
 		const fetchPosts = async () => {
-			let newPosts;
-			if (sort === 'suivi' && userInfo?.userInfo?.email) {
-				newPosts = await getFriendsPost(userInfo.userInfo.email, page, 'recent');
-			} else {
-				newPosts = await getPosts(page, {}, sort);
-			}
-			setPage((prevPage) => prevPage + 1);
-			setPosts((prevPosts) => [...prevPosts, ...newPosts]);
+			const newPosts = await fetchFunction(page);
+			setPage((prevPage: number) => prevPage + 1);
+			setPosts((prevPosts: any) => [...prevPosts, ...newPosts]);
 		};
 		fetchPosts();
-	}, [inView, sort, userInfo?.userInfo?.email]);
+	}, [inView]);
 
 	return (
 		<div
@@ -85,5 +89,3 @@ const InfiniteScroll: React.FC<InfiniteScrollProps> = ({
 		</div>
 	);
 }
-
-export default InfiniteScroll;
