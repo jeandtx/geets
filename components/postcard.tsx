@@ -275,32 +275,35 @@ export default function PostCard({
 					)}
 				</div>
 				<div>
-					{comments
-						.slice(0, commentsToShow)
-						.map((comment) => (
-							<div key={comment.postId + comment.time.toString()} className="comment mt-4 p-4 bg-gray-100 rounded-xl">
-								<p className="text-gray-900 font-semibold">
-									<Link href={`/${comment.author}`}>
-										{comment.pseudo ? comment.pseudo : comment.author}
-									</Link>
-								</p>
-								<p className="text-gray-700">
-									<MentionParser content={comment.content} />
-								</p>
-								<p className="text-gray-500 text-sm">{getTimeSincePosted(comment.time)}</p>
-							</div>
-						))}
-					{commentsToShow < comments.length && (
-						<div className="mt-4">
-							<button
-								onClick={handleShowMoreComments}
-								className="text-blue-500 hover:underline"
-							>
-								Voir plus de commentaires
-							</button>
-						</div>
-					)}
-				</div>
+  {comments
+    .slice()
+    .reverse()
+    .slice(0, commentsToShow)
+    .map((comment) => (
+      <div key={comment.postId + comment.time.toString()} className="comment mt-4 p-4 bg-gray-100 rounded-xl">
+        <p className="text-gray-900 font-semibold">
+          <Link href={`/${comment.author}`}>
+            {comment.pseudo ? comment.pseudo : comment.author}
+          </Link>
+        </p>
+        <p className="text-gray-700">
+          <MentionParser content={comment.content} />
+        </p>
+        <p className="text-gray-500 text-sm">{getTimeSincePosted(comment.time)}</p>
+      </div>
+    ))}
+  {commentsToShow < comments.length && (
+    <div className="mt-4">
+      <button
+        onClick={handleShowMoreComments}
+        className="text-blue-500 hover:underline"
+      >
+        Voir plus de commentaires
+      </button>
+    </div>
+  )}
+</div>
+
 			</div>
 		</div>
 	);
