@@ -14,12 +14,6 @@ import { el } from '@faker-js/faker';
     */
 
 export async function createProject(project: Project) {
-    const firstParticipantEmail = project.participants?.[0]?.name ?? "No participant found";
-    const isVerified = await UserVerifEmail(firstParticipantEmail);
-    if (!isVerified) {
-        throw new Error('User email not verified: ' + firstParticipantEmail);
-    }
-    else {
     const client = await clientPromise;
     const db = client.db('geets');
 
@@ -38,7 +32,7 @@ export async function createProject(project: Project) {
     const data = JSON.parse(JSON.stringify(result)); // Remove ObjectID (not serializable)
     return data;
 }
-}
+
 
 
 /**
