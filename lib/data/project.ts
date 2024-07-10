@@ -3,8 +3,7 @@
 import clientPromise from '@/lib/mongodb'
 import { Project } from '@/types/tables'
 import { ObjectId } from 'mongodb';
-import { UserVerifEmail } from './user';
-import { el } from '@faker-js/faker';
+// import { UserVerifEmail } from './user';
 
 /**
  * Creates a project in the database.
@@ -32,6 +31,7 @@ export async function createProject(project: Project) {
     const data = JSON.parse(JSON.stringify(result)); // Remove ObjectID (not serializable)
     return data;
 }
+
 
 
 
@@ -128,14 +128,14 @@ export async function deleteProject(projectId: string) {
  * @returns {Promise<Project[]>} A promise that resolves to the matched projects.
  */
 export async function searchProjects(searchTerm: string): Promise<Project[]> {
-    
-    
+
+
 
     const client = await clientPromise;
-    
+
 
     const db = client.db('geets');
-    
+
 
     try {
         const searchResults = await db.collection('projects').aggregate([
