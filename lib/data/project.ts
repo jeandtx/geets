@@ -13,12 +13,6 @@ import { ObjectId } from 'mongodb';
     */
 
 export async function createProject(project: Project) {
-    // const firstParticipantEmail = project.participants?.[0]?.name ?? "No participant found";
-    // const isVerified = await UserVerifEmail(firstParticipantEmail);
-    // if (!isVerified) {
-    //     throw new Error('User email not verified: ' + firstParticipantEmail);
-    // }
-    // else {
     const client = await clientPromise;
     const db = client.db('geets');
 
@@ -36,8 +30,9 @@ export async function createProject(project: Project) {
     const result = await db.collection('projects').insertOne({ ...project, _id: new ObjectId(), time: new Date() });
     const data = JSON.parse(JSON.stringify(result)); // Remove ObjectID (not serializable)
     return data;
-    // }
 }
+
+
 
 
 /**
